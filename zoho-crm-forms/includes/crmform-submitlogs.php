@@ -17,7 +17,8 @@ $siteurl = esc_url($siteurl);
     <tbody id='the-list'>
     <?php
             global $wpdb;
-            $get_shortcode_id = $wpdb->get_results("select * from zcf_submitlogs ORDER BY id DESC;");
+            $get_shortcode_idquery = $wpdb->prepare("SELECT * FROM zcf_submitlogs ORDER BY id DESC");
+            $get_shortcode_id = $wpdb->get_results($get_shortcode_idquery );
             $i=1;
             foreach ($get_shortcode_id as $value) {
 

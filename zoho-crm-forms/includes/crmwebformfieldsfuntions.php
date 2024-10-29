@@ -220,8 +220,12 @@ class zcfcoreGetFields {
         $activateplugin = $maincrmforms_helper_Obj->ActivatedPlugin;
         $config_underscored_fields = array();
         $moduleslug = $this->ModuleSlug = rtrim(strtolower($module), "s");
-        $config_fieldlist = $wpdb->get_results("select * from zcf_zohocrmform_field_manager where  module_type='{$module}' and layoutId='{$layoutID}'");
-
+        $config_query = "SELECT * 
+                    FROM zcf_zohocrmform_field_manager 
+                    WHERE module_type = %s 
+                    AND layoutId = %s
+                ";
+        $config_fieldlist = $wpdb->get_results($wpdb->prepare($config_query, $module, $layoutID) );
         $config_fields = get_option("crmforms_{$activateplugin}_{$moduleslug}_fields-tmp");
 
         $underscored_field = "";

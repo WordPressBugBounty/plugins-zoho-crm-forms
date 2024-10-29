@@ -26,35 +26,7 @@ class zcfcontactformfieldmapping {
         $webform_module .= "</select>";
         return $webform_module;
     }
-
-    public function zcfget_mapping_field_config1() {
-        global $wpdb;
-        $layoutarray = $wpdb->get_results("select distinct(api_name),plural_label from zcf_zohocrm_list_module where  api_name !='' and api_name NOT IN('Visits','Vendors','Tasks','Social','Sales_Orders','Projects','Approvals','Products','Solution','Invoice','Estimate','Reports','Quotes','Purchase_Orders','WPjects','WPducts','Price_Books','Notes','Invoices','Home','Feeds','Events','Emails','Documents','Dashboards','Campaigns','Calls','Attachments','ApWPvals','Activities');");
-        $rulearray = $resultaiss = $wpdb->get_results("select * from zcf_zohocrm_assignmentrule");
-       $webform_layout_lists = "";
-       $webform_layout_lists .= "<div>
-		<div class='form-group col-md-12 mt20'> <div class='exist_mapping col-md-6'> <label id='innertext' class='leads-builder-label'> Choose Your Module </label></div>
-                <div class='exist_mapping col-md-4'> <select id='map_thirdparty_module' class='selectpicker form-control' data-live-search='false' name='map_thirdparty_module'  onchange='selectThirdModule(this,$siteurl)'><option value=''>Select Module</option>";
-        foreach ($layoutarray as $key => $value) {
-           $webform_layout_lists .= "<option value='" . esc_html($value->api_name) . "'>" . $value->plural_label . "</option>";
-        }
-       $webform_layout_lists .= "</select><span class='smaill-loading-image'></span></div></div><br><br>";
-
-
-
-       $webform_layout_lists .= "<div id='layout-third-module'>
-		<div class='form-group col-md-12 mt20'> <div class='exist_mapping col-md-6'> <label id='innertext' class='leads-builder-label'> Select Layout </label></div>
-                <div class='exist_mapping col-md-4'> <select id='choose-thirdleads-layout' name='choose-thirdleads-layout' class='form-control' onchange='selectThirdlayout(this)'><option value=''>Select Layout</option>";
-
-       $webform_layout_lists .= "</select></div></div><br><br>";
-       $webform_layout_lists .= "<div class='form-group col-md-12 mb50' id='thirdparty-plugin-list'> <div class='exist_mapping col-md-6'> <label id='innertext' class='leads-builder-label'> Choose your Form Type </label></div>
-                <div class='exist_mapping col-md-4'> <select id='map_thirdparty_form' class='selectpicker form-control' data-live-search='false' name='map_thirdparty_form' onchange='getMappingConfiguration(this.value)'>";
-       $webform_layout_lists .= "<option value='none'>None</option>
-				<option value='contactform'>Contact Form</option>
-				</select></div></div></div>";
-    }
-
-    public function zcfget_mapping_field_config($tp_module, $cForm_namePlugin) {
+ public function zcfget_mapping_field_config($tp_module, $cForm_namePlugin) {
         global $wpdb;
         $zohocrmformname = 'crmformswpbuilder';
         $save_form_id = array();

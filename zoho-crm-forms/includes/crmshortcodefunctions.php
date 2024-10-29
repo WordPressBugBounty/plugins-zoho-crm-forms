@@ -113,15 +113,31 @@ class zcffieldoptions {
 
     function zcfformFields($options, $onAction, $editShortCodes, $formtype = "post", $module, $layoutname) {
         global $wpdb;
-        $fields = $wpdb->get_results("select * from zcf_zohocrmform_field_manager where  module_type='" . $module . "' and Layout_Name ='" . $layoutname . "'");
+        $fieldsquery = "
+                SELECT * 
+                FROM zcf_zohocrmform_field_manager 
+                WHERE module_type = %s 
+                AND Layout_Name = %s
+            ";
+        $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $module, $layoutname) );
+
 
         $siteurl = site_url();
         $crmformsfieldData = new zcffieldlistDatamanage();
         $module = $module_options = 'Leads';
         $htmlcontent1 = '';
         $config_leads_fields = $crmformsfieldData->zcfformfieldsPropsettings($editShortCodes);
+        $resultsquery = "SELECT * 
+                    FROM zcf_zohocrmform_field_manager fm 
+                    JOIN zcf_zohocrm_formfield_manager ffm ON ffm.field_id = fm.field_id 
+                    JOIN zcf_zohoshortcode_manager sm ON sm.shortcode_id = ffm.shortcode_id 
+                    WHERE sm.shortcode_name = %s 
+                    AND fm.editupdate = 1 
+                    AND fm.viewcreate_type = 1 
+                    GROUP BY fm.field_name
+                ";
+        $results = $wpdb->get_results($wpdb->prepare($resultsquery, $editShortCodes) );
 
-        $editupdatecount = $wpdb->get_results("select * from zcf_zohocrmform_field_manager fm join zcf_zohocrm_formfield_manager ffm ON ffm.field_id = fm.field_id join zcf_zohoshortcode_manager sm ON sm.shortcode_id = ffm.shortcode_id where sm.shortcode_name='" . $editShortCodes . "' and fm.editupdate=1 and fm.viewcreate_type=1 group by fm.field_name");
         $imagepath = ZCF_BASE_DIR . 'assets/images/';
         $imagepath = esc_url($imagepath);
         $htmlcontent = '
@@ -640,7 +656,11 @@ class zcfManageShortcodesActions {
         $config_fields['crm'] = $crmtype;
         $users_list = get_option('crm_users');
         $assignee = $users_list['users'][0]['email'];
-        $fields = $wpdb->get_results("select *from zcf_zohoshortcode_manager where shortcode_name = '" . $shortcode . "'");
+        $fieldsquery = "SELECT * 
+                    FROM zcf_zohoshortcode_manager 
+                    WHERE shortcode_name = %s
+                ";
+        $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $shortcode) );
         $config_fields = $shortcodeObj->zcffieldsPropsettings($crmtype, $module, $layoutname);
         foreach ($config_fields as $field) {
             $shortcodeObj->zcfinsertFormFields($shortcode_id, $field->field_id, $field->field_mandatory, '1', $field->field_type, $field->field_values, $field->field_sequence, $field->field_label);
@@ -659,7 +679,12 @@ class zcfManageShortcodesActions {
         $fieldsListarray = stripslashes_deep($value);
         global $wpdb;
         $formfieldsLength = $formfieldsLength + 1;
-        $shortcode_array = $wpdb->get_results("select * from zcf_zohocrm_formfield_manager where shortcode_id='" . $shortcode_id . "'");
+        $shortcode_arrayquery = "SELECT * 
+                    FROM zcf_zohocrm_formfield_manager 
+                    WHERE shortcode_id = %s
+                ";
+        $shortcode_array = $wpdb->get_results($wpdb->prepare($shortcode_arrayquery, $shortcode_id_sanitized) );
+
         $shortcode_count = sizeof($shortcode_array) + 10;
 
         if (!empty($value)) {
@@ -730,7 +755,9 @@ class zcfManageShortcodesActions {
         global $wpdb;
         $data = array();
         $delete_short = $shortcode;
-        $deletedata = $wpdb->get_results("select shortcode_id from zcf_zohoshortcode_manager where shortcode_name = '$delete_short'");
+        $deletedataquery = "SELECT shortcode_id FROM zcf_zohoshortcode_manager WHERE shortcode_name = %s";
+        $deletedata = $wpdb->get_results($wpdb->prepare($deletedataquery, $delete_short) );
+
         $deleteid = $deletedata[0]->shortcode_id;
         $delete_shortcode = $wpdb->query("delete from zcf_zohoshortcode_manager where shortcode_id = '$deleteid'");
         $delete_shortcode_fields = $wpdb->query("delete from zcf_zohocrm_formfield_manager where shortcode_id = '$deleteid'");
@@ -752,7 +779,18 @@ class ZcfCallMShortcodeObj extends zcfManageShortcodesActions {
 
     public function ZcfformatContactFields($thirdparty_form, $title, $shortcode) {
         global $wpdb;
-        $word_form_enable_fields = $wpdb->get_results("select a.rel_id,a.zcf_field_mandatory,a.custom_field_type,a.custom_field_values,a.display_label,a.field_id,c.field_name ,a.defaultvalues,a.hiddenfield from zcf_zohocrm_formfield_manager as a join zcf_zohoshortcode_manager as b join zcf_zohocrmform_field_manager as c where b.shortcode_id=a.shortcode_id and b.shortcode_name='$shortcode' and a.state=1 and c.field_id=a.field_id order by form_field_sequence");
+       $enablequery = "
+                SELECT a.rel_id, a.zcf_field_mandatory, a.custom_field_type, a.custom_field_values, 
+                       a.display_label, a.field_id, c.field_name, a.defaultvalues, a.hiddenfield 
+                FROM zcf_zohocrm_formfield_manager AS a 
+                JOIN zcf_zohoshortcode_manager AS b ON b.shortcode_id = a.shortcode_id 
+                JOIN zcf_zohocrmform_field_manager AS c ON c.field_id = a.field_id 
+                WHERE b.shortcode_name = %s 
+                AND a.state = 1 
+                ORDER BY a.form_field_sequence
+            ";
+        $word_form_enable_fields = $wpdb->get_results($wpdb->prepare($enablequery, $shortcode) );
+
         $checkid = $wpdb->get_var($wpdb->prepare("select thirdpartyformid from zcf_contactformrelation where crmformsshortcodename =%s and thirdpartypluginname=%s", $shortcode, 'contactform'));
 
         if (!empty($checkid)) {
@@ -848,7 +886,7 @@ class ZcfCallMShortcodeObj extends zcfManageShortcodesActions {
         $meta = $contact_array;
         //$checkid = $wpdb->get_var($wpdb->prepare("select thirdpartyformid from zcf_contactformrelation inner join {$wpdb->prefix}posts on {$wpdb->prefix}posts.ID = zcf_contactformrelation.thirdpartyformid and {$wpdb->prefix}posts.post_status='publish' where crmformsshortcodename =%s and thirdpartypluginname=%s",'contactform'));
         $dataQuery = "select thirdpartyformid from zcf_contactformrelation inner join {$wpdb->prefix}posts on {$wpdb->prefix}posts.ID = zcf_contactformrelation.thirdpartyformid and {$wpdb->prefix}posts.post_status='publish' where crmformsshortcodename ='".$shortcode."' and thirdpartypluginname='contactform'";
-        $dataresult = $wpdb->get_row( $dataQuery, ARRAY_A );
+        $dataresult = $wpdb->get_row( $dataQuery  );
 
         if (empty($dataresult)) {
             $contform = array(

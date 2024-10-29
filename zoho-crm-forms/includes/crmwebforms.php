@@ -66,7 +66,8 @@ if ($authtokens == '') {
 					<th class='crmforms-crm-free-list-view-th aligncenter'>" . __('Form Type', 'zoho-crm-form-builder') . "</th>
 
 				</tr></thead><tbody>";
-                    $shortcodemanager = $wpdb->get_results("select *from zcf_zohoshortcode_manager");
+                $shortcodemanagerquery = $wpdb->prepare("SELECT * FROM zcf_zohoshortcode_manager");
+                $shortcodemanager = $wpdb->get_results($shortcodemanagerquery );
                       echo esc_html($shortcode_fields->form_name);
 
                     foreach ($shortcodemanager as $shortcode_fields) {
@@ -153,7 +154,9 @@ if ($authtokens == '') {
 
                     $htmlcontent1 .= $existing_content;
                     $htmlcontent1 .= "</tbody></table></div>";
-                    $modulearray = $wpdb->get_results("select modifydate from zcf_zohocrm_list_module");
+                $modulearrayquery = $wpdb->prepare("SELECT modifydate FROM zcf_zohocrm_list_module");
+                    $modulearray = $wpdb->get_results($modulearrayquery );
+
                     $SettingsConfig = get_option("zcf_crmformswpbuilder_settings");
                     $authtokens = $SettingsConfig['authtoken'];
                     ?>
@@ -168,7 +171,8 @@ if ($authtokens == '') {
                         <?php } ?>
                     </div>
                     <?php
-                    $fields = $wpdb->get_results("select last_modified_date from zcf_zohocrmform_field_manager ");
+                    $fieldsquery = $wpdb->prepare("SELECT last_modified_date FROM zcf_zohocrmform_field_manager");
+                    $fields = $wpdb->get_results($fieldsquery );
                     ?>
 
                 </div>
@@ -201,7 +205,24 @@ if ($authtokens == '') {
                                 $authTokenConfig = get_option("zcf_crmformswpbuilder_settings");
                                 $authToken = base64_decode(base64_decode(base64_decode($authTokenConfig['authtoken'])));
                                 $crmformsZohoapi->zcfGetModules($authToken);
-                                $layoutarray = $wpdb->get_results("select distinct(api_name),plural_label from zcf_zohocrm_list_module where  api_name !='' and api_name NOT IN('Visits','Vendors','Tasks','Social','Sales_Orders','Reports','Quotes','Purchase_Orders','Projects','Products','Price_Books','Notes','Invoices','Home','Feeds','Events','Emails','Documents','Dashboards','Campaigns','Calls','Attachments','Approvals','Activities');");
+                                $layoutarrayquery = $wpdb->prepare("
+                                    SELECT DISTINCT(api_name), plural_label 
+                                    FROM zcf_zohocrm_list_module 
+                                    WHERE api_name != '' 
+                                    AND api_name NOT IN (
+                                        %s, %s, %s, %s, %s, 
+                                        %s, %s, %s, %s, %s, 
+                                        %s, %s, %s, %s, %s, 
+                                        %s, %s, %s, %s, %s, 
+                                        %s, %s, %s, %s
+                                    )", 'Visits', 'Vendors', 'Tasks', 'Social', 'Sales_Orders', 
+                                   'Reports', 'Quotes', 'Purchase_Orders', 'Projects', 
+                                   'Products', 'Price_Books', 'Notes', 'Invoices', 
+                                   'Home', 'Feeds', 'Events', 'Emails', 'Documents', 
+                                   'Dashboards', 'Campaigns', 'Calls', 'Attachments', 
+                                   'Approvals', 'Activities');
+                               $layoutarray = $wpdb->get_results($layoutarrayquery );
+
                                 ?>
 
                                 <div class="col-md-12  m10">
@@ -262,8 +283,22 @@ if ($authtokens == '') {
 
             <?php
             global $wpdb;
-            $layoutarray = $wpdb->get_results("select distinct(api_name),plural_label from zcf_zohocrm_list_module where  api_name !='' and api_name NOT IN('Visits','Vendors','Tasks','Social','Sales_Orders','Projects','Approvals','Products','Solution','Invoice','Estimate','Reports','Quotes','Purchase_Orders','WPjects','WPducts','Price_Books','Notes','Invoices','Home','Feeds','Events','Emails','Documents','Dashboards','Campaigns','Calls','Attachments','ApWPvals','Activities');");
-            $rulearray = $wpdb->get_results("select * from zcf_zohocrm_assignmentrule");
+            $layoutarrayquery = "SELECT DISTINCT(api_name), plural_label 
+                FROM zcf_zohocrm_list_module 
+                WHERE api_name != '' 
+                AND api_name NOT IN (
+                    'Visits', 'Vendors', 'Tasks', 'Social', 'Sales_Orders', 
+                    'Projects', 'Approvals', 'Products', 'Solution', 'Invoice', 
+                    'Estimate', 'Reports', 'Quotes', 'Purchase_Orders', 
+                    'WPjects', 'WPducts', 'Price_Books', 'Notes', 
+                    'Invoices', 'Home', 'Feeds', 'Events', 'Emails', 
+                    'Documents', 'Dashboards', 'Campaigns', 'Calls', 
+                    'Attachments', 'ApWPvals', 'Activities'
+                )
+            ";
+            $layoutarray = $wpdb->get_results($layoutarrayquery );
+            $rulearrayquery = "SELECT * FROM zcf_zohocrm_assignmentrule";
+            $rulearray = $wpdb->get_results($rulearrayquery );
             ?>
             <div class='form-group col-md-12'>
                 <div id="display_form_lists" class='col-md-offset-1' style="display:flex;">

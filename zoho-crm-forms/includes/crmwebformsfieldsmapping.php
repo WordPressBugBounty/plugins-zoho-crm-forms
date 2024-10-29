@@ -54,7 +54,15 @@ class zcffieldlistDatamanage {
         $layoutId = $data['layoutId'];
         $readonly = $data['readonly'];
         $viewcreate_type = $data['viewcreate_type'];
-        $fields = $wpdb->get_results("select *from zcf_zohocrmform_field_manager where field_name='" . $field_name . "' and module_type='" . $module . "' and crm_type='" . $crm_type . "'  and Layout_Name='" . $layoutname . "'");
+        $fieldsquery = "
+                SELECT * 
+                FROM zcf_zohocrmform_field_manager 
+                WHERE field_name = %s 
+                AND module_type = %s 
+                AND crm_type = %s 
+                AND Layout_Name = %s
+            ";
+        $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, $crm_type, $layoutname) );
         if (count($fields) == 0) {
             $fields = $wpdb->insert('zcf_zohocrmform_field_manager', array('field_name' => "$field_name", 'field_label' => "$field_label", 'field_type' => "$field_type", 'field_values' => "$field_values", 'module_type' => "$module_type", 'field_mandatory' => $field_mandatory, 'crm_type' => "$crm_type", 'field_sequence' => $field_sequence, 'base_model' => "$base_model", 'last_modified_date' => date("Y-m-d H:i:s"), 'Layout_Name' => $layoutname, 'layoutId' => $layoutId, 'readonly' => $readonly, 'editupdate' => 0, 'viewcreate_type' => $viewcreate_type));
         } else {
@@ -77,8 +85,14 @@ class zcffieldlistDatamanage {
         $layoutId = $data['layoutId'];
         $readonly = $data['readonly'];
         $viewcreate_type = $data['viewcreate_type'];
-        $fields = $wpdb->get_results("select *from zcf_zohocrmform_field_manager where field_name='" . $field_name . "' and module_type='" . $module . "'  and Layout_Name='" . $layoutname . "'");
-
+        $fieldsquery = "
+                    SELECT * 
+                    FROM zcf_zohocrmform_field_manager 
+                    WHERE field_name = %s 
+                    AND module_type = %s 
+                    AND Layout_Name = %s
+                ";
+        $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, $layoutname) );
         if (count($fields) == 0) {
             $fields = $wpdb->insert('zcf_zohocrmform_field_manager', array('field_name' => "$field_name", 'field_label' => "$field_label", 'field_type' => "$field_type", 'field_values' => "$field_values", 'module_type' => "$module_type", 'field_mandatory' => $field_mandatory, 'crm_type' => "$crm_type", 'field_sequence' => $field_sequence, 'base_model' => "$base_model", 'last_modified_date' => date("Y-m-d H:i:s"), 'Layout_Name' => $layoutname, 'layoutId' => $layoutId, 'readonly' => $readonly, 'editupdate' => 1, 'viewcreate_type' => $viewcreate_type));
         } else {
@@ -117,8 +131,18 @@ class zcffieldlistDatamanage {
             $fields = array();
             $shortcodename = $shortcodedata->shortcode_name;
             $shortcode_id = $shortcodedata->shortcode_id;
+            $fieldsquery = "
+                    SELECT ffm.*, sm.* 
+                    FROM zcf_zohocrm_formfield_manager AS ffm
+                    INNER JOIN zcf_zohocrmform_field_manager AS fm ON fm.field_id = ffm.field_id
+                    INNER JOIN zcf_zohoshortcode_manager AS sm ON sm.shortcode_id = ffm.shortcode_id
+                    WHERE fm.field_name = %s 
+                    AND fm.module_type = %s 
+                    AND sm.shortcode_name = %s 
+                    AND sm.crm_type = %s
+                ";
 
-            $fields = $wpdb->get_results("select ffm.* , sm.*  from zcf_zohocrm_formfield_manager as ffm inner join zcf_zohocrmform_field_manager as fm on fm.field_id = ffm.field_id inner join zcf_zohoshortcode_manager as sm on sm.shortcode_id = ffm.shortcode_id where fm.field_name = '$field_name' and fm.module_type = '$module' and shortcode_name = '$shortcodename' and sm.crm_type = '$crm_type' ");
+$fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, $shortcodename, $crm_type) );
             $rel_id = isset($fields[0]) ? $fields[0]->rel_id : "";
             $field_id = isset($get_field_manager[0]) ? $get_field_manager[0]->field_id : "";
 
@@ -162,20 +186,59 @@ class zcffieldlistDatamanage {
         $field_values = $data['field_values'];
         $layout_name = $data['layout_name'];
         $get_shortcodes = array();
-        $get_shortcodes = $wpdb->get_results("select * from zcf_zohoshortcode_manager where module ='" . $module . "' ");
-        $get_field_manager = $wpdb->get_results("select * from zcf_zohocrmform_field_manager where module_type ='" . $module . "' and field_name ='" . $field_name . "' and  Layout_Name ='" . $layout_name . "'");
+        $module = sanitize_text_field($module);
+        $get_shortcodesquery = "
+                    SELECT * 
+                    FROM zcf_zohoshortcode_manager 
+                    WHERE module = %s
+                ";
+        $get_shortcodes = $wpdb->get_results($wpdb->prepare($get_shortcodesquery, $module) );
+        $field_name = sanitize_text_field($field_name);
+        $layout_name = sanitize_text_field($layout_name);
+        $get_field_managerquery = "
+                    SELECT * 
+                    FROM zcf_zohocrmform_field_manager 
+                    WHERE module_type = %s 
+                    AND field_name = %s 
+                    AND Layout_Name = %s
+                ";
+        $get_field_manager = $wpdb->get_results($wpdb->prepare($get_field_managerquery, $module_sanitized, $field_name_sanitized, $layout_name_sanitized) );
         foreach ($get_shortcodes as $key => $shortcodedata) {
             $fields = array();
             $shortcodename = $shortcodedata->shortcode_name;
             $shortcode_id = $shortcodedata->shortcode_id;
-            $fields = $wpdb->get_results("select ffm.* , sm.*  from zcf_zohocrm_formfield_manager as ffm inner join zcf_zohocrmform_field_manager as fm on fm.field_id = ffm.field_id inner join zcf_zohoshortcode_manager as sm on sm.shortcode_id = ffm.shortcode_id where fm.field_name = '$field_name' and fm.module_type = '$module' and sm.shortcode_name = '$shortcodename' ");
+            $field_name = sanitize_text_field($field_name);
+            $module = sanitize_text_field($module);
+            $shortcodename = sanitize_text_field($shortcodename);
+            $fieldsquery = "
+    SELECT ffm.*, sm.* 
+    FROM zcf_zohocrm_formfield_manager AS ffm
+    INNER JOIN zcf_zohocrmform_field_manager AS fm ON fm.field_id = ffm.field_id
+    INNER JOIN zcf_zohoshortcode_manager AS sm ON sm.shortcode_id = ffm.shortcode_id
+    WHERE fm.field_name = %s 
+    AND fm.module_type = %s 
+    AND sm.shortcode_name = %s
+";
+
+$fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, $shortcodename) );
             $rel_id = isset($fields[0]) ? $fields[0]->rel_id : "";
             $field_id = isset($get_field_manager[0]) ? $get_field_manager[0]->field_id : "";
 
             if ($module_type == $module) {
                 if (count($fields) == 0) {
+                    $querydata = array(
+                            'field_id' => $field_id,
+                            'shortcode_id' => $shortcode_id,
+                            'display_label' => $field_label,
+                            'custom_field_type' => $field_type,
+                            'custom_field_values' => $field_values,
+                            'zcf_field_mandatory' => $field_mandatory,
+                            'form_field_sequence' => $field_sequence,
+                            'state' => $publish,
+                            'editupdate' => 1
+                        );
+                    $query = $wpdb->insert('zcf_zohocrm_formfield_manager', $querydata);
 
-                    $query = $wpdb->get_results("insert into zcf_zohocrm_formfield_manager( field_id , shortcode_id , display_label , custom_field_type , custom_field_values , zcf_field_mandatory , form_field_sequence , state ,editupdate) VALUES ('$field_id', '$shortcode_id' , '$field_label', '$field_type', '$field_values' , $field_mandatory , $field_sequence , $publish,1 )");
                 } else {
 
                     $state = "";
@@ -249,21 +312,40 @@ class zcffieldlistDatamanage {
 
     function zcffieldsPropsettings($crmtype, $module, $layoutname) {
         global $wpdb;
-        $fields = $wpdb->get_results("select *from zcf_zohocrmform_field_manager where crm_type = '" . $crmtype . "' and module_type = '" . $module . "' and Layout_Name = '" . $layoutname . "' and readonly != '1' and field_name !='Layout'  and field_type NOT IN ('lookup','ownerlookup','multiselectlookup')");
+        $fieldsquery = "SELECT * FROM zcf_zohocrmform_field_manager WHERE crm_type = %s AND module_type = %s AND Layout_Name = %s AND readonly != '1' AND field_name != 'Layout' AND field_type NOT IN ('lookup', 'ownerlookup', 'multiselectlookup')";
+    $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $crmtype, $module, $layoutname) );
+
         return $fields;
     }
 
     function zcfformfieldsPropsettings($shortcode_name) {
         global $wpdb;
         $crm_type = 'crmformswpbuilder';
-        $get_shortcode_id = $wpdb->get_results("select shortcode_id from zcf_zohoshortcode_manager where shortcode_name = '" . $shortcode_name . "' and crm_type ='" . $crm_type . "'");
+        $shortcodequery = "SELECT shortcode_id FROM zcf_zohoshortcode_manager WHERE shortcode_name = %s AND crm_type =%s";
+$get_shortcode_id = $wpdb->get_results($wpdb->prepare($shortcodequery, $shortcode_name, $crm_type) );
         $shortcode_id = $get_shortcode_id[0]->shortcode_id;
-        $field = $wpdb->get_results("select fm.field_mandatory,ffm.defaultvalues,ffm.rel_id,ffm.hiddenfield,ffm.field_id,fm.field_name,ffm.zcf_field_mandatory,ffm.form_field_sequence,ffm.state,fm.editupdate,ffm.display_label,fm.field_label,fm.layoutId,ffm.custom_field_values,ffm.custom_field_type from zcf_zohocrmform_field_manager fm join zcf_zohocrm_formfield_manager ffm ON ffm.field_id = fm.field_id join zcf_zohoshortcode_manager sm ON sm.shortcode_id = ffm.shortcode_id where sm.shortcode_id='{$shortcode_id}' and  ffm.state=1 and fm.viewcreate_type=1 and fm.field_type NOT IN ('lookup','ownerlookup','multiselectlookup') group by fm.field_name order by ffm.form_field_sequence");
-        $editupdatecount = $wpdb->get_results("select * from zcf_zohocrmform_field_manager fm join zcf_zohocrm_formfield_manager ffm ON ffm.field_id = fm.field_id join zcf_zohoshortcode_manager sm ON sm.shortcode_id = ffm.shortcode_id where sm.shortcode_name='{$shortcode_name}' and fm.editupdate=1 and fm.viewcreate_type=1 group by fm.field_name");
+        $fieldquery = "SELECT fm.field_mandatory,ffm.defaultvalues,ffm.rel_id,ffm.hiddenfield,ffm.field_id,fm.field_name,ffm.zcf_field_mandatory,ffm.form_field_sequence,ffm.state,fm.editupdate,ffm.display_label,fm.field_label,fm.layoutId,ffm.custom_field_values,ffm.custom_field_type FROM zcf_zohocrmform_field_manager fm JOIN zcf_zohocrm_formfield_manager ffm ON ffm.field_id = fm.field_id JOIN zcf_zohoshortcode_manager sm ON sm.shortcode_id = ffm.shortcode_id
+    WHERE sm.shortcode_id = %d AND ffm.state = 1 AND fm.viewcreate_type = 1 AND fm.field_type NOT IN ('lookup', 'ownerlookup', 'multiselectlookup') GROUP BY fm.field_name ORDER BY ffm.form_field_sequence ";
+
+$field = $wpdb->get_results($wpdb->prepare($fieldquery, $shortcode_id) );
+
+$editquery = "SELECT *
+                    FROM zcf_zohocrmform_field_manager fm
+                    JOIN zcf_zohocrm_formfield_manager ffm ON ffm.field_id = fm.field_id
+                    JOIN zcf_zohoshortcode_manager sm ON sm.shortcode_id = ffm.shortcode_id
+                    WHERE sm.shortcode_name = %s
+                    AND fm.editupdate = 1
+                    AND fm.viewcreate_type = 1
+                    GROUP BY fm.field_name
+                ";
+       $editupdatecount = $wpdb->get_results($wpdb->prepare($editquery, $shortcode_name) );
+      
         $i = 0;
         $crmFields = array();
 
         foreach ($field as $newfields) {
+
+
             $crmFields['fields'][$i]['field_id'] = $newfields->field_id;
             $crmFields['fields'][$i]['name'] = $newfields->field_name;
             $zcf_field_mandatory = $newfields->zcf_field_mandatory;
@@ -295,7 +377,6 @@ class zcffieldlistDatamanage {
             $i++;
         }
         $crmFields['fields']['editupdatecount'] = sizeof($editupdatecount);
-
         return $crmFields;
     }
 

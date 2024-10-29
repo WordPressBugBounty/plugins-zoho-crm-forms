@@ -93,7 +93,9 @@ function zcfcontact_forms_submitdata() {
                     if($cf_val == 'site-title'){
                       $user_value = sanitize_text_field(get_bloginfo());
                     }
-                    $queryresult = $wpdb->get_results("SELECT field_type FROM zcf_zohocrmform_field_manager WHERE field_name='" . $field_name . "' AND layoutId='" . $layoutid . "'");
+
+$resquery = "SELECT field_type FROM zcf_zohocrmform_field_manager WHERE field_name = %s AND layoutId =%s";
+$queryresult = $wpdb->get_results($wpdb->prepare($resquery, $field_name, $layoutid));
                     if ($wpdb->last_error) {
                     }else{
                         if($queryresult[0]->field_type=='multiselectpicklist'){
@@ -165,12 +167,14 @@ function zcfcontact_forms_submitdata() {
                 unset($all_fields[$key]);
         }
 
-        $mapping = $wpdb->get_results($wpdb->prepare("select crmformsfieldslable,thirdpartyfieldids from zcf_contactformrelation where thirdpartyformid=%d", $post_id), ARRAY_A);
+        $mapping = $wpdb->get_results($wpdb->prepare("select crmformsfieldslable,thirdpartyfieldids from zcf_contactformrelation where thirdpartyformid=%d", $post_id) );
         foreach ($mapping as $key => $value) {
             $crmformsfieldslable[$key] = $value['crmformsfieldslable'];
             $thirdpartyfieldids[$key] = $value['thirdpartyfieldids'];
         }
-        $crmformsfieldName = $wpdb->get_results(" select a.field_name , a.field_values , a.field_type from zcf_zohocrmform_field_manager as a join zcf_zohocrm_formfield_manager as b join zcf_contactformrelation as c where b.field_id=a.field_id and c.crmformsfieldid=b.rel_id and thirdpartyformid='{$post_id}'", ARRAY_A);
+        $crmformsfieldquery = "SELECT a.field_name, a.field_values, a.field_type FROM zcf_zohocrmform_field_manager AS a JOIN zcf_zohocrm_formfield_manager AS b ON b.field_id = a.field_id JOIN zcf_contactformrelation AS c ON c.crmformsfieldid = b.rel_id WHERE c.thirdpartyformid = %d";
+
+$crmformsfieldName = $wpdb->get_results($wpdb->prepare($crmformsfieldquery, $post_id) );
 
         $thirdpartyfieldids = array_flip($thirdpartyfieldids);
 

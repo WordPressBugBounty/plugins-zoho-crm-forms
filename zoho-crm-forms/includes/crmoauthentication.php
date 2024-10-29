@@ -117,7 +117,21 @@ function zcfsynModules() {
     $client->zcfGetModules($authtoken);
     $core->zcfgetUsersList();
     global $wpdb;
-    $resultaiss = $wpdb->get_results("select distinct(api_name),plural_label from zcf_zohocrm_list_module where  api_name !='' and api_name NOT IN('Visits','Vendors','Tasks','Social','Sales_Orders','Reports','Quotes','Purchase_Orders','WPjects','WPducts','Price_Books','Deals','Notes','Invoices','Home','Feeds','Events','Accounts','Emails','Documents','Dashboards','Campaigns','Calls','Attachments','ApWPvals','Activities')");
+   $resultquery = $wpdb->prepare("
+            SELECT DISTINCT(api_name), plural_label 
+            FROM zcf_zohocrm_list_module 
+            WHERE api_name != '' 
+            AND api_name NOT IN (
+                'Visits', 'Vendors', 'Tasks', 'Social', 'Sales_Orders', 
+                'Reports', 'Quotes', 'Purchase_Orders', 'WPjects', 
+                'WPducts', 'Price_Books', 'Deals', 'Notes', 'Invoices', 
+                'Home', 'Feeds', 'Events', 'Accounts', 'Emails', 
+                'Documents', 'Dashboards', 'Campaigns', 'Calls', 
+                'Attachments', 'ApWPvals', 'Activities'
+            )
+        ");
+   $resultaiss = $wpdb->get_results($resultquery );
+
     foreach ($resultaiss as $key => $value) {
         $client->zcfgetAssignmentRule($authtoken, $value->api_name);
     }

@@ -94,7 +94,9 @@ class zcfcustomfunctions {
     public static function zcf_selectLayoutName() {
         global $wpdb;
         $modulemname = sanitize_text_field($_REQUEST['module']);
-        $layoutarray = $wpdb->get_results("select Layoutname,layoutID from zcf_zohocrm_moduleLists where  modulename='" . $modulemname . "'");
+    $query_layout = "SELECT Layoutname, layoutID FROM zcf_zohocrm_moduleLists WHERE modulename = %s";
+ $layoutarray = $wpdb->get_results($wpdb->prepare($query_layout, $modulemname) );
+
         $content = "<option value=''>Select Layout</option>";
         foreach ($layoutarray as $key => $value) {
             $content .= "<option  value='" . esc_html($value->layoutID) . "'>" . $value->Layoutname . "</option>";
@@ -121,8 +123,11 @@ class zcfcustomfunctions {
         global $wpdb;
         $shortcode = sanitize_text_field($_REQUEST['shortcode']);
         $formTitle = sanitize_text_field($_REQUEST['formvalue']);
-        $wpdb->query("update zcf_zohoshortcode_manager set form_name = '".$formTitle."' where shortcode_name='".$shortcode."'");
-        $shortcodemanager = $wpdb->get_results("select * from zcf_zohoshortcode_manager");
+        $updatequery = "UPDATE zcf_zohoshortcode_manager SET form_name = %s WHERE shortcode_name = %s
+            ";
+        $result = $wpdb->query($wpdb->prepare($updatequery, $formTitle, $shortcode));
+        $shortcodemanagerquery = $wpdb->prepare("SELECT * FROM zcf_zohoshortcode_manager");
+        $shortcodemanager = $wpdb->get_results($shortcodemanagerquery );
         $namestr = sanitize_title_with_dashes($shortcode_fields->form_name);
 
         echo "success";
@@ -235,7 +240,14 @@ class zcfcustomfunctions {
                 }
 
                 global $wpdb;
-                $get_existing_fields = $wpdb->get_results("select field_name from zcf_zohocrmform_field_manager where module_type ='" . $module . "'  and Layout_Name ='" . $field_details['layout_name'] . "'");
+                $fieldsexitsquery = "
+                        SELECT field_name 
+                        FROM zcf_zohocrmform_field_manager 
+                        WHERE module_type = %s 
+                        AND Layout_Name = %s
+                ";
+                $get_existing_fields = $wpdb->get_results($wpdb->prepare($fieldsexitsquery, $module, $layout_name) );
+
                 foreach ($get_existing_fields as $ex_key => $ex_val) {
                     $existing_fields[] = $ex_val->field_name;
                 }
@@ -363,7 +375,14 @@ class zcfcustomfunctions {
         switch ($tp_formtype) {
 
             case 'contactform':
-                $get_checkid = $wpdb->get_results("select thirdpartyformid from zcf_contactformrelation where  crmformsshortcodename='{$shortcode}' and thirdpartypluginname='contactform'");
+                $get_checkidquery = "
+                        SELECT thirdpartyformid 
+                        FROM zcf_contactformrelation 
+                        WHERE crmformsshortcodename = %s 
+                        AND thirdpartypluginname = %s
+                    ";
+                $get_checkid = $wpdb->get_results($wpdb->prepare($get_checkidquery, $shortcode,'contactform') );
+
                 if (isset($get_checkid[0])) {
                     $checkid = $get_checkid[0]->thirdpartyformid;
                 } else {
@@ -440,7 +459,8 @@ class zcfcustomfunctions {
                 $zcf_offset = sanitize_text_field($_POST['wp_offset']);
 
                 $users_synced_count = sanitize_text_field($_POST['synced_count']);
-                $fetch_last_id = $wpdb->get_results("select ID from {$wpdb->prefix}users order by id desc limit 1");
+$fetch_last_idquery = $wpdb->prepare("SELECT ID FROM {$wpdb->prefix}users ORDER BY ID DESC LIMIT 1");
+                $fetch_last_id = $wpdb->get_results($fetch_last_idquery );
                 $last_user_id = $fetch_last_id[0]->ID;
                 $zcf_users_count = count(get_users());
                 $duplicate_cancelled = 0;
@@ -453,7 +473,13 @@ class zcfcustomfunctions {
                 $zcf_active_crm = 'crmformswpbuilder';
                 $FunctionsObj = new zcfcoreGetFields();
                 global $wpdb;
-                $blogusers = $wpdb->get_results("select ID from " . $wpdb->prefix . "users limit $zcf_start, $zcf_offset");
+                $blogusersquery = "
+                    SELECT ID 
+                    FROM {$wpdb->prefix}users 
+                    LIMIT %d, %d
+                ";
+                $blogusers = $wpdb->get_results($wpdb->prepare($blogusersquery, $zcf_start, $zcf_offset) );
+
                 $user = array();
                 foreach ($blogusers as $users) {
                     $user[] = $users->ID;

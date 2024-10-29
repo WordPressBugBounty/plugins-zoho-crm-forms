@@ -6,8 +6,8 @@ global $wpdb, $adminmenulable;
 $shortcode = sanitize_text_field($_REQUEST['EditShortcode']);
 $module = sanitize_text_field($_REQUEST['module']);
 $onAction = sanitize_text_field($_REQUEST['onAction']);
-
-$data = $wpdb->get_results("select *from zcf_zohoshortcode_manager");
+$dataquery = "SELECT * FROM zcf_zohoshortcode_manager";
+$data = $wpdb->get_results($wpdb->prepare($dataquery) );
 if ($result != '') {
     $allowedposttags = zcf_allowed_tag();
     ?>
@@ -118,11 +118,15 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                             <?php
                             $shortcode = sanitize_text_field($_REQUEST['EditShortcode']);
                             $formName = sanitize_text_field($_REQUEST['formName']);
-                            $formname = $wpdb->get_results("SELECT form_name FROM `zcf_zohoshortcode_manager` WHERE `shortcode_name` LIKE '" . esc_html__($shortcode) . "' ");
-                            ?>
-
-                            <input class="textField" type="text"  data-value="<?php echo esc_html__($formname[0]->form_name); ?>" id="form-name" name="form-name" data-value="<?php echo esc_html__($formName); ?>"
-                            value="<?php echo esc_html__($formName); ?>" onblur="formTitleupdate(this, '<?php sanitize_title_with_dashes($formname[0]->form_name); ?>', '<?php echo esc_url_raw($siteurl); ?>', '<?php echo sanitize_text_field($shortcode); ?>')"/>
+                            $formnamequery = "
+                                SELECT form_name 
+                                FROM zcf_zohoshortcode_manager 
+                                WHERE shortcode_name LIKE %s
+                            ";
+                    $formname = $wpdb->get_results($wpdb->prepare($formnamequery, $shortcode));
+?>
+                            <input class="textField" type="text"  data-value="<?php echo esc_html__($formname[0]->form_name); ?>" id="form-name" name="form-name" data-value="<?php echo esc_html__($formname[0]->form_name); ?>"
+                            value="<?php echo esc_html__($formname[0]->form_name); ?>" onblur="formTitleupdate(this, '<?php sanitize_title_with_dashes($formname[0]->form_name); ?>', '<?php echo esc_url_raw($siteurl); ?>', '<?php echo sanitize_text_field($shortcode); ?>')"/>
                             <input type='hidden' id='lead_crmtype' name="lead_crmtype" value="crmformswpbuilder">
                             <input type="hidden" id="savefields" name="savefields" value="<?php echo esc_attr__('Apply', ZCF_PLUGIN_BASE_URL); ?>"/>
                             <?php

@@ -152,8 +152,11 @@ if ($cform_form_name != 'None') {
                             <input type="hidden" name="modulename" id="modulename"  value="<?php echo esc_html($_REQUEST['third_module']); ?>">
                             <input type="hidden" name="layoutname" id="layoutname"  value="<?php echo esc_html($_REQUEST['layoutname']); ?>">
                             <?php
-                                 $query_layout = "select layoutID from zcf_zohocrm_moduleLists where modulename='".$cform_module."' and Layoutname='".sanitize_text_field($_REQUEST['layoutname'])."'";
-                                $get_layoutjson_array = $wpdb->get_results($query_layout);
+                                $cform_module_sanitized = sanitize_text_field($cform_module);
+                                $layoutname_sanitized = sanitize_text_field($_REQUEST['layoutname']);
+                                $query_layout = "SELECT layoutID FROM zcf_zohocrm_moduleLists WHERE modulename = %s AND Layoutname = %s";
+                                $get_layoutjson_array = $wpdb->get_results($wpdb->prepare($query_layout, $cform_module_sanitized, $layoutname_sanitized) );
+
                                 $layoutIDarray = $get_layoutjson_array[0]->layoutID;
                             ?>
                             <input type="hidden" name="layoutId" id="layoutId" value=<?php echo esc_html($layoutIDarray); ?>>
