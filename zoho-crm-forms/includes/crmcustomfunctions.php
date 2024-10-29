@@ -97,7 +97,7 @@ class zcfcustomfunctions {
         $layoutarray = $wpdb->get_results("select Layoutname,layoutID from zcf_zohocrm_moduleLists where  modulename='" . $modulemname . "'");
         $content = "<option value=''>Select Layout</option>";
         foreach ($layoutarray as $key => $value) {
-            $content .= "<option  value='" . $value->layoutID . "'>" . $value->Layoutname . "</option>";
+            $content .= "<option  value='" . esc_html($value->layoutID) . "'>" . $value->Layoutname . "</option>";
         }
         $allowedposttags = zcf_allowed_tag();
         echo wp_kses( $content, $allowedposttags );
@@ -177,7 +177,7 @@ class zcfcustomfunctions {
             case "CheckformExits":
                 include(ZCF_BASE_DIR_URI . 'includes/crmshortcodefunctions.php');
                 $fields = new zcfManageShortcodesActions();
-                $all_fields = $fields->zcfCrmManageFieldsLists(sanitize_text_field($_REQUEST['shortcode']), sanitize_text_field($_REQUEST['crmtype']), sanitize_text_field($_REQUEST['module']), sanitize_text_field($_REQUEST['bulkaction']), sanitize_text_field($_REQUEST['chkarray']), sanitize_text_field($_REQUEST['labelarray']), sanitize_text_field($_REQUEST['orderarray']), $_REQUEST['defaultvalue'], sanitize_text_field($_REQUEST['inputtype']));
+                $all_fields = $fields->zcfCrmManageFieldsLists(sanitize_text_field($_REQUEST['shortcode']), sanitize_text_field($_REQUEST['crmtype']), sanitize_text_field($_REQUEST['module']), sanitize_text_field($_REQUEST['bulkaction']), sanitize_text_field($_REQUEST['chkarray']), sanitize_text_field($_REQUEST['labelarray']), sanitize_text_field($_REQUEST['orderarray']), sanitize_text_field($_REQUEST['defaultvalue']), sanitize_text_field($_REQUEST['inputtype']));
                 $moduleslug = rtrim(strtolower($module), "s");
                 $config_fields = get_option("crmforms_crmformswpbuilder_{$moduleslug}_fields-tmp");
                 if (!isset($config_fields['fields'][0]))

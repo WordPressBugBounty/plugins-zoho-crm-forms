@@ -36,7 +36,7 @@ class zcfcontactformfieldmapping {
 		<div class='form-group col-md-12 mt20'> <div class='exist_mapping col-md-6'> <label id='innertext' class='leads-builder-label'> Choose Your Module </label></div>
                 <div class='exist_mapping col-md-4'> <select id='map_thirdparty_module' class='selectpicker form-control' data-live-search='false' name='map_thirdparty_module'  onchange='selectThirdModule(this,$siteurl)'><option value=''>Select Module</option>";
         foreach ($layoutarray as $key => $value) {
-           $webform_layout_lists .= "<option value='" . $value->api_name . "'>" . $value->plural_label . "</option>";
+           $webform_layout_lists .= "<option value='" . esc_html($value->api_name) . "'>" . $value->plural_label . "</option>";
         }
        $webform_layout_lists .= "</select><span class='smaill-loading-image'></span></div></div><br><br>";
 

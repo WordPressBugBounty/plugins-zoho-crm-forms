@@ -180,7 +180,7 @@ class zcfajaxcore {
       $action = sanitize_text_field($_REQUEST['action']);
       $user = wp_get_current_user();
       $allowed_roles = array( 'editor', 'administrator', 'author' );
-      if ( isset( $_REQUEST['action'] )&& (wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles ))){
+      if (sanitize_text_field(isset($_REQUEST['action']) )&& (wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles ))){
         $thirdparty_title_key = sanitize_text_field($_REQUEST['tp_title_key']);
         $thirdparty_title_value = sanitize_text_field($_REQUEST['tp_title_val']);
         update_option($thirdparty_title_key, $thirdparty_title_value);

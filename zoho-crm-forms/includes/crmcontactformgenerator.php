@@ -280,7 +280,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
                 else
                 $htmlcontent1 .= '';
                 $htmlcontent1 .= "'/><span class='crmforms_field_error' id='" . $config_fields[$i]['name'] . "error{$_SESSION["generated_forms"]}'>";
-                if (isset($_POST['submitcontactform']) && (intval($_POST['formnumber']) !='')) {
+                if (sanitize_text_field(isset($_POST['submitcontactform'])) && (intval($_POST['formnumber']) !='')) {
                     if ($config_fields[$i]['zcf_mandatory'] == 1 && sanitize_text_field($_POST[$config_fields[$i]['name']]) == "") {
                         $htmlcontent1 .= $config_fields[$i]['display_label'] . " cannot be empty";
                     }
@@ -425,8 +425,8 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
                 $count_selected++;
             }
             elseif ($fieldtype == 'boolean') {
-                $htmlcontent1 .= '<td><input type="checkbox" class="boolean '.$M.'" name=' . $config_fields[$i]['name'] . ' id="' . $module_options . '_' . $config_fields[$i]['name'] . '"    /><br/><span class="crmforms_field_error" id="' . $config_fields[$i]['name'] . 'error' . $_SESSION["generated_forms"] . '">';
-                if (isset($_POST['submitcontactform']) && (intval($_POST['formnumber']) ==$_SESSION['generated_forms'])) {
+                $htmlcontent1 .= '<td><input type="checkbox" class="boolean '.$M.'" name=' . $config_fields[$i]['name'] . ' id="' . $module_options . '_' . $config_fields[$i]['name'] . '"    /><br/><span class="crmforms_field_error" id="' . $config_fields[$i]['name'] . 'error' . sanitize_text_field($_SESSION["generated_forms"]) . '">';
+if(sanitize_text_field(isset($_POST['submitcontactform'])) && (sanitize_text_field(intval($_POST['formnumber']))) == sanitize_text_field($_SESSION['generated_forms'])){
                     if ($config_fields[$i]['zcf_mandatory'] == 1 && sanitize_text_field($_POST[$config_fields[$i]['name']]) == "") {
                         $htmlcontent1 .= $config_fields[$i]['display_label'] . " cannot be empty";
                     }
@@ -451,7 +451,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
                 $count_selected++;
             } elseif ($fieldtype == 'phone') {
                 $htmlcontent1 .= "<td><input type='text' class='phone{$M} crmforms_post_fields' name='{$config_fields[$i]['name']}' id='{$module_options}_{$config_fields[$i]['name']}' value='";
-                if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field(intval($_POST['formnumber'])) == $_SESSION['generated_forms']) && $count_error != 0)
+if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field(intval($_POST['formnumber'])) ==sanitize_text_field($_SESSION['generated_forms'])) && $count_error != 0)
                     $htmlcontent1 .= sanitize_text_field($_POST[$config_fields[$i]['name']]);
                 else
                     $htmlcontent1 .= '';
@@ -494,7 +494,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
                 }
                 $htmlcontent1 .= $htmlcontent2;
             } else {
-                $htmlcontent1 .= "<td><input type='hidden'  class='form-control dafalutvalue ss' name='{$config_fields[$i]['name']}'   value='" . $config_fields[$i]['defaultvalue'] . "'>";
+                $htmlcontent1 .= "<td><input type='hidden'  class='form-control dafalutvalue ss' name='{$config_fields[$i]['name']}'   value='" . esc_html($config_fields[$i]['defaultvalue']) . "'>";
             }
              $htmlcontent1 .= '</tr>';
         }
@@ -528,9 +528,9 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
         $htmlcontent .= '<input type="submit" value="Submit" id="submit" name="submit"></div>';
     }
     $htmlcontent .= "</td></tr></table>";
-    $htmlcontent .= "<input type='hidden' value='" . $module . "' name='moduleName' /><input type='hidden'  name='layoutId' value='" . $config_fields[0] ['layoutId'] . "'/></div></form>";
+    $htmlcontent .= "<input type='hidden' value='" . esc_html($module) . "' name='moduleName' /><input type='hidden'  name='layoutId' value='" . esc_html($config_fields[0] ['layoutId']) . "'/></div></form>";
 
-    if (sanitize_text_field(isset($_POST['submitcontactform'])) && (sanitize_text_field(intval($_POST['formnumber'])) == $_SESSION['generated_forms'])) {
+    if (sanitize_text_field(isset($_POST['submitcontactform'])) && (sanitize_text_field(intval($_POST['formnumber'])) == sanitize_text_field($_SESSION['generated_forms']))) {
         if ($count_error == 0) {
             $htmlcontent .= zcf_callcontactform7mapping($formtype);
         }
