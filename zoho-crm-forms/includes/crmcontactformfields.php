@@ -67,7 +67,7 @@ if ($cform_form_name != 'None') {
     <span id="inneroptions" class="leads-builder-sub-heading mr10"><span class="headerlabel">Module:</span> <span class="headerValue"> <?php echo esc_html($_REQUEST['third_module']); ?></span></span>
     <span id="inneroptions" class="leads-builder-sub-heading mr10"><span class="headerlabel">Layout:</span> <span class="headerValue"><?php echo esc_html($_REQUEST['layoutname']); ?></span></span>
     <?php $modulename = esc_html($_REQUEST['third_module']); ?>
-    <span id="inneroptions" class="leads-builder-sub-heading mr10"><a onclick="syncfields('', 'crmformswpbuilder','<?php echo $modulename;?>', '', 'Oncreate', '', '', '', '', '')" class='pR pl20 cP' >Fetch Fields</a></span>
+    <span id="inneroptions" class="leads-builder-sub-heading mr10"><a onclick="syncfields('', 'crmformswpbuilder','<?php echo esc_html($modulename);?>', '', 'Oncreate', '', '', '', '', '')" class='pR pl20 cP' >Fetch Fields</a></span>
 
 </span>
 </div>
@@ -124,16 +124,16 @@ if ($cform_form_name != 'None') {
                                                             foreach ($contact_config as $config_key => $config_val) { // configuration
 
                                                                 if ($cont_label == $config_key && $field_key == $config_val) { //match label and fieldname
-                                                                    $crm_field_options .= "selected=selected"; //select when the configuration exist
+                                                                     $crm_field_options .= " selected=\"selected\"";
                                                                 }
                                                             }
                                                         }
                                                         $crm_field_options .= "> $crm_field_label</option>";
                                                     }
                                                     $allowedposttags = zcf_allowed_tag();
-                                                    printf($crm_field_options);
+													printf('%s', wp_kses( $crm_field_options, $allowedposttags ));
                                                     ?>
-
+												</select>
                                             </td>
                                         </tr>
                                         <?php

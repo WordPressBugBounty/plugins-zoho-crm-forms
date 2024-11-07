@@ -361,7 +361,7 @@ class zcffieldoptions {
                 jQuery("tbody").sortable({
                     update: function (event, ui) {
                         var orderArray = new Array;
-                        var siteurl = "<?php echo site_url(); ?>";
+                        var siteurl = "<?php echo esc_url(site_url()); ?>";
                         var module = '<?php echo esc_html($_REQUEST['module']); ?>';
                         var option = 'crmforms_fields_shortcoders';
                         var shortcode = '<?php echo esc_html($_REQUEST['EditShortcode']); ?>';

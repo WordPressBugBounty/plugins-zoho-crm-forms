@@ -3,12 +3,12 @@
 /* * ******************************************************************************************
  * Plugin Name: Zoho CRM Lead Magnet
  * Description: Websites are one of the most important sources of leads for your business. That means your CRM system should be well integrated with your website to contextually capture each and every visitor to turn them into a lead.Introducing the Zoho CRM Lead Capture plugin for Wordpress. This lets you create webforms, embed them in your website, and automatically capture leads directly into your CRM with zero attenuation.Not only is the integration easy to set-up but it's also easy on your wallet.
- * Version: 1.7.9.4
+ * Version: 1.7.9.6
  * ***************************************************************************************** */
 if (!defined('ABSPATH'))
     exit;
 
-        define( 'ZCF_VERSION', '1.7.9.4' );
+        define( 'ZCF_VERSION', '1.7.9.6' );
         define( 'ZCF_LBPLUGINFILE', __FILE__ );
         define( 'ZCF_LBPLUGIN_URL', untrailingslashit( plugins_url( '', ZCF_LBPLUGINFILE ) ) );
         zcf_define_url_constants();
@@ -97,6 +97,7 @@ if (!defined('ABSPATH'))
       'data-thumbnail-background-color'     => array(),
       'data-alt'     => array(),
       'data-src'     => array(),
+	
       
 
       );
@@ -113,6 +114,7 @@ if (!defined('ABSPATH'))
       $allowedposttags['h1']       = $allowed_atts;
       $allowedposttags['h2']       = $allowed_atts;
       $allowedposttags['selected'] = $allowed_atts;
+      $allowedposttags['selected1'] = $allowed_atts;
       $allowedposttags['ul']       = $allowed_atts;
       $allowedposttags['li']       = $allowed_atts;
       $allowedposttags['option']   = $allowed_atts;
@@ -254,9 +256,10 @@ add_filter( 'http_request_args', function ( $r ) {
 } );
  function zcf_add_nonce(){
 		printf(
-			'<meta name="zoho_crm_forms_csrf_token" content="%s" />',
-			wp_create_nonce( 'zoho_crm_forms_nonce' )
-		);
+    '<meta name="zoho_crm_forms_csrf_token" content="%s" />',
+    esc_attr( wp_create_nonce( 'zoho_crm_forms_nonce' ) )
+);
+
 	}
 
 	 function zcf_prepare_nonces(){

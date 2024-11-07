@@ -126,7 +126,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                     $formname = $wpdb->get_results($wpdb->prepare($formnamequery, $shortcode));
 ?>
                             <input class="textField" type="text"  data-value="<?php echo esc_html__($formname[0]->form_name); ?>" id="form-name" name="form-name" data-value="<?php echo esc_html__($formname[0]->form_name); ?>"
-                            value="<?php echo esc_html__($formname[0]->form_name); ?>" onblur="formTitleupdate(this, '<?php sanitize_title_with_dashes($formname[0]->form_name); ?>', '<?php echo esc_url_raw($siteurl); ?>', '<?php echo sanitize_text_field($shortcode); ?>')"/>
+                            value="<?php echo esc_html__($formname[0]->form_name); ?>" onblur="formTitleupdate(this, '<?php sanitize_title_with_dashes($formname[0]->form_name); ?>', '<?php echo esc_url_raw($siteurl); ?>', '<?php echo esc_html($shortcode); ?>')"/>
                             <input type='hidden' id='lead_crmtype' name="lead_crmtype" value="crmformswpbuilder">
                             <input type="hidden" id="savefields" name="savefields" value="<?php echo esc_attr__('Apply', ZCF_PLUGIN_BASE_URL); ?>"/>
                             <?php
@@ -260,7 +260,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                     }
                     ?>
                     <div class='col-md-4'></div>
-                    <div  id="assignedto_td" class="col-md-2 mt10 <?php echo sanitize_text_field($userAssignedClass); ?>">
+                    <div  id="assignedto_td" class="col-md-2 mt10 <?php echo esc_html($userAssignedClass); ?>">
                         <?php
                         $crm_type_tmp = 'crmformswpbuilder';
                         require_once(ZCF_BASE_DIR_URI . "includes/crmwebformfieldsfuntions.php");
@@ -286,7 +286,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                         ?>
 
 
-                        <div class="col-md-2 mt10 <?php echo sanitize_text_field($userAssignedruleClass); ?>" id="assignmentRule">
+                        <div class="col-md-2 mt10 <?php echo esc_html($userAssignedruleClass); ?>" id="assignmentRule">
 
                             <select id='assignmentRule_ID' class=" form-control" data-live-search='false' name='assignmentRule_ID'>";
                                 <option value=''>None</option>
@@ -412,7 +412,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" name="thirdparty_form_title" id="thirdparty_form_title" <?php if (!empty($check_thirdparty_title)) { ?> value="<?php echo sanitize_text_field($check_thirdparty_title); ?>" <?php } ?> />
+                            <input type="text" class="form-control" name="thirdparty_form_title" id="thirdparty_form_title" <?php if (!empty($check_thirdparty_title)) { ?> value="<?php echo esc_html($check_thirdparty_title); ?>" <?php } ?> />
                         </div>
 
                     </div>
@@ -424,7 +424,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" name="thirdparty_form_title" id="thirdparty_form_title" <?php if (!empty($check_thirdparty_title)) { ?> value="<?php echo sanitize_text_field($check_thirdparty_title); ?>" <?php } ?> />
+                            <input type="text" class="form-control" name="thirdparty_form_title" id="thirdparty_form_title" <?php if (!empty($check_thirdparty_title)) { ?> value="<?php echo esc_html($check_thirdparty_title); ?>" <?php } ?> />
                         </div>
 
                     </div>
@@ -444,7 +444,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
             ?>
             <input type="hidden" name='thirdparty_option_available' id='thirdparty_option_available' value="<?php echo esc_attr__($thirdparty_option_available); ?>">
             <input class="newgraybtn" type="button" onclick="cancelFormSettings();" value="<?php echo esc_attr__("Cancel", ZCF_PLUGIN_BASE_URL); ?>" name="CancelFormSettings" />
-            <input class="primarybtn" type="button" onclick="saveFormSettings('<?php echo sanitize_text_field($shortcode); ?>');" value="<?php echo esc_attr__("Save Form Settings", ZCF_PLUGIN_BASE_URL); ?>" name="SaveFormSettings" />
+            <input class="primarybtn" type="button" onclick="saveFormSettings('<?php echo esc_html($shortcode); ?>');" value="<?php echo esc_attr__("Save Form Settings", ZCF_PLUGIN_BASE_URL); ?>" name="SaveFormSettings" />
 
 
         </div>
@@ -462,7 +462,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
         $shortcode_array = $wpdb->get_row($wpdb->prepare("select shortcode_id from zcf_zohoshortcode_manager where shortcode_name=%s",sanitize_text_field($_REQUEST['EditShortcode'])));
         $fields_array = $wpdb->get_results($wpdb->prepare("select * from zcf_zohocrm_formfield_manager where shortcode_id=%s and state=0 ",$shortcode_array->shortcode_id));
         ?>
-        <input type="hidden" id="shortcode_id" value="<?php echo sanitize_text_field($shortcode_array->shortcode_id); ?>" />
+        <input type="hidden" id="shortcode_id" value="<?php echo esc_html($shortcode_array->shortcode_id); ?>" />
         <div class="col-md-12  m10">
             <div class="f13 fontSmooth" id="profileNote">Select the fields(s).</div>
             <div class="field-list dIB cchosen" id="choose-fields">

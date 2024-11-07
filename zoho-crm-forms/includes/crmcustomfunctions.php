@@ -366,7 +366,7 @@ class zcfcustomfunctions {
                 break;
         }
       }else{
-        die( __( 'Security check', 'textdomain' ) );
+        die( esc_html(__( 'Security check', 'textdomain' ) ));
       }
     }
 
@@ -566,7 +566,7 @@ class zcf_AjaxActionsClass {
         }
         die;
       }else{
-        die( __( 'Security check', 'textdomain' ) );
+       die( esc_html(__( 'Security check', 'textdomain' ) ));
       }
     }
 
@@ -585,7 +585,7 @@ class zcf_ajaxActionModuleList {
         $OverallFunctionObj->zcf_selectLayoutName();
         die;
       }else{
-        die( __( 'Security check', 'textdomain' ) );
+        die( esc_html(__( 'Security check', 'textdomain' ) ));
       }
     }
 
@@ -604,7 +604,7 @@ class zcf_ajaxzcf_updateTitles {
         $OverallFunctionObj->zcf_updateFormTitle();
         die;
       }else{
-        die( __( 'Security check', 'textdomain' ) );
+        die( esc_html(__( 'Security check', 'textdomain' ) ));
       }
     }
 
@@ -622,7 +622,7 @@ class zcf_ajaxzcf_updateTitles1 {
         $OverallFunctionObj->zcf_saveClientAuthKeys();
         die;
       }else{
-        die( __( 'Security check', 'textdomain' ) );
+        die( esc_html(__( 'Security check', 'textdomain' ) ));
       }
     }
 

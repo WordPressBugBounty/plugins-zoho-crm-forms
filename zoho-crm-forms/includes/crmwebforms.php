@@ -22,7 +22,7 @@ if ($authtokens == '') {
                 require_once( ZCF_BASE_DIR_URI . "includes/crmcontactformfieldsmapping.php" );
                 if (!$result['status']) {
                     ?>
-                    <div style='font-weight:bold;color:red;font-size:16px;text-align:center'><br><?php echo sanitize_text_field($result['content']);?>to create Forms <br><br></div>
+                    <div style='font-weight:bold;color:red;font-size:16px;text-align:center'><br><?php echo esc_html($result['content']);?>to create Forms <br><br></div>
                 <?php
                 } else {
                     global $zohocrmdetails;
@@ -154,7 +154,7 @@ if ($authtokens == '') {
 
                     $htmlcontent1 .= $existing_content;
                     $htmlcontent1 .= "</tbody></table></div>";
-                $modulearrayquery = $wpdb->prepare("SELECT modifydate FROM zcf_zohocrm_list_module");
+$modulearrayquery = $wpdb->prepare("SELECT modifydate FROM zcf_zohocrm_list_module ORDER BY modifydate DESC");
                     $modulearray = $wpdb->get_results($modulearrayquery );
 
                     $SettingsConfig = get_option("zcf_crmformswpbuilder_settings");
@@ -167,7 +167,7 @@ if ($authtokens == '') {
 
                         <input class="outlineprimary  btn_small" type="button" onclick="createNewTPFormPopup()" id="thirdparty_map" value="<?php echo esc_attr__('Use Contact Form 7', " zoho-crm-form-builder "); ?>" />
                         <?php if ($authtokens != '') { ?>
-                            <span class="latest_module_syn" ><span class="mr20">Last sync on: <?php echo date("M d, Y", strtotime($modulearray[0]->modifydate)); ?> </span><a onclick="syncrmModules();"  class="synmodules pR pl20" title="Modules of Zoho CRM will be synchronized with WordPress" data-toggle='tooltip' data-placement='top'>Sync now</a></span>
+                            <span class="latest_module_syn" ><span class="mr20">Last sync on: <?php echo esc_html(date("M d, Y", strtotime($modulearray[0]->modifydate))); ?> </span><a onclick="syncrmModules();"  class="synmodules pR pl20" title="Modules of Zoho CRM will be synchronized with WordPress" data-toggle='tooltip' data-placement='top'>Sync now</a></span>
                         <?php } ?>
                     </div>
                     <?php
@@ -352,7 +352,7 @@ if ($authtokens == '') {
                             <?php
                             foreach ($layoutarray as $key => $value) {
                               ?>
-                                  <option  value="<?php echo $value->api_name ?>" > <?php echo $value->plural_label ?> </option>;
+                                  <option  value="<?php echo esc_html($value->api_name) ?>" > <?php echo esc_html($value->plural_label) ?> </option>;
                                 <?php
                             }
                             ?>

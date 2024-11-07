@@ -26,7 +26,7 @@ if (sanitize_text_field(isset($_REQUEST['code']))) {
 <div class="">
     <div class="panel" style="width:99%;">
         <div class="panel-body">
-            <input type="hidden" id="get_config" value="<?php echo sanitize_text_field($config_data) ?>" >
+            <input type="hidden" id="get_config" value="<?php echo esc_html($config_data) ?>" >
             <input type="hidden" id="revert_old_crm" value="crmformswpbuilder">
 
             <input type="hidden" id="site_url" name="site_url" value="<?php echo esc_attr($siteurl); ?>">
@@ -86,7 +86,7 @@ if (sanitize_text_field(isset($_REQUEST['code']))) {
 
             <div class="form">
                 <div class="form__row">
-                    <label class="form--label">Domain<?php echo $domainname;?></label>
+                    <label class="form--label">Domain<?php echo esc_html($domainname);?></label>
                     
                     <select onchange='authToken()' id='zcrm_integ_domain_name' class="form--input form--input--select" name="zcrm_integ_domain_name" onchange='selectaccount(this)'>
                         <option value="com" <?php if($domainname == 'com'){ echo esc_html__("selected");} ?> >zoho.com</option>
@@ -102,7 +102,7 @@ if (sanitize_text_field(isset($_REQUEST['code']))) {
                       ?>
                         <div class="form__row">
                                 <label class="form--label">Client Id</label>
-                                <input type="text" value="<?php echo sanitize_text_field($clientid); ?>" name="zcrm_integ_client_id" class="form--input" id="zcrm_integ_client_id" required onchange='authToken()'/>
+                                <input type="text" value="<?php echo esc_html($clientid); ?>" name="zcrm_integ_client_id" class="form--input" id="zcrm_integ_client_id" required onchange='authToken()'/>
 
                                   <span id='zohocomaccount'><a  href="https://accounts.zoho.com/developerconsole">How to create client id and Secret key</a> </span>
                                   <span id='zohoinaccount' class='dN'><a  href="https://accounts.zoho.in/developerconsole">How to create client id and Secret key</a> </span>
@@ -112,13 +112,13 @@ if (sanitize_text_field(isset($_REQUEST['code']))) {
 
                             <div class="form__row">
                                 <label class="form--label">Client Secret</label>
-                                <input type="text" value="<?php echo sanitize_text_field($clientsecret); ?>" name="zcrm_integ_client_secret" class="form--input" id="zcrm_integ_client_secret"  required onchange='authToken()'> <i class="form__row-info">Created in the developer console</i> </div>
+                                <input type="text" value="<?php echo esc_html($clientsecret); ?>" name="zcrm_integ_client_secret" class="form--input" id="zcrm_integ_client_secret"  required onchange='authToken()'> <i class="form__row-info">Created in the developer console</i> </div>
                             <div class="form__row">
                                 <input type="hidden"  readonly="readonly" id='stateurl' name="state" class="form--input" value="<?php echo esc_url(admin_url().'admin.php?page=crmforms-builder'); ?>" class="regular-text" readonly="readonly" required onchange='authToken()'/>
 
                                 <label class="form--label">Authorization Redirect URI</label>
                                 <?php $redUrl = "https://extensions.zoho.".$domainname."/plugin/wordpress/callback";?>
-                                <input type="text" id="zcrm_integ_authorization_uri" readonly="readonly" name="zcrm_integ_authorization_uri" class="form--input zcrm_integ_authorization_uri_us" value="<?php echo $redUrl;?>" class="regular-text" readonly="readonly" required/>
+                                <input type="text" id="zcrm_integ_authorization_uri" readonly="readonly" name="zcrm_integ_authorization_uri" class="form--input zcrm_integ_authorization_uri_us" value="<?php echo esc_url($redUrl);?>" class="regular-text" readonly="readonly" required/>
 
 
                             <div class="form__row form__row-btn">

@@ -153,10 +153,10 @@ class zcfadminhelperconfig extends zcfhelper {
         if (sanitize_text_field($_REQUEST['page']) == 'crmforms-builder' || sanitize_text_field($_REQUEST['page']) == 'formsettings-builder') {
             echo '<div class="zoho-crm-form-builder">
                 <table class="commentabmenu"><tr>
-                       <td class="' . $manuactive . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=crmforms-builder') . '"  id = "menu1" style="' . $disabledMenu . '">' . esc_html__('Forms', 'zoho-crm-form-builder') . '</a> </td>
-                        <td class="' . $manuformsettingsactive . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=formsettings-builder') . '"  id = "menu2" style="' . $disabledMenu . '">' . esc_html__('Settings', 'zoho-crm-form-builder') . '</a> </td>
-                        <td class="' . $manuformsubmitlogactive . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=formsubmit-logs') . '"  id = "menu2" style="' . $disabledMenu . '">' . esc_html__('Logs', 'zoho-crm-form-builder') . '</a> </td>
-                        <td class="' . $manucrmauthentications . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=crm-authentications') . '"  id = "menu2" style="' . $disabledMenu . '">' . esc_html__('authentication', 'zoho-crm-form-builder') . '</a> </td>
+                       <td class="' . esc_html($manuactive) . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=crmforms-builder') . '"  id = "menu1" style="' . esc_html($disabledMenu) . '">' . esc_html__('Forms', 'zoho-crm-form-builder') . '</a> </td>
+                        <td class="' . esc_html($manuformsettingsactive) . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=formsettings-builder') . '"  id = "menu2" style="' . esc_html($disabledMenu) . '">' . esc_html__('Settings', 'zoho-crm-form-builder') . '</a> </td>
+                        <td class="' . esc_html($manuformsubmitlogactive) . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=formsubmit-logs') . '"  id = "menu2" style="' . esc_html($disabledMenu) . '">' . esc_html__('Logs', 'zoho-crm-form-builder') . '</a> </td>
+                        <td class="' . esc_html($manucrmauthentications) . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=crm-authentications') . '"  id = "menu2" style="' . esc_html($disabledMenu) . '">' . esc_html__('authentication', 'zoho-crm-form-builder') . '</a> </td>
 
                 </tr></table></div>';
         } else if (sanitize_text_field($_REQUEST['page']) == 'create-leadform-builder') {
@@ -166,10 +166,10 @@ class zcfadminhelperconfig extends zcfhelper {
         } else {
             echo '<div class="zoho-crm-form-builder">
                 <table class="commentabmenu"><tr>
-                       <td class="' . $manuactive . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=crmforms-builder') . '"  id = "menu1" style="' . $disabledMenu . '">' . esc_html__('Forms', 'zoho-crm-form-builder') . '</a> </td>
-                        <td class="' . $manuformsettingsactive . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=formsettings-builder') . '"  id = "menu2" style="' . $disabledMenu . '">' . esc_html__('Settings', 'zoho-crm-form-builder') . '</a> </td>
-                        <td class="' . $manuformsubmitlogactive . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=formsubmit-logs') . '"  id = "menu2" style="' . $disabledMenu . '">' . esc_html__('Logs', 'zoho-crm-form-builder') . '</a> </td>
-                        <td class="' . $manucrmauthentications . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=crm-authentications') . '"  id = "menu2" style="' . $disabledMenu . '">' . esc_html__('authentication', 'zoho-crm-form-builder') . '</a> </td>
+                      <td class="' . esc_html($manuactive) . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=crmforms-builder') . '"  id = "menu1" style="' . esc_html($disabledMenu) . '">' . esc_html__('Forms', 'zoho-crm-form-builder') . '</a> </td>
+                        <td class="' . esc_html($manuformsettingsactive) . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=formsettings-builder') . '"  id = "menu2" style="' . esc_html($disabledMenu) . '">' . esc_html__('Settings', 'zoho-crm-form-builder') . '</a> </td>
+                        <td class="' . esc_html($manuformsubmitlogactive) . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=formsubmit-logs') . '"  id = "menu2" style="' . esc_html($disabledMenu) . '">' . esc_html__('Logs', 'zoho-crm-form-builder') . '</a> </td>
+                        <td class="' . esc_html($manucrmauthentications) . '"> <a href="' . esc_url(admin_url() . 'admin.php?page=crm-authentications') . '"  id = "menu2" style="' . esc_html($disabledMenu) . '">' . esc_html__('authentication', 'zoho-crm-form-builder') . '</a> </td>
 
                 </tr></table></div>';
         }
