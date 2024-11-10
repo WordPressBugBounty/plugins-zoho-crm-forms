@@ -58,12 +58,12 @@ if ($authtokens == '') {
 				<tr class='crmforms-crm-highlight crmforms-crm-alt border_ddd' >
 
 					<th class='crmforms-crm-free-list-view-th' style='width: 80px;'></th>
-					<th class='crmforms-crm-free-list-view-th' >" . __('Form name', 'zoho-crm-form-builder') . "</th>
-					<th class='crmforms-crm-free-list-view-th' >" . __('Shortcode', 'zoho-crm-form-builder') . "</th>
-					<th class='crmforms-crm-free-list-view-th'>" . __('Module', 'zoho-crm-form-builder') . "</th>
-					<th class='crmforms-crm-free-list-view-th' >" . __('Layout Name', 'zoho-crm-form-builder') . "</th>
-					<th class='crmforms-crm-free-list-view-th'>" . __('Assignee', 'zoho-crm-form-builder') . "</th>
-					<th class='crmforms-crm-free-list-view-th aligncenter'>" . __('Form Type', 'zoho-crm-form-builder') . "</th>
+					<th class='crmforms-crm-free-list-view-th' >" . __('Form name', 'zoho-crm-forms') . "</th>
+					<th class='crmforms-crm-free-list-view-th' >" . __('Shortcode', 'zoho-crm-forms') . "</th>
+					<th class='crmforms-crm-free-list-view-th'>" . __('Module', 'zoho-crm-forms') . "</th>
+					<th class='crmforms-crm-free-list-view-th' >" . __('Layout Name', 'zoho-crm-forms') . "</th>
+					<th class='crmforms-crm-free-list-view-th'>" . __('Assignee', 'zoho-crm-forms') . "</th>
+					<th class='crmforms-crm-free-list-view-th aligncenter'>" . __('Form Type', 'zoho-crm-forms') . "</th>
 
 				</tr></thead><tbody>";
                 $shortcodemanagerquery = $wpdb->prepare("SELECT * FROM zcf_zohoshortcode_manager");
@@ -163,9 +163,9 @@ $modulearrayquery = $wpdb->prepare("SELECT modifydate FROM zcf_zohocrm_list_modu
                     <div class="mb20 mt30">
                         <h4 class="mb10 dB">Zoho CRM Forms</h4><span class="dB">The form builder allows you to create forms in your wordpress and push the data into your Zoho CRM. Also, you can map the third party forms with Zoho CRM.</span> </div>
                     <div class="mt30 mb30 pR">
-                        <input class="primaryflatbtn   btn_small" type="submit" value="<?php echo esc_attr__('Create New Form', " zoho-crm-form-builder "); ?>" onclick="createNewFormPopup()" id="createNewFormPopup" />
+                        <input class="primaryflatbtn   btn_small" type="submit" value="<?php echo esc_attr__('Create New Form', "zoho-crm-forms"); ?>" onclick="createNewFormPopup()" id="createNewFormPopup" />
 
-                        <input class="outlineprimary  btn_small" type="button" onclick="createNewTPFormPopup()" id="thirdparty_map" value="<?php echo esc_attr__('Use Contact Form 7', " zoho-crm-form-builder "); ?>" />
+                        <input class="outlineprimary  btn_small" type="button" onclick="createNewTPFormPopup()" id="thirdparty_map" value="<?php echo esc_attr__('Use Contact Form 7', "zoho-crm-forms"); ?>" />
                         <?php if ($authtokens != '') { ?>
                             <span class="latest_module_syn" ><span class="mr20">Last sync on: <?php echo esc_html(date("M d, Y", strtotime($modulearray[0]->modifydate))); ?> </span><a onclick="syncrmModules();"  class="synmodules pR pl20" title="Modules of Zoho CRM will be synchronized with WordPress" data-toggle='tooltip' data-placement='top'>Sync now</a></span>
                         <?php } ?>

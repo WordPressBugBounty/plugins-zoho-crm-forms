@@ -82,7 +82,7 @@ class zcfajaxcore {
         $shortcodevalues = json_encode($value);
         print_r($shortcodevalues);
         }else{
-          die( esc_html(__( 'Security check', 'textdomain' ) ));
+          die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
         }
         die;
     }
@@ -103,7 +103,7 @@ class zcfajaxcore {
         $admin = $adminObj->zcfmainFormsActions();
         die;
       }else{
-        die( esc_html(__( 'Security check', 'textdomain' ) ));
+        die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
 
     }
@@ -122,7 +122,7 @@ class zcfajaxcore {
         update_option("zcf_captcha_settings", $final_captcha_array);
         die;
       }else{
-        die( esc_html(__( 'Security check', 'textdomain' ) ));
+        die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
 
     }
@@ -151,7 +151,7 @@ class zcfajaxcore {
         $mapping_ui_fields = new zcfcontactformfieldmapping();
         $mapping_ui_fields->zcfget_mapping_field_config($module, $thirdparty_form);
       }else{
-         die( esc_html(__( 'Security check', 'textdomain' ) ));
+         die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
     }
 
@@ -171,7 +171,7 @@ class zcfajaxcore {
         $mapping_ui_fields = new zcfcontactformfieldmapping();
         $mapping_ui_fields->zcfmaping_contactform_fields();
       }else{
-          die( esc_html(__( 'Security check', 'textdomain' ) ));
+          die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
     }
 
@@ -186,7 +186,7 @@ class zcfajaxcore {
         update_option($thirdparty_title_key, $thirdparty_title_value);
         die;
       }else{
-          die( esc_html(__( 'Security check', 'textdomain' ) ));
+          die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
 
     }
@@ -201,7 +201,7 @@ class zcfajaxcore {
         $mapping_ui_fields = new zcfcontactformfieldmapping();
         $mapping_ui_fields->zcf_mapped_fields_config();
       }else{
-          die( esc_html(__( 'Security check', 'textdomain' ) ));
+          die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
     }
 
@@ -215,7 +215,7 @@ class zcfajaxcore {
         $mapping_ui_fields = new zcfcontactformfieldmapping();
         $mapping_ui_fields->zcf_delete_mappedfields_config();
       }else{
-          die( esc_html(__( 'Security check', 'textdomain' ) ));
+          die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
     }
 

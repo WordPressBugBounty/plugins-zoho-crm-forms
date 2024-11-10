@@ -43,7 +43,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                 $select_option = "";
                 // $Data->crmtype = "" ;
 
-                $select_option .= "<option> --" . __('Select', ZCF_PLUGIN_BASE_URL) . "-- </option>";
+                $select_option .= "<option> --" . __('Select', 'zoho-crm-forms') . "-- </option>";
                 foreach ($zohocrmdetails as $crm_key => $crm_value) {
                     if (sanitize_text_field(isset($_REQUEST['crmtype'])) && ($crm_key == sanitize_text_field($_REQUEST['crmtype']))) {
                         $select_option .= "<option value='{$crm_key}' selected=selected > {$crm_value['crmname']} </option>";
@@ -87,7 +87,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
             } else {
                 $content .= "<span id='inneroptions' style='position:relative;left:40px;'>Module: <select id='module' name='module' style='margin-left:8px;height:27px;' onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}', '{onEditShortcode}')\" >";
                 $select_option = "";
-                $select_option .= "<option> --" . __('Select', ZCF_PLUGIN_BASE_URL) . "-- </option>";
+                $select_option .= "<option> --" . __('Select', 'zoho-crm-forms') . "-- </option>";
                 foreach (sanitize_text_field($zohocrmdetails[$_REQUEST['crmtype']]['modulename']) as $key => $value) {
                     if (sanitize_text_field(isset($_REQUEST['module'])) && (sanitize_text_field($_REQUEST['module']) == $key )) {
                         $select_option .= "<option value = '{$key}' selected=selected  > {$value}</option>";
@@ -125,10 +125,10 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                             ";
                     $formname = $wpdb->get_results($wpdb->prepare($formnamequery, $shortcode));
 ?>
-                            <input class="textField" type="text"  data-value="<?php echo esc_html__($formname[0]->form_name); ?>" id="form-name" name="form-name" data-value="<?php echo esc_html__($formname[0]->form_name); ?>"
-                            value="<?php echo esc_html__($formname[0]->form_name); ?>" onblur="formTitleupdate(this, '<?php sanitize_title_with_dashes($formname[0]->form_name); ?>', '<?php echo esc_url_raw($siteurl); ?>', '<?php echo esc_html($shortcode); ?>')"/>
+                            <input class="textField" type="text"  data-value="<?php echo esc_html($formname[0]->form_name); ?>" id="form-name" name="form-name" data-value="<?php echo esc_html($formname[0]->form_name); ?>"
+                            value="<?php echo esc_html($formname[0]->form_name); ?>" onblur="formTitleupdate(this, '<?php sanitize_title_with_dashes($formname[0]->form_name); ?>', '<?php echo esc_url_raw($siteurl); ?>', '<?php echo esc_html($shortcode); ?>')"/>
                             <input type='hidden' id='lead_crmtype' name="lead_crmtype" value="crmformswpbuilder">
-                            <input type="hidden" id="savefields" name="savefields" value="<?php echo esc_attr__('Apply', ZCF_PLUGIN_BASE_URL); ?>"/>
+                            <input type="hidden" id="savefields" name="savefields" value="<?php echo esc_attr__('Apply', 'zoho-crm-forms'); ?>"/>
                             <?php
                             if (isset($shortcode)) {
                                 $content = "";
@@ -141,7 +141,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                         <?php
                         if (isset($shortcode)) {
                             $content = "";
-                            $content .= "<input class='crmforms-btn crmforms-btn-primary btn-radius' id='generate_forms' type='hidden' value='" . __("Apply", ZCF_PLUGIN_BASE_URL) . "' onclick =  \" return updateStatus(false,'" . site_url() . "','{$module}','zcf_crmfields_shortcodes','{$shortcode}', '{$onAction}')\" />";
+                            $content .= "<input class='crmforms-btn crmforms-btn-primary btn-radius' id='generate_forms' type='hidden' value='" . __("Apply", "zoho-crm-forms") . "' onclick =  \" return updateStatus(false,'" . site_url() . "','{$module}','zcf_crmfields_shortcodes','{$shortcode}', '{$onAction}')\" />";
                             $allowedposttags = zcf_allowed_tag();
                             echo wp_kses( $content, $allowedposttags );
                         }
@@ -182,7 +182,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
         <div id="settingsavedmessage" style="height: 42px; display:none; color:red;">   </div>
         <div id="savedetails" style="height: 90px; display:none; color:blue;">   </div>
         <div id="url_post_id" style="display:none; color:blue;">  </div>
-        <div id="formtext" class="h1 mB0 pp-header m0"> <?php echo esc_html__('Form Settings', ZCF_PLUGIN_BASE_URL); ?> :</div>
+        <div id="formtext" class="h1 mB0 pp-header m0"> <?php echo esc_html__('Form Settings', 'zoho-crm-forms'); ?> :</div>
         <div class="pp-content pb10">
             <div>
 
@@ -213,7 +213,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                             $HelperObj = new zcfmaincorehelpers();
                             $module = $HelperObj->Module;
                             $resultmodule = $wpdb->get_results($wpdb->prepare("select * from zcf_zohocrm_assignmentrule where modulename=%s", sanitize_text_field($_REQUEST['module'])));
-                            echo esc_html__("Assign to User", ZCF_PLUGIN_BASE_URL);
+                            echo esc_html__("Assign to User", 'zoho-crm-forms');
                             ?></label>
                     </div>
 
@@ -224,10 +224,10 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                                     <input type='radio'  name='check_assigenduser' id='check_assigenduser' value="updateuser"
                                     <?php
                                     if (( isset($config_fields->assignmentrule_enable) && ($config_fields->assignmentrule_enable == 'updateuser')) || $config_fields->assignmentrule_enable != 'updaterule') {
-                                        echo esc_html__("checked=checked");
+                                        echo esc_html("checked=checked");
                                     }
                                     ?> onclick="assignedUser(this)">
-                                    <?php echo esc_html__("Choose a user", ZCF_PLUGIN_BASE_URL); ?></label>
+                                    <?php echo esc_html__("Choose a user", 'zoho-crm-forms'); ?></label>
                             </span>
                         </div>
                         <?php if ($resultmodule != '') { ?>
@@ -237,10 +237,10 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                                         <input type='radio'  name='check_assigenduser' id='check_assigendrule' value= "updaterule"
                                         <?php
                                         if (isset($config_fields->assignmentrule_enable) && ($config_fields->assignmentrule_enable == 'updaterule')) {
-                                            echo esc_html__("checked=checked");
+                                            echo esc_html("checked=checked");
                                         }
                                         ?> onclick="assignedUser(this)">
-                                        <?php echo esc_html__('Choose an assignment rule', ZCF_PLUGIN_BASE_URL); ?></label>
+                                        <?php echo esc_html__('Choose an assignment rule', 'zoho-crm-forms'); ?></label>
                                 </span>
                             </div>
                             <?php
@@ -275,7 +275,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
 
                         $first_userid = "";
                         ?>
-                        <input type='hidden' id='rr_first_userid' value="<?php echo esc_attr__($first_userid); ?>">
+                        <input type='hidden' id='rr_first_userid' value="<?php echo esc_attr($first_userid); ?>">
                     </div>
 
                     <?php
@@ -320,7 +320,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
             <div>
                 <div class="form-group col-md-12">
                     <div class="col-md-4">
-                        <label id='innertext' class="leads-builder-label"><?php echo esc_html__('Enable URL Redirection', ZCF_PLUGIN_BASE_URL); ?> </label>
+                        <label id='innertext' class="leads-builder-label"><?php echo esc_html__('Enable URL Redirection', 'zoho-crm-forms'); ?> </label>
                     </div>
                     <div class="col-md-6">
                         <label for="enableurlredirection" class="dIB mt5 mr10">
@@ -341,7 +341,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                             if (!isset($config_fields->is_redirection) == '1') {
                                 echo "disabled=disabled";
                             }
-                            ?> value="<?php if (isset($config_fields->url_redirection)) echo esc_url($config_fields->url_redirection); ?>" placeholder = "<?php echo esc_attr__('Page url or Post url', ZCF_PLUGIN_BASE_URL); ?>"/>
+                            ?> value="<?php if (isset($config_fields->url_redirection)) echo esc_url($config_fields->url_redirection); ?>" placeholder = "<?php echo esc_attr__('Page url or Post url', 'zoho-crm-forms'); ?>"/>
 
                         <?php }else { ?>
 
@@ -349,7 +349,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                             if (!isset($config_fields->is_redirection) == '1') {
                                 echo "disabled=disabled";
                             }
-                            ?> value="<?php if (isset($config_fields->url_redirection)) echo esc_url($config_fields->url_redirection); ?>" placeholder = "<?php echo esc_attr__('Page url or Post url', ZCF_PLUGIN_BASE_URL); ?>"/>
+                            ?> value="<?php if (isset($config_fields->url_redirection)) echo esc_url($config_fields->url_redirection); ?>" placeholder = "<?php echo esc_attr__('Page url or Post url', 'zoho-crm-forms'); ?>"/>
 
                         <?php } ?>
 
@@ -359,7 +359,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                 ?>
                 <div class="form-group col-md-12">
                     <div class="col-md-4">
-                        <label id='innertext' class="leads-builder-label"><?php echo esc_html__("Enable Google Captcha", "zoho-crm-form-builder"); ?>
+                        <label id='innertext' class="leads-builder-label"><?php echo esc_html__("Enable Google Captcha", "zoho-crm-forms"); ?>
                         </label>
                     </div>
                     <div class="col-md-2">
@@ -382,7 +382,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                 ?>
                 <div class="form-group col-md-12">
                     <div class="col-md-4">
-                        <label id='innertext' class="leads-builder-label"><?php echo esc_html__("Would you like to create this form as contact form 7", "zoho-crm-form-builder"); ?>
+                        <label id='innertext' class="leads-builder-label"><?php echo esc_html__("Would you like to create this form as contact form 7", "zoho-crm-forms"); ?>
                         </label>
                     </div>
                     <div class="col-md-1">
@@ -408,7 +408,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                     ?>
                     <div class="form-group col-md-12  update-thirdparty_title">
                         <div class="col-md-4">
-                            <label id='innertext' class="leads-builder-label"><?php echo esc_html__("Specify a title to this form", "zoho-crm-form-builder"); ?>
+                            <label id='innertext' class="leads-builder-label"><?php echo esc_html__("Specify a title to this form", "zoho-crm-forms"); ?>
                             </label>
                         </div>
                         <div class="col-md-4">
@@ -420,7 +420,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
 
                     <div class="form-group vH col-md-12  update-thirdparty_title">
                         <div class="col-md-4">
-                            <label id='innertext' class="leads-builder-label"><?php echo esc_html__("Specify a title to this form", "zoho-crm-form-builder"); ?>
+                            <label id='innertext' class="leads-builder-label"><?php echo esc_html__("Specify a title to this form", "zoho-crm-forms"); ?>
                             </label>
                         </div>
                         <div class="col-md-4">
@@ -442,9 +442,9 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                 $thirdparty_option_available = 'yes';
             }
             ?>
-            <input type="hidden" name='thirdparty_option_available' id='thirdparty_option_available' value="<?php echo esc_attr__($thirdparty_option_available); ?>">
-            <input class="newgraybtn" type="button" onclick="cancelFormSettings();" value="<?php echo esc_attr__("Cancel", ZCF_PLUGIN_BASE_URL); ?>" name="CancelFormSettings" />
-            <input class="primarybtn" type="button" onclick="saveFormSettings('<?php echo esc_html($shortcode); ?>');" value="<?php echo esc_attr__("Save Form Settings", ZCF_PLUGIN_BASE_URL); ?>" name="SaveFormSettings" />
+            <input type="hidden" name='thirdparty_option_available' id='thirdparty_option_available' value="<?php echo esc_attr($thirdparty_option_available); ?>">
+            <input class="newgraybtn" type="button" onclick="cancelFormSettings();" value="<?php echo esc_attr__("Cancel", 'zoho-crm-forms'); ?>" name="CancelFormSettings" />
+            <input class="primarybtn" type="button" onclick="saveFormSettings('<?php echo esc_html($shortcode); ?>');" value="<?php echo esc_attr__("Save Form Settings", "zoho-crm-forms"); ?>" name="SaveFormSettings" />
 
 
         </div>

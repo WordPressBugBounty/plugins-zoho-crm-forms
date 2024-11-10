@@ -23,7 +23,7 @@ class zcfcustomfunctions {
         $content = "";
         $flag = true;
         if (!$leadsynced) {
-            $content = __("Please configure your CRM in the CRM Configuration", "zoho-crm-form-builder");
+            $content = __("Please configure your CRM in the CRM Configuration", "zoho-crm-forms");
         }
         $return_array = array('content' => "$content", 'status' => $flag);
         return $return_array;
@@ -366,7 +366,7 @@ class zcfcustomfunctions {
                 break;
         }
       }else{
-        die( esc_html(__( 'Security check', 'textdomain' ) ));
+        die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
     }
 
@@ -566,7 +566,7 @@ class zcf_AjaxActionsClass {
         }
         die;
       }else{
-       die( esc_html(__( 'Security check', 'textdomain' ) ));
+       die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
     }
 
@@ -585,7 +585,7 @@ class zcf_ajaxActionModuleList {
         $OverallFunctionObj->zcf_selectLayoutName();
         die;
       }else{
-        die( esc_html(__( 'Security check', 'textdomain' ) ));
+        die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
     }
 
@@ -604,7 +604,7 @@ class zcf_ajaxzcf_updateTitles {
         $OverallFunctionObj->zcf_updateFormTitle();
         die;
       }else{
-        die( esc_html(__( 'Security check', 'textdomain' ) ));
+        die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
     }
 
@@ -622,7 +622,7 @@ class zcf_ajaxzcf_updateTitles1 {
         $OverallFunctionObj->zcf_saveClientAuthKeys();
         die;
       }else{
-        die( esc_html(__( 'Security check', 'textdomain' ) ));
+        die( esc_html(__( 'Security check', 'zoho-crm-forms' ) ));
       }
     }
 

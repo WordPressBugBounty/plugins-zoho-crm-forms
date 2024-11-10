@@ -146,7 +146,7 @@ class zcffieldoptions {
         $i = 0;
 
         if (!isset($config_leads_fields['fields'][0])) {
-            $htmlcontent .= '<p style="color:red;font-size:20px;text-align:center;margin-top:-22px;margin-bottom:20px;">' . __("Crm fields are not yet synchronised", "zoho-crm-form-builder") . ' </p>';
+            $htmlcontent .= '<p style="color:red;font-size:20px;text-align:center;margin-top:-22px;margin-bottom:20px;">' . __("Crm fields are not yet synchronised", "zoho-crm-forms") . ' </p>';
         } else {
             $htmlcontent .= '<form method="post" name = "userform" id="userform" action="' . ZCF_BASE_DIR . '/includes/class-lb-crmshortcodefunctions.php">
                 <table class="table  mb0" cellpadding="0" cellspacing="0"  id="sort_table" >
@@ -155,15 +155,15 @@ class zcffieldoptions {
 
             $htmlcontent .= '<th class="boder_lefte7e7e7 boder_bottome7e7e7 border-rightTrans border-topTrans sortable-icon" width="6%" scope=col rowspan=2></th>';
             if ($config_leads_fields['fields']['editupdatecount'] >= 1) {
-                $htmlcontent .= '<th  align="left" width="22%"  scope=col rowspan=2 class="boder_righte7e7e7 boder_lefte7e7e7 border-topTrans color_222">' . __('Crm Fields', 'zoho-crm-form-builder') . '<span class="editupdatecount">' . $config_leads_fields['fields']['editupdatecount'] . '</span></th>';
+                $htmlcontent .= '<th  align="left" width="22%"  scope=col rowspan=2 class="boder_righte7e7e7 boder_lefte7e7e7 border-topTrans color_222">' . __('Crm Fields', 'zoho-crm-forms') . '<span class="editupdatecount">' . $config_leads_fields['fields']['editupdatecount'] . '</span></th>';
             } else {
-                $htmlcontent .= '<th  align="left" width="22%"   scope=col rowspan=2 class="border-topTrans boder_bottome7e7e7 boder_righte7e7e7 color_222">' . __('CRM Fields', 'zoho-crm-form-builder') . '</th>';
+                $htmlcontent .= '<th  align="left" width="22%"   scope=col rowspan=2 class="border-topTrans boder_bottome7e7e7 boder_righte7e7e7 color_222">' . __('CRM Fields', 'zoho-crm-forms') . '</th>';
             }
             $htmlcontent .= '<th scope=colgroup colspan=5 class="aligncenter border-topTrans boder_righte7e7e7 pR pb0 color_222"  scope=col> Wordpress form<span class="tableseperator"></span></th></tr><tr>
-                <th  class="border-topTrans  border-rightTrans pl30 boder_bottome7e7e7" align="left" width="22%"  scope=col>' . __('Field Label', 'zoho-crm-form-builder') . '</th>
-                <th  class="border-topTrans aligncenter border-rightTrans boder_bottome7e7e7" align="left" width="10%"  scope=col>' . __('Mandatory', 'zoho-crm-form-builder') . '</th>
-                <th  class="border-topTrans  aligncenter border-rightTrans boder_bottome7e7e7" align="left" width="10%"  scope=col>' . __('Hidden Field', 'zoho-crm-form-builder') . '</th>
-                <th  class="border-topTrans boder_bottome7e7e7 boder_righte7e7e7 " align="left" width="17%"  scope=col>' . __('Default Values', 'zoho-crm-form-builder') . '</th>
+                <th  class="border-topTrans  border-rightTrans pl30 boder_bottome7e7e7" align="left" width="22%"  scope=col>' . __('Field Label', 'zoho-crm-forms') . '</th>
+                <th  class="border-topTrans aligncenter border-rightTrans boder_bottome7e7e7" align="left" width="10%"  scope=col>' . __('Mandatory', 'zoho-crm-forms') . '</th>
+                <th  class="border-topTrans  aligncenter border-rightTrans boder_bottome7e7e7" align="left" width="10%"  scope=col>' . __('Hidden Field', 'zoho-crm-forms') . '</th>
+                <th  class="border-topTrans boder_bottome7e7e7 boder_righte7e7e7 " align="left" width="17%"  scope=col>' . __('Default Values', 'zoho-crm-forms') . '</th>
                 </tr></thead><tbody>';
             $fieldcount = count($config_leads_fields['fields']) - 1;
             for ($i = 0; $i < $fieldcount; $i++) {

@@ -38,11 +38,11 @@ $captcha = ZCF_PLUGIN_BASE_URL;
                     <input type="hidden" name="crmforms-crmformswpbuilder-captcha-form" value="crmforms-crmformswpbuilder-captcha-form" />
 
                     <div class="form-group dN">
-                        <label id="inneroptions" class="leads-builder-heading"><?php echo esc_html__('Notification ', 'zoho-crm-form-builder'); ?> </label>
+                        <label id="inneroptions" class="leads-builder-heading"><?php echo esc_html__('Notification ', 'zoho-crm-forms'); ?> </label>
                     </div>
                     <div class="form-group col-md-12 dN">
                         <div class="col-md-3">
-                            <label id="innertext" class="leads-builder-label"><?php echo esc_html__('Which details you would like to be notified?', 'zoho-crm-form-builder'); ?> </label>
+                            <label id="innertext" class="leads-builder-label"><?php echo esc_html__('Which details you would like to be notified?', 'zoho-crm-forms'); ?> </label>
                         </div>
                         <div class="col-md-2">
                             <span id="circlecheck">
@@ -58,7 +58,7 @@ $captcha = ZCF_PLUGIN_BASE_URL;
 
                     <div class="form-group col-md-12 mt20">
                         <div class="col-md-3">
-                            <label id="innertext" class="leads-builder-label"> <?php echo esc_html__('Which email address you need to be notified to?', "zoho-crm-form-builder"); ?> </label>
+                            <label id="innertext" class="leads-builder-label"> <?php echo esc_html__('Which email address you need to be notified to?', "zoho-crm-forms"); ?> </label>
                         </div>
                         <div class="col-md-4">
                           <?php $emailId = sanitize_email($captcha_config['email']);?>
@@ -73,7 +73,7 @@ $captcha = ZCF_PLUGIN_BASE_URL;
 
                     <div class="form-group col-md-12">
                         <div class="col-md-3">
-                            <label id="inneroptions" class="leads-builder-label"><?php echo esc_html__("Would you like to put google captcha in all your form? ", "zoho-crm-form-builder"); ?> <?php echo esc_html(str_repeat('&nbsp', 2)); ?>  </label>
+                            <label id="inneroptions" class="leads-builder-label"><?php echo esc_html__("Would you like to put google captcha in all your form? ", "zoho-crm-forms"); ?> <?php echo esc_html(str_repeat('&nbsp', 2)); ?>  </label>
                         </div>
                         <div class="col-md-4">
                             <span id="circlecheck">
@@ -83,14 +83,14 @@ $captcha = ZCF_PLUGIN_BASE_URL;
                                     echo "checked";
                                 }
                                 ?> onclick="toggleRecaptcha('no');">
-                                <label for="crmforms_recaptcha_no"  id="innertext"  class="leads-builder-label mr10"> <?php echo esc_html__('No', 'zoho-crm-form-builder'); ?>
+                                <label for="crmforms_recaptcha_no"  id="innertext"  class="leads-builder-label mr10"> <?php echo esc_html__('No', 'zoho-crm-forms'); ?>
                                 </label>
                                 <input type='radio'  name='crmforms_recaptcha' id='crmforms_recaptcha_yes'  value="yes"<?php
                                 if ($captcha_config['crmforms_recaptcha'] == 'yes') {
                                     echo "checked";
                                 }
                                 ?> onclick="toggleRecaptcha('yes');">
-                                <label for="crmforms_recaptcha_yes"  id="innertext"  class="leads-builder-label"> <?php echo esc_html__('Yes', 'zoho-crm-form-builder'); ?>
+                                <label for="crmforms_recaptcha_yes"  id="innertext"  class="leads-builder-label"> <?php echo esc_html__('Yes', 'zoho-crm-forms'); ?>
                                 </label>
                             </span>
                         </div>
@@ -107,11 +107,11 @@ $captcha = ZCF_PLUGIN_BASE_URL;
                              >
                             <div class="form-group col-md-12">
                                 <div class="col-md-3">
-                                    <label id="innertext" class="leads-builder-label"><?php echo esc_html__('Google Recaptcha Site Key', 'zoho-crm-form-builder'); ?>  <?php echo esc_html(str_repeat('&nbsp;', 50)); ?>   </label>
+                                    <label id="innertext" class="leads-builder-label"><?php echo esc_html__('Google Recaptcha Site Key', 'zoho-crm-forms'); ?>  <?php echo esc_html(str_repeat('&nbsp;', 50)); ?>   </label>
                                 </div>
 
                                 <div class="col-md-4">
-                                    <input type='text' class='crmforms-vtiger-settings-text form-control' placeholder='<?php echo esc_attr__(' Enter your recaptcha site key here ', 'zoho-crm-form-builder '); ?>' name='recaptcha_public_key' id='crmforms_public_key' value="<?php echo esc_html($captcha_config['recaptcha_public_key']) ?>" />
+                                    <input type='text' class='crmforms-vtiger-settings-text form-control' placeholder='<?php echo esc_attr__(' Enter your recaptcha site key here ', 'zoho-crm-forms'); ?>' name='recaptcha_public_key' id='crmforms_public_key' value="<?php echo esc_html($captcha_config['recaptcha_public_key']) ?>" />
                                 </div>
                             </div>
 
@@ -128,11 +128,11 @@ $captcha = ZCF_PLUGIN_BASE_URL;
                              >
                             <div class="form-group col-md-12">
                                 <div class="col-md-3">
-                                    <label id="innertext" class="leads-builder-label"><?php echo esc_html__("Google Recaptcha Secret Key", "zoho-crm-form-builder"); ?></label>
+                                    <label id="innertext" class="leads-builder-label"><?php echo esc_html__("Google Recaptcha Secret Key", "zoho-crm-forms"); ?></label>
                                     <?php echo esc_html(str_repeat('&nbsp;', 50)); ?>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type='text' class='crmforms-vtiger-settings-text form-control' placeholder='<?php echo esc_attr__("Enter your recaptcha Secret key here", "zoho-crm-form-builder"); ?>' name='recaptcha_private_key' id='crmforms_private_key' value="<?php echo esc_html($captcha_config['recaptcha_private_key']) ?>" />
+                                    <input type='text' class='crmforms-vtiger-settings-text form-control' placeholder='<?php echo esc_attr__("Enter your recaptcha Secret key here", "zoho-crm-forms"); ?>' name='recaptcha_private_key' id='crmforms_private_key' value="<?php echo esc_html($captcha_config['recaptcha_private_key']) ?>" />
                                 </div>
                             </div>
                         </div>
@@ -141,7 +141,7 @@ $captcha = ZCF_PLUGIN_BASE_URL;
                     <!--leads captcha div close -->
 
                     <input type="hidden" name="posted" value="<?php echo 'posted'; ?>">
-                    <input type="button" value="<?php echo esc_attr__('Save', 'zoho-crm-form-builder'); ?>" onclick="updatecaptchakey();" id="innersave" class="primarybtn" />
+                    <input type="button" value="<?php echo esc_attr__('Save', 'zoho-crm-forms'); ?>" onclick="updatecaptchakey();" id="innersave" class="primarybtn" />
 
             </div>
         </div>

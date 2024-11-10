@@ -50,7 +50,7 @@ if (sanitize_text_field(isset($_REQUEST['code']))) {
                                     if (sanitize_text_field(isset($_POST['zcrm_integ_submit'])) && !empty($_POST)) {
                                       $nonce = sanitize_text_field($_REQUEST['_wpnonce']);
                                       if (!wp_verify_nonce($nonce, 'zcrm_integ_settings_nonce')) {
-                                            echo '<div class="error"><p><strong>'.esc_html__('Reload the page again').'</strong></p></div>'."\n";
+                                            echo '<div class="error"><p><strong>'.esc_html('Reload the page again').'</strong></p></div>'."\n";
                                         }
                                         else {
 
@@ -62,7 +62,7 @@ if (sanitize_text_field(isset($_REQUEST['code']))) {
                                         update_option('zcrm_integ_client_secret',$zcrm_integ_client_secret);
                                         update_option('zcrm_integ_domain_name',$zcrm_integ_domain_name);
                                         update_option('zcrm_integ_authorization_uri',$zcrm_integ_authorization_uri);
-                                        echo '<div class="updated"><p><strong>'.esc_html__('Settings saved.').'</strong></p></div>'."\n";
+                                        echo '<div class="updated"><p><strong>'.esc_html('Settings saved.').'</strong></p></div>'."\n";
                                          ?>
 
                                          <?php
@@ -89,11 +89,11 @@ if (sanitize_text_field(isset($_REQUEST['code']))) {
                     <label class="form--label">Domain<?php echo esc_html($domainname);?></label>
                     
                     <select onchange='authToken()' id='zcrm_integ_domain_name' class="form--input form--input--select" name="zcrm_integ_domain_name" onchange='selectaccount(this)'>
-                        <option value="com" <?php if($domainname == 'com'){ echo esc_html__("selected");} ?> >zoho.com</option>
-                        <option value="eu" <?php if($domainname == 'eu'){ echo esc_html__("selected");} ?>>zoho.eu</option>
-                          <option value="in" <?php if($domainname == 'in'){ echo esc_html__("selected");} ?>>zoho.in</option>
-                            <option value="jp" <?php if($domainname == 'jp'){ echo esc_html__("selected");} ?>>zoho.jp</option>
-                        <option value="com.au" <?php if($domainname == 'com.au'){ echo esc_html__("selected");} ?>>zoho.com.au</option>
+                        <option value="com" <?php if($domainname == 'com'){ echo esc_html("selected");} ?> >zoho.com</option>
+                        <option value="eu" <?php if($domainname == 'eu'){ echo esc_html("selected");} ?>>zoho.eu</option>
+                          <option value="in" <?php if($domainname == 'in'){ echo esc_html("selected");} ?>>zoho.in</option>
+                            <option value="jp" <?php if($domainname == 'jp'){ echo esc_html("selected");} ?>>zoho.jp</option>
+                        <option value="com.au" <?php if($domainname == 'com.au'){ echo esc_html("selected");} ?>>zoho.com.au</option>
                     </select>
 
                     <i class="form__row-info">The name of the region the account is configured</i> </div>
