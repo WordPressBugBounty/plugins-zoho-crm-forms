@@ -52,14 +52,14 @@ $post = array();
 global $module_options, $module, $isWidget, $assignedto, $check_duplicate, $update_record;
 
 function zcf_ContactFormFieldsGenerator($attr, $thirdparty) {
-
-
     global $HelperObj;
     global $module_options, $module, $isWidget, $assignedto, $check_duplicate, $update_record, $formattr, $attrname;
     $module_options = 'Leads';
     $newform = new zcffieldlistDatamanage();
-    if($attr['name'] ==''){
-      $attr['name'] = $attr['id'];
+    if (empty($attr['name'])) {
+        $attr['name'] = sanitize_text_field($attr['id']);  
+    } else {
+        $attr['name'] = sanitize_text_field($attr['name']); 
     }
     $newshortcode = $newform->zcfformfieldsPropsettings($attr['name']);
     $FormSettings = $newform->zcfFormPropSettings($attr['name']);
@@ -71,10 +71,12 @@ function zcf_ContactFormFieldsGenerator($attr, $thirdparty) {
     $module_options = $module;
     $check_duplicate = $FormSettings->duplicate_handling;
     if (isset($shortcodes['update_record'])) {
-        $update_record = $shortcodes['update_record'];
+        $update_record = sanitize_text_field($shortcodes['update_record']); // Sanitize if needed
     }
+
     return zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_options, "post", $thirdparty);
 }
+
 
 function zcf_callcontactform7mapping($formtype) {
 

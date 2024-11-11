@@ -382,17 +382,19 @@ $editquery = "SELECT *
 
     function zcfFormPropSettings($shortcodename = "") {
         global $wpdb;
-        $query = "";
-        $where = "";
+        $query = "SELECT * FROM zcf_zohoshortcode_manager";
+        
+        // Use a prepared statement to safely handle user input
         if ($shortcodename != "") {
-            $where = " where shortcode_name = '$shortcodename'";
+            $sql = $wpdb->prepare("SELECT * FROM zcf_zohoshortcode_manager WHERE shortcode_name = %s", $shortcodename);
+        } else {
+            $sql = $query;
         }
-        $query = "select * from zcf_zohoshortcode_manager";
-        $sql = $query . $where;
+
         $results = $wpdb->get_results($sql);
-        if (( $shortcodename != "" ) && ( count($results) > 0 )) {
-            $return_results = $results[0];
-            return $return_results;
+        
+        if (($shortcodename != "") && (count($results) > 0)) {
+            return $results[0];
         } else {
             return $results;
         }
