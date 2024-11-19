@@ -6,9 +6,9 @@ Requires at least: 3.8
 Author URI: https://www.zoho.com/crm/
 Author: Zoho CRM
 Tested up to: 6.7
-Stable tag:1.7.9.8
+Stable tag:1.7.9.9
 License: GPLv2 or later
-Version: 1.7.9.8
+Version: 1.7.9.9
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -302,6 +302,8 @@ Security review changes has been updated
 Wordpress latest version compatibility check 
 1.7.9.8
 Security review changes has been updated 
+1.7.9.9
+Php latest version compatibility checking
 
 == Upgrade notice ==
 

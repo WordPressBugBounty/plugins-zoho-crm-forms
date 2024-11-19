@@ -206,7 +206,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
     if (sanitize_text_field(isset($_POST['submitcontactform'])) && (sanitize_text_field($_POST['formnumber']) == sanitize_text_field($_SESSION['generated_forms']))) {
         $count_error = 0;
         for ($i = 0; $i < count($config_fields); $i++) {
-            if (array_key_exists($config_fields[$i]['name'], sanitize_text_field($_POST))) {
+           if (is_array($_POST) && array_key_exists($config_fields[$i]['name'], $_POST))  {
 
                 if ($config_fields[$i]['zcf_mandatory'] == 1 && sanitize_text_field($_POST[$config_fields[$i]['name']]) == "") {
 
@@ -524,7 +524,7 @@ if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_
             }
         }
         $htmlcontent .= "<div class='mT20' >
-		<div class='form-submit'>";
+        <div class='form-submit'>";
         $htmlcontent .= "<input type='hidden' name='formnumber' value='{$_SESSION['generated_forms']}'>";
         $htmlcontent .= "<input type='hidden' name='submitcontactform' value='submitcontactform{$_SESSION['generated_forms']}'/>";
         $htmlcontent .= '<input type="submit" value="Submit" id="submit" name="submit"></div>';
