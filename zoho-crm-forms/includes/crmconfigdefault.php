@@ -149,7 +149,7 @@ class zcfadminhelperconfig extends zcfhelper {
         $disableTab = $disableAuthen."".$disabledMenu;
         $admin_url = 'admin.php';
         $modulearrayquery = "SELECT modifydate FROM zcf_zohocrm_list_module WHERE modifydate != %s";
-        $modulearray = $wpdb->get_results($wpdb->prepare($modulearrayquery, ''));
+        $modulearray = $wpdb->get_results($wpdb->prepare($modulearrayquery, '0000-00-00'));
         if (sanitize_text_field($_REQUEST['page']) == 'crmforms-builder' || sanitize_text_field($_REQUEST['page']) == 'formsettings-builder') {
             echo '<div class="zoho-crm-form-builder">
                 <table class="commentabmenu"><tr>
