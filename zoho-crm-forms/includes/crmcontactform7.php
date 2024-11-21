@@ -168,15 +168,26 @@ $queryresult = $wpdb->get_results($wpdb->prepare($resquery, $field_name, $layout
         }
 
         $mapping = $wpdb->get_results($wpdb->prepare("select crmformsfieldslable,thirdpartyfieldids from zcf_contactformrelation where thirdpartyformid=%d", $post_id) );
-        foreach ($mapping as $key => $value) {
-            $crmformsfieldslable[$key] = $value['crmformsfieldslable'];
-            $thirdpartyfieldids[$key] = $value['thirdpartyfieldids'];
+
+        if (!empty($mapping)) {
+            foreach ($mapping as $key => $value) {
+                $crmformsfieldslable[$key] = $value['crmformsfieldslable'];
+                $thirdpartyfieldids[$key] = $value['thirdpartyfieldids'];
+            }
+            $thirdpartyfieldids = array_flip($thirdpartyfieldids);
+        } else {
+            $thirdpartyfieldids = []; 
         }
         $crmformsfieldquery = "SELECT a.field_name, a.field_values, a.field_type FROM zcf_zohocrmform_field_manager AS a JOIN zcf_zohocrm_formfield_manager AS b ON b.field_id = a.field_id JOIN zcf_contactformrelation AS c ON c.crmformsfieldid = b.rel_id WHERE c.thirdpartyformid = %d";
 
 $crmformsfieldName = $wpdb->get_results($wpdb->prepare($crmformsfieldquery, $post_id) );
 
-        $thirdpartyfieldids = array_flip($thirdpartyfieldids);
+        if (is_array($thirdpartyfieldids)) {
+            $thirdpartyfieldids = array_flip($thirdpartyfieldids);
+        } else {
+            $thirdpartyfieldids = []; // Handle empty or invalid cases gracefully
+        }
+
 
         foreach ($thirdpartyfieldids as $key => $value) {
             $OriginalMap[$key] = $crmformsfieldname[$value];

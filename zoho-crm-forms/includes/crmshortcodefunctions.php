@@ -511,7 +511,11 @@ class zcffieldoptions {
     }
 
     function zcfupdateFieldsOrder($field_order, $shortcode_name) {
-        $field_order = array_flip($field_order);
+         if (!is_array($field_order)) {
+            $field_order = array_flip($field_order);
+        }else {
+            $field_order = []; // Handle empty or invalid cases gracefully
+        }
         global $wpdb;
         $get_shortcode_id = $wpdb->get_results($wpdb->prepare("select shortcode_id from zcf_zohoshortcode_manager where shortcode_name = %s and crm_type = %s", $shortcode_name, 'crmformswpbuilder'));
         $shortcode_id = $get_shortcode_id[0]->shortcode_id;
