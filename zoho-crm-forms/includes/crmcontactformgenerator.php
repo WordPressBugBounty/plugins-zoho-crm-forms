@@ -65,9 +65,7 @@ function zcf_ContactFormFieldsGenerator($attr, $thirdparty) {
 $newshortcode = is_array($newshortcode) ? $newshortcode : [];
 
 $FormSettings = $newform->zcfFormPropSettings($attr['name']);
-$FormSettingsArray = is_array($FormSettings)
-    ? $FormSettings
-    : json_decode(json_encode($FormSettings), true);
+$FormSettingsArray = is_array($FormSettings)? $FormSettings: json_decode(json_encode($FormSettings), true);
 $FormSettingsArray = $FormSettingsArray ?? [];
 
 $formattr = array_merge($FormSettingsArray, $newshortcode);

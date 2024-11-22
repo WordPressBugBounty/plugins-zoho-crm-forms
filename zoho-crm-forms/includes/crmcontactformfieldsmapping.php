@@ -212,26 +212,29 @@ class zcfcontactformfieldmapping {
         foreach ($config_data as $data_key => $data_val) {
             if (preg_match('/^thirdpartyfield/', $data_key)) {
                 $thirdparty_key = ltrim($data_key, 'thirdpartyfield_');
-                $thirdparty_labels[$thirdparty_key] = $data_val; // Make thirdparty label array
+                $thirdparty_labels[$thirdparty_key] = $data_val; 
             }
 
             if (preg_match('/^crm_fields/', $data_key)) {
                 $crm_field_key = ltrim($data_key, 'crm_fields_');
                 if ($data_val != '--None--') {
-                    $crm_labels[$crm_field_key] = $data_val; // Make crm labels array -take only mapped values
+                    $crm_labels[$crm_field_key] = $data_val; 
                 }
             }
         }
-        $get_keys_crm_labels = array_keys($crm_labels); // get keys from crm labels- to prepare mapped thirdparty labels
-
+        $get_keys_crm_labels = is_array($crm_labels) ? array_keys($crm_labels) : [];
         foreach ($thirdparty_labels as $tp_key => $tp_val) {
             foreach ($get_keys_crm_labels as $index_val) {
-                if ($tp_key == $index_val) {//check crm key index with thirdparty label  array
-                    $thirdparty_mapped_labels[$tp_key] = $tp_val;  // prepare mapped values for thirdparty label array
+                if ($tp_key == $index_val) {
+                    $thirdparty_mapped_labels[$tp_key] = $tp_val;  
                 }
             }
         }
-        $mapped_array = array_combine($thirdparty_mapped_labels, $crm_labels); // Combine final mapped array(thirdparty, crm fields)
+        if (is_array($thirdparty_mapped_labels) && is_array($crm_labels) && count($thirdparty_mapped_labels) === count($crm_labels)){
+            $mapped_array = array_combine($thirdparty_mapped_labels, $crm_labels);
+        }else{
+            $mapped_array = [];
+        }
         $final_mapped_array = array();
         $final_mapped_array['form_title'] = $form_title;
         $final_mapped_array['third_plugin'] = $cForm7_name;

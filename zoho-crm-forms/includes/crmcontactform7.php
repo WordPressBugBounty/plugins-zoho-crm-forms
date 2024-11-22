@@ -4,15 +4,17 @@ if (!defined('ABSPATH'))
     exit;
 require_once('crmcontactformgenerator.php');
 add_action('wpcf7_before_send_mail', 'zcfcontact_forms_submitdata');
-
 function zcfreplace_key_function($all_fields, $key1, $key2) {
+    if (!is_array($all_fields) || !array_key_exists($key1, $all_fields)) {
+        return $all_fields; 
+    }
     $keys = array_keys($all_fields);
-    $index = array_search($key1, $keys);
+    $values = array_values($all_fields);
+    $index = array_search($key1, $keys, true);
     if ($index !== false) {
         $keys[$index] = $key2;
-        $all_fields = array_combine($keys, $all_fields);
     }
-    return $all_fields;
+    return array_combine($keys, $values);
 }
 
 function zcfgetTBetBrackets($post_content) {
@@ -56,7 +58,7 @@ function zcfcontact_forms_submitdata() {
                 unset($all_fields[$key]);
         }
 
-        $mapped_array = $check_map_exist['fields'];
+        $mapped_array = isset($check_map_exist['fields']) && is_array($check_map_exist['fields']) ? $check_map_exist['fields'] : [];
         $mapped_array_key_labels = array_keys($mapped_array);
         $get_json_array = $wpdb->get_results($wpdb->prepare("select ID,post_content from $wpdb->posts where ID=%d", $post_id));
         $contact_post_content = $get_json_array[0]->post_content;
