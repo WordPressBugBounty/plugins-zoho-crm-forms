@@ -62,8 +62,15 @@ function zcf_ContactFormFieldsGenerator($attr, $thirdparty) {
         $attr['name'] = sanitize_text_field($attr['name']); 
     }
     $newshortcode = $newform->zcfformfieldsPropsettings($attr['name']);
-    $FormSettings = $newform->zcfFormPropSettings($attr['name']);
-    $formattr = array_merge(json_decode(json_encode($FormSettings), true), $newshortcode);
+$newshortcode = is_array($newshortcode) ? $newshortcode : [];
+
+$FormSettings = $newform->zcfFormPropSettings($attr['name']);
+$FormSettingsArray = is_array($FormSettings)
+    ? $FormSettings
+    : json_decode(json_encode($FormSettings), true);
+$FormSettingsArray = $FormSettingsArray ?? [];
+
+$formattr = array_merge($FormSettingsArray, $newshortcode);
     $attrname = $attr['name'];
     $config_fields = $newshortcode['fields'];
     $module = $FormSettings->module;
@@ -103,8 +110,11 @@ function zcf_callcontactform7mapping($formtype) {
 
     $newform = new zcffieldlistDatamanage();
     $newshortcode = $newform->zcfformfieldsPropsettings($attrname);
+    $newshortcode = is_array($newshortcode) ? $newshortcode : [];
     $FormSettings = $newform->zcfFormPropSettings($attrname);
-    $config_fields = array_merge(json_decode(json_encode($FormSettings), true), $newshortcode);
+    $FormSettingsArray = $FormSettings?(is_array($FormSettings)?$FormSettings:json_decode(json_encode($FormSettings), true)) :[];
+    $FormSettingsArray = $FormSettingsArray ?? []; // Handle null case
+    $config_fields = array_merge($FormSettingsArray, $newshortcode);
     $submitcontactform = '';
     if (isset($data) && $data) {
         if (sanitize_text_field(isset($_REQUEST['submitcontactform']))) {

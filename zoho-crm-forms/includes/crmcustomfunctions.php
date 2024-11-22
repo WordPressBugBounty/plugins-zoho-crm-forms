@@ -792,6 +792,13 @@ class zcf_CapturingClassAjax {
             $zcf_CapturingClassAjax = new zcf_CapturingClassAjax();
             $Assigned_user = $zcf_CapturingClassAjax->zcf_get_mapping_assignedto($tp_shortcode, $assignedto_old);
             $Assigned_user_value = array_values($Assigned_user);
+            if (!is_array($post)) {
+                $post = [];
+            }
+
+            if (!is_array($Assigned_user)) {
+                $Assigned_user = [];
+            }
             if ($Assigned_user_value[0] != "--Select--") {
                 $post = array_merge($post, $Assigned_user);
             } else {
