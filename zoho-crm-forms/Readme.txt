@@ -6,9 +6,9 @@ Requires at least: 3.8
 Author URI: https://www.zoho.com/crm/
 Author: Zoho CRM
 Tested up to: 6.7
-Stable tag: 1.8.0.3
+Stable tag: 1.8.0.4
 License: GPLv2 or later
-Version: 1.8.0.3
+Version: 1.8.0.4
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -312,6 +312,8 @@ Php latest version compatibility checking
 Php latest version compatibility checking
 1.8.0.3
 Php latest version compatibility checking
+1.8.0.4
+Bug Boundry issue has been fixed
 
 == Upgrade notice ==
 
@@ -361,3 +363,6 @@ For examples
 [hidden site-url default:_site_url]
 
 Please feel free to contact us for any further assistance: **support@zohoextensions.com**
+
+A vulnerability reporting program in "Bug Bounty", to reach the community of researchers, is in place, which recognizes and rewards the work of security researchers. We are committed to working with the community to verify, reproduce, respond and implement appropriate solutions for the reported vulnerabilities.
+If you happen to find any, please submit the issues at https://bugbounty.zohocorp.com/. If you want to directly report vulnerabilities to us, mail us at **security@zohocorp.com**.

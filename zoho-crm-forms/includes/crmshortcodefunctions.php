@@ -432,7 +432,7 @@ class zcffieldoptions {
 
     function zcfenableMandatoryFields($selectedfields, $shortcode_name) {
         global $wpdb;
-        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id,fieldmanager.shortcode_id,fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager as fieldmanager INNER JOIN zcf_zohoshortcode_manager as shorcodemanager ON fieldmanager.shortcode_id=shorcodemanager.shortcode_id AND fieldmanager.field_id='$selectedfields' AND shorcodemanager.shortcode_name = '$shortcode_name'", $shortcode_name));
+        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id, fieldmanager.shortcode_id, fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager AS fieldmanager INNER JOIN zcf_zohoshortcode_manager AS shorcodemanager ON fieldmanager.shortcode_id = shorcodemanager.shortcode_id AND fieldmanager.field_id = %s AND shorcodemanager.shortcode_name = %s",$selectedfields,$shortcode_name));
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
@@ -442,7 +442,7 @@ class zcffieldoptions {
 
     function zcfdisableMandatoryFields($selectedfields, $shortcode_name) {
         global $wpdb;
-        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id,fieldmanager.shortcode_id,fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager as fieldmanager INNER JOIN zcf_zohoshortcode_manager as shorcodemanager ON fieldmanager.shortcode_id=shorcodemanager.shortcode_id AND fieldmanager.field_id='$selectedfields' AND shorcodemanager.shortcode_name = '$shortcode_name'", $shortcode_name));
+        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id, fieldmanager.shortcode_id, fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager AS fieldmanager INNER JOIN zcf_zohoshortcode_manager AS shorcodemanager ON fieldmanager.shortcode_id = shorcodemanager.shortcode_id AND fieldmanager.field_id = %s AND shorcodemanager.shortcode_name = %s",$selectedfields,$shortcode_name));
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
@@ -452,7 +452,8 @@ class zcffieldoptions {
 
     function zcfsaveFieldLabelDisplay($fieldDisplayLabels, $selectedfields, $shortcode_name) {
         global $wpdb;
-        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id,fieldmanager.shortcode_id,fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager as fieldmanager INNER JOIN zcf_zohoshortcode_manager as shorcodemanager ON fieldmanager.shortcode_id=shorcodemanager.shortcode_id AND fieldmanager.field_id='$selectedfields' AND shorcodemanager.shortcode_name = '$shortcode_name'", $shortcode_name));
+        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id, fieldmanager.shortcode_id, fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager AS fieldmanager INNER JOIN zcf_zohoshortcode_manager AS shorcodemanager ON fieldmanager.shortcode_id = shorcodemanager.shortcode_id AND fieldmanager.field_id = %s AND shorcodemanager.shortcode_name = %s",$selectedfields,$shortcode_name));
+
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
@@ -462,7 +463,8 @@ class zcffieldoptions {
 
     function zcfdefaultvalueFields($selectedfields, $shortcode_name, $defaultvalue) {
         global $wpdb;
-        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id,fieldmanager.shortcode_id,fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager as fieldmanager INNER JOIN zcf_zohoshortcode_manager as shorcodemanager ON fieldmanager.shortcode_id=shorcodemanager.shortcode_id AND fieldmanager.field_id='$selectedfields' AND shorcodemanager.shortcode_name = '$shortcode_name'", $shortcode_name));
+        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id, fieldmanager.shortcode_id, fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager AS fieldmanager INNER JOIN zcf_zohoshortcode_manager AS shorcodemanager ON fieldmanager.shortcode_id = shorcodemanager.shortcode_id AND fieldmanager.field_id = %s AND shorcodemanager.shortcode_name = %s",$selectedfields,$shortcode_name));
+
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
@@ -472,7 +474,8 @@ class zcffieldoptions {
 
     function zcfenableFields($selectedfields, $shortcode_name) {
         global $wpdb;
-        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id,fieldmanager.shortcode_id,fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager as fieldmanager INNER JOIN zcf_zohoshortcode_manager as shorcodemanager ON fieldmanager.shortcode_id=shorcodemanager.shortcode_id AND fieldmanager.field_id='$selectedfields' AND shorcodemanager.shortcode_name = '$shortcode_name'", $shortcode_name));
+        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id, fieldmanager.shortcode_id, fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager AS fieldmanager INNER JOIN zcf_zohoshortcode_manager AS shorcodemanager ON fieldmanager.shortcode_id = shorcodemanager.shortcode_id AND fieldmanager.field_id = %s AND shorcodemanager.shortcode_name = %s",$selectedfields,$shortcode_name));
+
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
@@ -482,7 +485,8 @@ class zcffieldoptions {
 
     function zcfdisableFields($selectedfields, $shortcode_name) {
         global $wpdb;
-        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id,fieldmanager.shortcode_id,fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager as fieldmanager INNER JOIN zcf_zohoshortcode_manager as shorcodemanager ON fieldmanager.shortcode_id=shorcodemanager.shortcode_id AND fieldmanager.field_id='$selectedfields' AND shorcodemanager.shortcode_name = '$shortcode_name'", $shortcode_name));
+        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id, fieldmanager.shortcode_id, fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager AS fieldmanager INNER JOIN zcf_zohoshortcode_manager AS shorcodemanager ON fieldmanager.shortcode_id = shorcodemanager.shortcode_id AND fieldmanager.field_id = %s AND shorcodemanager.shortcode_name = %s",$selectedfields,$shortcode_name));
+
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
@@ -492,7 +496,8 @@ class zcffieldoptions {
 
     function zcfenableHiddenFields($selectedfields, $shortcode_name) {
         global $wpdb;
-        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id,fieldmanager.shortcode_id,fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager as fieldmanager INNER JOIN zcf_zohoshortcode_manager as shorcodemanager ON fieldmanager.shortcode_id=shorcodemanager.shortcode_id AND fieldmanager.field_id='$selectedfields' AND shorcodemanager.shortcode_name = '$shortcode_name'", $shortcode_name));
+       $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id, fieldmanager.shortcode_id, fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager AS fieldmanager INNER JOIN zcf_zohoshortcode_manager AS shorcodemanager ON fieldmanager.shortcode_id = shorcodemanager.shortcode_id AND fieldmanager.field_id = %s AND shorcodemanager.shortcode_name = %s",$selectedfields,$shortcode_name));
+
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
@@ -502,7 +507,8 @@ class zcffieldoptions {
 
     function zcfdisableHiddenFields($selectedfields, $shortcode_name) {
         global $wpdb;
-        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id,fieldmanager.shortcode_id,fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager as fieldmanager INNER JOIN zcf_zohoshortcode_manager as shorcodemanager ON fieldmanager.shortcode_id=shorcodemanager.shortcode_id AND fieldmanager.field_id='$selectedfields' AND shorcodemanager.shortcode_name = '$shortcode_name'", $shortcode_name));
+        $enable_showfields = $wpdb->get_results($wpdb->prepare("SELECT fieldmanager.field_id, fieldmanager.shortcode_id, fieldmanager.rel_id, shorcodemanager.shortcode_id FROM zcf_zohocrm_formfield_manager AS fieldmanager INNER JOIN zcf_zohoshortcode_manager AS shorcodemanager ON fieldmanager.shortcode_id = shorcodemanager.shortcode_id AND fieldmanager.field_id = %s AND shorcodemanager.shortcode_name = %s",$selectedfields,$shortcode_name));
+
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
@@ -783,16 +789,7 @@ class ZcfCallMShortcodeObj extends zcfManageShortcodesActions {
 
     public function ZcfformatContactFields($thirdparty_form, $title, $shortcode) {
         global $wpdb;
-       $enablequery = "
-                SELECT a.rel_id, a.zcf_field_mandatory, a.custom_field_type, a.custom_field_values, 
-                       a.display_label, a.field_id, c.field_name, a.defaultvalues, a.hiddenfield 
-                FROM zcf_zohocrm_formfield_manager AS a 
-                JOIN zcf_zohoshortcode_manager AS b ON b.shortcode_id = a.shortcode_id 
-                JOIN zcf_zohocrmform_field_manager AS c ON c.field_id = a.field_id 
-                WHERE b.shortcode_name = %s 
-                AND a.state = 1 
-                ORDER BY a.form_field_sequence
-            ";
+       $enablequery = "SELECT a.rel_id, a.zcf_field_mandatory, a.custom_field_type, a.custom_field_values, a.display_label, a.field_id, c.field_name, a.defaultvalues, a.hiddenfield FROM zcf_zohocrm_formfield_manager AS a JOIN zcf_zohoshortcode_manager AS b ON b.shortcode_id = a.shortcode_id JOIN zcf_zohocrmform_field_manager AS c ON c.field_id = a.field_id WHERE b.shortcode_name = %s AND a.state = 1 ORDER BY a.form_field_sequence";
         $word_form_enable_fields = $wpdb->get_results($wpdb->prepare($enablequery, $shortcode) );
 
         $checkid = $wpdb->get_var($wpdb->prepare("select thirdpartyformid from zcf_contactformrelation where crmformsshortcodename =%s and thirdpartypluginname=%s", $shortcode, 'contactform'));
