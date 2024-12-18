@@ -886,8 +886,9 @@ class ZcfCallMShortcodeObj extends zcfManageShortcodesActions {
         $contact_array .= "<p><br /> [submit " . " \"Submit\"" . "]</p>";
         $meta = $contact_array;
         //$checkid = $wpdb->get_var($wpdb->prepare("select thirdpartyformid from zcf_contactformrelation inner join {$wpdb->prefix}posts on {$wpdb->prefix}posts.ID = zcf_contactformrelation.thirdpartyformid and {$wpdb->prefix}posts.post_status='publish' where crmformsshortcodename =%s and thirdpartypluginname=%s",'contactform'));
-        $dataQuery = "select thirdpartyformid from zcf_contactformrelation inner join {$wpdb->prefix}posts on {$wpdb->prefix}posts.ID = zcf_contactformrelation.thirdpartyformid and {$wpdb->prefix}posts.post_status='publish' where crmformsshortcodename ='".$shortcode."' and thirdpartypluginname='contactform'";
-        $dataresult = $wpdb->get_row( $dataQuery  );
+      
+        $dataQuery = $wpdb->prepare("SELECT thirdpartyformid FROM zcf_contactformrelation INNER JOIN {$wpdb->prefix}posts ON {$wpdb->prefix}posts.ID = zcf_contactformrelation.thirdpartyformid AND {$wpdb->prefix}posts.post_status = 'publish' WHERE crmformsshortcodename = %s AND thirdpartypluginname = 'contactform'",$shortcode);
+        $dataresult = $wpdb->get_row($dataQuery);
 
         if (empty($dataresult)) {
             $contform = array(
