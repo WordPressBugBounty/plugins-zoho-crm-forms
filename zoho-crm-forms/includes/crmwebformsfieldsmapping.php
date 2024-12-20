@@ -103,8 +103,11 @@ class zcffieldlistDatamanage {
     function zcfupdateFormSaveStatuses($submit_parameters, $shortcodename) {
         global $wpdb;
         $submit_parameters['failure_count'] = $submit_parameters['total'] - $submit_parameters['success'];
-
-        $update_form_submits = $wpdb->get_results("update zcf_zohoshortcode_manager set submit_count = '{$submit_parameters['total']}' , success_count = '{$submit_parameters['success']}' , failure_count = '{$submit_parameters['failure_count']}' where shortcode_name = '$shortcodename'");
+        $total = intval($submit_parameters['total']);
+        $success = intval($submit_parameters['success']);
+        $failure_count = intval($submit_parameters['failure_count']);
+        $shortcodename = sanitize_text_field($shortcodename);
+        $update_form_submits = $wpdb->query($wpdb->prepare("UPDATE zcf_zohoshortcode_manager SET submit_count = %d, success_count = %d, failure_count = %d WHERE shortcode_name = %s",$total,$success,$failure_count,$shortcodename));
     }
 
     function zcfupdateScodeFields($data, $module) {
@@ -142,14 +145,13 @@ class zcffieldlistDatamanage {
                     AND sm.crm_type = %s
                 ";
 
-$fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, $shortcodename, $crm_type) );
+            $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, $shortcodename, $crm_type) );
             $rel_id = isset($fields[0]) ? $fields[0]->rel_id : "";
             $field_id = isset($get_field_manager[0]) ? $get_field_manager[0]->field_id : "";
 
             if ($crm_type == $shortcodedata->crm_type && $module_type == $module) {
                 if (count($fields) == 0) {
-
-                    $query = $wpdb->get_results("insert into zcf_zohocrm_formfield_manager( field_id , shortcode_id , display_label , custom_field_type , custom_field_values , zcf_field_mandatory , form_field_sequence , state ) VALUES ('$field_id', '$shortcode_id' , '$field_label', '$field_type', '$field_values' , $field_mandatory , $field_sequence , $publish )");
+                    $query = $wpdb->query($wpdb->prepare("INSERT INTO zcf_zohocrm_formfield_manager (field_id, shortcode_id, display_label, custom_field_type, custom_field_values, zcf_field_mandatory, form_field_sequence, state)VALUES (%d, %d, %s, %s, %s, %d, %d, %d)",$field_id,$shortcode_id,$field_label,$field_type,$field_values,$field_mandatory,$field_sequence,$publish));
                 } else {
                     $state = "";
                     if ($field_mandatory == 1) {
@@ -157,7 +159,7 @@ $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, 
                         $state = ", state = '1'";
                     }
 
-                    $query = $wpdb->get_results("update zcf_zohocrm_formfield_manager set zcf_field_mandatory = '$field_mandatory' {$state} , custom_field_values = '$field_values' where rel_id = '{$rel_id}'");
+                    $query = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET zcf_field_mandatory = %d, custom_field_values = %s {$state} WHERE rel_id = %d",$field_mandatory,$field_values,$rel_id));
 
                     if ($field_type == 'picklist' || $field_type == 'multipicklist') {
                         $wpdb->update('zcf_zohocrm_formfield_manager', array('custom_field_values' => $field_values), array('rel_id' => $rel_id));
@@ -246,7 +248,7 @@ $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, 
                         $field_mandatory = 1;
                         $state = ", state = '1'";
                     }
-                    $query = $wpdb->get_results("update zcf_zohocrm_formfield_manager set zcf_field_mandatory = '$field_mandatory' {$state} , custom_field_values = '$field_values' ,editupdate=0 where field_id = '{$field_id}'");
+        $query = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET zcf_field_mandatory = %d, custom_field_values = %s, editupdate = 0 {$state} WHERE field_id = %d",$field_mandatory,$field_values,$field_id));
 
                     if ($field_type == 'picklist' || $field_type == 'multipicklist') {
                       //  $wpdb->update('zcf_zohocrm_formfield_manager', array('custom_field_values' => $field_values), array('rel_id' => $rel_id));

@@ -113,12 +113,7 @@ class zcffieldoptions {
 
     function zcfformFields($options, $onAction, $editShortCodes, $formtype = "post", $module, $layoutname) {
         global $wpdb;
-        $fieldsquery = "
-                SELECT * 
-                FROM zcf_zohocrmform_field_manager 
-                WHERE module_type = %s 
-                AND Layout_Name = %s
-            ";
+        $fieldsquery = "SELECT * FROM zcf_zohocrmform_field_manager WHERE module_type = %s AND Layout_Name = %s";
         $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $module, $layoutname) );
 
 
@@ -436,7 +431,8 @@ class zcffieldoptions {
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
-        $enable_crmfields = $wpdb->query("update zcf_zohocrm_formfield_manager set zcf_field_mandatory = '1' ,hiddenfield = '0',editupdate = '0' where rel_id ='$rel_id' and shortcode_id = '$shortcode_id'");
+        $enable_crmfields = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET zcf_field_mandatory = '1', hiddenfield= '0', editupdate = '0' WHERE rel_id = %s AND shortcode_id = %s",$rel_id,$shortcode_id));
+
         $wpdb->query("update zcf_zohocrmform_field_manager set editupdate = '0' where field_id ='$field_id'");
     }
 
@@ -446,8 +442,8 @@ class zcffieldoptions {
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
-        $enable_crmfields = $wpdb->query("update zcf_zohocrm_formfield_manager set zcf_field_mandatory = '0',hiddenfield = '0',editupdate = '0' where rel_id ='$rel_id' and shortcode_id = '$shortcode_id'");
-        $wpdb->query("update zcf_zohocrmform_field_manager set editupdate = '0' where field_id ='$field_id' ");
+        $enable_crmfields = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET zcf_field_mandatory = '0', hiddenfield= '0', editupdate = '0' WHERE rel_id = %s AND shortcode_id = %s",$rel_id,$shortcode_id));
+        $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrmform_field_manager SET editupdate = '0' WHERE field_id = %s",$field_id));
     }
 
     function zcfsaveFieldLabelDisplay($fieldDisplayLabels, $selectedfields, $shortcode_name) {
@@ -457,8 +453,8 @@ class zcffieldoptions {
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
-        $enable_crmfields = $wpdb->query("update zcf_zohocrm_formfield_manager set display_label = '{$fieldDisplayLabels}' , editupdate = '0' where rel_id ='$rel_id' and shortcode_id = '$shortcode_id'");
-        $wpdb->query("update zcf_zohocrmform_field_manager set editupdate = '0' where field_id ='$field_id'");
+        $enable_crmfields = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET display_label = %s, editupdate = '0' WHERE rel_id = %s AND shortcode_id = %s",$fieldDisplayLabels,$rel_id,$shortcode_id));
+        $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrmform_field_manager SET editupdate = '0' WHERE field_id = %s",$field_id));
     }
 
     function zcfdefaultvalueFields($selectedfields, $shortcode_name, $defaultvalue) {
@@ -468,8 +464,9 @@ class zcffieldoptions {
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
-        $enable_crmfields = $wpdb->query("update zcf_zohocrm_formfield_manager set defaultvalues = '{$defaultvalue}' , editupdate = '0' where rel_id ='$rel_id' and shortcode_id = '$shortcode_id'");
-        $wpdb->query("update zcf_zohocrmform_field_manager set editupdate = '0' where field_id ='$field_id'");
+        $enable_crmfields = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET defaultvalues = %s, editupdate = '0' 
+         WHERE rel_id = %s AND shortcode_id = %s",$defaultvalue,$rel_id,$shortcode_id));
+        $field_update_result = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrmform_field_manager SET editupdate = '0' WHERE field_id = %s",$field_id));
     }
 
     function zcfenableFields($selectedfields, $shortcode_name) {
@@ -479,8 +476,8 @@ class zcffieldoptions {
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
-        $enable_crmfields = $wpdb->query("update zcf_zohocrm_formfield_manager set state = '1' , editupdate = '0'  where rel_id ='$rel_id' and shortcode_id = '$shortcode_id'");
-        $wpdb->query("update zcf_zohocrmform_field_manager set editupdate = '0' where field_id ='$field_id'");
+        $enable_crmfields = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET state = '1', editupdate = '0' WHERE rel_id = %s AND shortcode_id = %s",$rel_id,$shortcode_id));
+        $field_update_result = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrmform_field_manager SET editupdate = '0' WHERE field_id = %s",$field_id));
     }
 
     function zcfdisableFields($selectedfields, $shortcode_name) {
@@ -490,8 +487,9 @@ class zcffieldoptions {
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
-        $enable_crmfields = $wpdb->query("update zcf_zohocrm_formfield_manager set state = '0' , editupdate = '0' where rel_id ='$rel_id' and shortcode_id = '$shortcode_id'");
-        $wpdb->query("update zcf_zohocrmform_field_manager set editupdate = '0' where field_id ='$field_id'");
+        $enable_crmfields = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET state = '0', editupdate = '0' 
+         WHERE rel_id = %s AND shortcode_id = %s",$rel_id,$shortcode_id));
+        $field_update_result = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrmform_field_manager SET editupdate = '0' WHERE field_id = %s",$field_id));
     }
 
     function zcfenableHiddenFields($selectedfields, $shortcode_name) {
@@ -501,8 +499,10 @@ class zcffieldoptions {
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
-        $enable_crmfields = $wpdb->query("update zcf_zohocrm_formfield_manager set hiddenfield = '1' , editupdate = '0'  where rel_id ='$rel_id' and shortcode_id = '$shortcode_id'");
-        $wpdb->query("update zcf_zohocrmform_field_manager set editupdate = '0' where field_id ='$field_id'");
+        $enable_crmfields = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET hiddenfield = '1', editupdate = '0' 
+         WHERE rel_id = %s AND shortcode_id = %s",$rel_id,$shortcode_id));
+        $field_update_result = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrmform_field_manager SET editupdate = '0' WHERE field_id = %s",
+        $field_id));
     }
 
     function zcfdisableHiddenFields($selectedfields, $shortcode_name) {
@@ -512,8 +512,10 @@ class zcffieldoptions {
         $rel_id = $enable_showfields[0]->rel_id;
         $shortcode_id = $enable_showfields[0]->shortcode_id;
         $field_id = $enable_showfields[0]->field_id;
-        $enable_crmfields = $wpdb->query("update zcf_zohocrm_formfield_manager set hiddenfield = '0' , editupdate = '0' where rel_id ='$rel_id' and shortcode_id = '$shortcode_id'");
-        $wpdb->query("update zcf_zohocrmform_field_manager set editupdate = '0' where field_id ='$field_id'");
+        $enable_crmfields = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET hiddenfield = '0', editupdate = '0' 
+         WHERE rel_id = %s AND shortcode_id = %s",$rel_id,$shortcode_id));
+        $field_update_result = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrmform_field_manager SET editupdate = '0' WHERE field_id = %s",
+        $field_id));
     }
 
     function zcfupdateFieldsOrder($field_order, $shortcode_name) {
@@ -528,7 +530,10 @@ class zcffieldoptions {
         $get_existing_field_order = $wpdb->get_results($wpdb->prepare("select field_id,rel_id, form_field_sequence from zcf_zohocrm_formfield_manager where shortcode_id = %d order by form_field_sequence", $shortcode_id));
         $i = 0;
         foreach ($get_existing_field_order as $key => $ffOrder) {
-            $updates_orders = $wpdb->query("update zcf_zohocrm_formfield_manager set form_field_sequence ='" . $field_order[$ffOrder->field_id] . "' where rel_id ={$ffOrder->rel_id} ");
+            $form_field_sequence = isset($field_order[$ffOrder->field_id]) ? intval($field_order[$ffOrder->field_id]) : 0;
+            $rel_id = intval($ffOrder->rel_id);
+            $updates_orders = $wpdb->query($wpdb->prepare("UPDATE zcf_zohocrm_formfield_manager SET form_field_sequence = %d 
+             WHERE rel_id = %d",$form_field_sequence,$rel_id));
             $i++;
         }
     }
@@ -769,8 +774,10 @@ class zcfManageShortcodesActions {
         $deletedata = $wpdb->get_results($wpdb->prepare($deletedataquery, $delete_short) );
 
         $deleteid = $deletedata[0]->shortcode_id;
-        $delete_shortcode = $wpdb->query("delete from zcf_zohoshortcode_manager where shortcode_id = '$deleteid'");
-        $delete_shortcode_fields = $wpdb->query("delete from zcf_zohocrm_formfield_manager where shortcode_id = '$deleteid'");
+        $delete_shortcode = $wpdb->query($wpdb->prepare("DELETE FROM zcf_zohoshortcode_manager WHERE shortcode_id = %d",
+        $deleteid));        
+        $delete_shortcode_fields = $wpdb->query($wpdb->prepare("DELETE FROM zcf_zohocrm_formfield_manager WHERE shortcode_id = %d",
+        $deleteid));
         return $deletedata;
         exit;
     }

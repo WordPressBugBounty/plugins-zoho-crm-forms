@@ -48,8 +48,9 @@ if (!class_exists("crmformsZohoApi")) {
                            PRIMARY KEY ( id )
                         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8
                ");
-               $delete_moduleList = $wpdb->query("delete from zcf_zohocrm_moduleLists where modulename = '$module'");
-              foreach($result_array['layouts'] as $value_array){
+        $delete_moduleList = $wpdb->query($wpdb->prepare("DELETE FROM zcf_zohocrm_moduleLists WHERE modulename = %s",
+        $module));              
+        foreach($result_array['layouts'] as $value_array){
                 $layoutname = $value_array['name'];
                 $layoutId   = $value_array['id'];
                 $wpdb->insert('zcf_zohocrm_moduleLists', array('modulename' => $module, 'Layoutname' => $layoutname, 'layoutID' => $layoutId));
