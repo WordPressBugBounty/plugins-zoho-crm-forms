@@ -120,8 +120,8 @@ class zcfcontactformfieldmapping {
             $crm_field_options = '';
             $crm_field_options .= "<option>--None--</option>";
             foreach ($crm_field_labels as $field_key => $crm_field_label) {
-
-                $crm_field_options .= "<option value='{$crm_field_label}'> $crm_field_label</option>";
+                $crm_field_label = esc_html($crm_field_label);
+                $crm_field_options .= "<option value='{$crm_field_label}'> {$crm_field_label}</option>";
             }
 
 

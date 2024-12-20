@@ -371,11 +371,11 @@ $editquery = "SELECT *
             $crmFields['fields'][$i]['layoutId'] = $newfields->layoutId;
             $crmFields['fields'][$i]['hiddenfield'] = $newfields->hiddenfield;
             if ($newfields->custom_field_type == 'select-multiple' || $newfields->custom_field_type == 'select') {
-                $crmFields['fields'][$i]['defaultvalue'] = array('defaultvalues' => @unserialize($newfields->defaultvalues));
+                $crmFields['fields'][$i]['defaultvalue'] = array('defaultvalues' => @unserialize($newfields->defaultvalues,['allowed_classes' => false]));
             } else {
                 $crmFields['fields'][$i]['defaultvalue'] = $newfields->defaultvalues;
             }
-            $crmFields['fields'][$i]['type'] = array('picklistValues' => @unserialize($newfields->custom_field_values), 'name' => $newfields->custom_field_type, 'defaultValue' => $newfields->custom_field_values);
+            $crmFields['fields'][$i]['type'] = array('picklistValues' => @unserialize($newfields->custom_field_values,['allowed_classes' => false]), 'name' => $newfields->custom_field_type, 'defaultValue' => $newfields->custom_field_values);
             $i++;
         }
         $crmFields['fields']['editupdatecount'] = sizeof($editupdatecount);

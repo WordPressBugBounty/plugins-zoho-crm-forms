@@ -482,7 +482,7 @@ if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_
         if ($hiddenFieldChk == 1) {
              $htmlcontent1 .= '<tr class="hiddenElement">';
             if ($config_fields[$i]['type']['name'] == 'multiselectpicklist') {
-                $defaultvaluepicklist = unserialize($config_fields[$i]['defaultvalue']);
+                $defaultvaluepicklist = unserialize($config_fields[$i]['defaultvalue'],['allowed_classes' => false]);
             }
 
             if ($config_fields[$i]['type']['name'] == 'picklist') {

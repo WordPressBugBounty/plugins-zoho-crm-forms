@@ -180,7 +180,7 @@ class zcffieldoptions {
 
                 $defaultvaluepicklist = $config_leads_fields['fields'][$i]['defaultvalue'];
                 if (($config_leads_fields['fields'][$i]['type']['name'] == 'multiselectpicklist') && $config_leads_fields['fields'][$i]['defaultvalue'] != '') {
-                    $defaultvaluepicklist = unserialize($config_leads_fields['fields'][$i]['defaultvalue']);
+                    $defaultvaluepicklist = unserialize($config_leads_fields['fields'][$i]['defaultvalue'],['allowed_classes' => false]);
                 }
 
 
@@ -830,7 +830,7 @@ class ZcfCallMShortcodeObj extends zcfManageShortcodesActions {
                 $classhidden = 'class:hidden';
                 $classtrHidden = 'dN';
                 if ($type == 'multiselectpicklist') {
-                    $cont_array = unserialize($value->defaultvalues);
+                    $cont_array = unserialize($value->defaultvalues,['allowed_classes' => false]);
                 } else {
                     $defaultvalue = $value->defaultvalues;
                 }
