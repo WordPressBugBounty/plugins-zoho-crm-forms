@@ -100,7 +100,7 @@ if (!class_exists("crmformsZohoApi")) {
             $joinstring = $desc."".$fetchData;
             $wpdb->insert( 'zcf_submitlogs' , array( 'crmsubmitlogStatus' => $status,'crmsubmitlogDescribtion'=>$joinstring) );
         }
-        public function zcfInsertattachment($response, $authkey, $path='', $modulename) {
+        public function zcfInsertattachment($response, $authkey, $path='', $modulename="") {
             $id = $response['data'][0]['details']['id'];
 
           $url = $this->apiurl ."/crm/v2/$modulename/$id/Attachments";

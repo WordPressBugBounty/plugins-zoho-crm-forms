@@ -225,11 +225,11 @@ class zcffieldoptions {
                     $onaction = sanitize_text_field($_REQUEST['onAction']);
                     if ($config_leads_fields['fields'][$i]['hiddenfield'] == 1) {
 
-                        $htmlcontent1 .= "<label class='newCustomchkbox-md  {$disableTypeHiddenfield}'>
-                        <input checked='checked' type='checkbox' data-id='" . $field_id . "' name='hiddenfieldChk" . $field_id . "' class='onoffswitch-checkbox hiddenfieldChk enablefield' data-status='hiddenenablefield' data-label='Hidden Disable Field' id='hiddenfieldChk" . $i . "' onclick =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$shortcode', '$onaction')\" > <span class='vam chkbxIcon'></span></label>";
+                        $htmlcontent1 .= "<label class='newCustomchkbox-md  {$disableTypeHiddenfield}'><input checked='checked' type='checkbox' data-id='".esc_attr($field_id)."' name='hiddenfieldChk".esc_attr($field_id)."' class='onoffswitch-checkbox hiddenfieldChk enablefield' data-status='hiddenenablefield' data-label='Hidden Disable Field' id='hiddenfieldChk" . esc_attr($i) . "' onclick=\"return updateStatus(this,'".esc_url(site_url())."','$module','zcf_crmfields_shortcodes','$shortcode', '".esc_js($onaction) . "')\" > <span class='vam chkbxIcon'></span></label>";
                     } else {
 
-                        $htmlcontent1 .= "<label class='newCustomchkbox-md  {$disableTypeHiddenfield}'><input type='checkbox' data-id='" . $field_id . "'' name='hiddenfieldChk" . $field_id . "' class='hiddenfieldChk disablefield' data-status='hiddendisablefield'  data-label='Hidden Enable Field' id='hiddenfieldChk" . $i . "' onclick =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$shortcode', '$onaction')\" ><span class='vam chkbxIcon'></span></label>";
+                        $htmlcontent1 .= "<label class='newCustomchkbox-md  {$disableTypeHiddenfield}'><input type='checkbox' 
+           data-id='".esc_attr($field_id)."' name='hiddenfieldChk".esc_attr($field_id)."'class='hiddenfieldChk disablefield' data-status='hiddendisablefield' data-label='Hidden Enable Field' id='hiddenfieldChk".esc_attr($i)."' onclick=\"return updateStatus(this,'".esc_url(site_url())."','".esc_js($module) . "','zcf_crmfields_shortcodes','".esc_js($shortcode) . "','" .esc_js($onaction) ."')\" ><span class='vam chkbxIcon'></span></label>";
                     }
 
                     $htmlcontent1 .= '</td>';

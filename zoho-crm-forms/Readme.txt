@@ -6,9 +6,9 @@ Requires at least: 3.8
 Author URI: https://www.zoho.com/crm/
 Author: Zoho CRM
 Tested up to: 6.7
-Stable tag: 1.8.0.7
+Stable tag: 1.8.0.8
 License: GPLv2 or later
-Version: 1.8.0.7
+Version: 1.8.0.8
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -319,6 +319,8 @@ Bug Boundry issue has been fixed
 1.8.0.6
 Bug Boundry issue has been fixed
 1.8.0.7
+Bug Boundry issue has been fixed
+1.8.0.8
 Bug Boundry issue has been fixed
 
 == Upgrade notice ==
