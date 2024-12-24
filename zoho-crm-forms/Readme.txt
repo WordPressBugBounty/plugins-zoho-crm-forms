@@ -6,9 +6,9 @@ Requires at least: 3.8
 Author URI: https://www.zoho.com/crm/
 Author: Zoho CRM
 Tested up to: 6.7
-Stable tag: 1.8.0.8
+Stable tag: 1.8.0.9
 License: GPLv2 or later
-Version: 1.8.0.8
+Version: 1.8.0.9
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -313,15 +313,15 @@ Php latest version compatibility checking
 1.8.0.3
 Php latest version compatibility checking
 1.8.0.4
-Bug Boundry issue has been fixed
+Php latest version compatibility checking
 1.8.0.5
-Bug Boundry issue has been fixed
+Php latest version compatibility checking
 1.8.0.6
-Bug Boundry issue has been fixed
+Php latest version compatibility checking
 1.8.0.7
-Bug Boundry issue has been fixed
-1.8.0.8
-Bug Boundry issue has been fixed
+Php latest version compatibility checking
+1.8.0.9
+Php latest version compatibility checking
 
 == Upgrade notice ==
 
