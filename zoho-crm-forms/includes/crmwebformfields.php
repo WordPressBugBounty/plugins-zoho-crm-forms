@@ -38,8 +38,11 @@ if ($result != '') {
                 $content .= "</span>";
                 $content .= "</span>";
             } else {
+                $encoded_module = urlencode($module);
+                $encoded_zcf_crmfields_shortcodes = urlencode('zcf_crmfields_shortcodes');
+                $encoded_onEditShortcode = urlencode('onEditShortcode');
                 $content .= "<span id='inneroptions'>CRM Type  : <select id='crmtype' name='crmtype' style='margin-left:8px;height:27px;' class=''
-onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}', '{onEditShortcode}')\">";
+onchange = \"ChooseFields('{$siteurl}','{$encoded_module}','{$encoded_zcf_crmfields_shortcodes}', '{$encoded_onEditShortcode}')\">";
                 $select_option = "";
                 // $Data->crmtype = "" ;
 
@@ -85,7 +88,10 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                 $allowedposttags = zcf_allowed_tag();
                 echo wp_kses( $content, $allowedposttags );
             } else {
-                $content .= "<span id='inneroptions' style='position:relative;left:40px;'>Module: <select id='module' name='module' style='margin-left:8px;height:27px;' onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}', '{onEditShortcode}')\" >";
+                $encoded_module = urlencode($module);
+                $encoded_zcf_crmfields_shortcodes = urlencode('zcf_crmfields_shortcodes');
+                $encoded_onEditShortcode = urlencode('onEditShortcode');
+                $content .= "<span id='inneroptions' style='position:relative;left:40px;'>Module: <select id='module' name='module' style='margin-left:8px;height:27px;' onchange = \"ChooseFields('{$siteurl}','{$encoded_module}','{$encoded_zcf_crmfields_shortcodes}', '{$encoded_onEditShortcode}')\" >";
                 $select_option = "";
                 $select_option .= "<option> --" . __('Select', 'zoho-crm-forms') . "-- </option>";
                 foreach (sanitize_text_field($zohocrmdetails[$_REQUEST['crmtype']]['modulename']) as $key => $value) {
@@ -102,7 +108,9 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                 echo wp_kses( $content, $allowedposttags );
             }
 
-             $contentsync = "<a onclick=\"syncfields('', 'crmformswpbuilder','{$module}', '', 'Oncreate', '', '', 'leads', '{$shortcode}', '{$shortcode}') \" class='pR pl20 cP' title='Modules of Zoho CRM will be synchronized with WordPress' data-toggle='tooltip' data-placement='top'>Fetch Fields</a>";
+            $encoded_module = urlencode($module);
+            $encoded_shortcode = urlencode($shortcode);
+            $contentsync = "<a onclick=\"syncfields('', 'crmformswpbuilder','{$encoded_module}', '', 'Oncreate', '', '', 'leads', '{$encoded_shortcode}', '{$encoded_shortcode}') \" class='pR pl20 cP' title='Modules of Zoho CRM will be synchronized with WordPress' data-toggle='tooltip' data-placement='top'>Fetch Fields</a>";
              echo wp_kses( $contentsync, $allowedposttags );
 
             ?>
@@ -141,7 +149,7 @@ onchange = \"ChooseFields('{$siteurl}','{$module}','{zcf_crmfields_shortcodes}',
                         <?php
                         if (isset($shortcode)) {
                             $content = "";
-                            $content .= "<input class='crmforms-btn crmforms-btn-primary btn-radius' id='generate_forms' type='hidden' value='" . __("Apply", "zoho-crm-forms") . "' onclick =  \" return updateStatus(false,'" . site_url() . "','{$module}','zcf_crmfields_shortcodes','{$shortcode}', '{$onAction}')\" />";
+                            $content .= "<input class='crmforms-btn crmforms-btn-primary btn-radius' id='generate_forms' type='hidden' value='" . __("Apply", "zoho-crm-forms") . "' onclick =  \" return updateStatus(false,'" . esc_url(site_url()) . "','" . esc_attr($module) . "','zcf_crmfields_shortcodes','" . esc_attr($shortcode) . "', '" . esc_attr($onAction) . "')\" />";
                             $allowedposttags = zcf_allowed_tag();
                             echo wp_kses( $content, $allowedposttags );
                         }

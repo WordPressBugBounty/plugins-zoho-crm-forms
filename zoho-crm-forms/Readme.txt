@@ -6,9 +6,9 @@ Requires at least: 3.8
 Author URI: https://www.zoho.com/crm/
 Author: Zoho CRM
 Tested up to: 6.7
-Stable tag: 1.8.0.9
+Stable tag: 1.8.1.0
 License: GPLv2 or later
-Version: 1.8.0.9
+Version: 1.8.1.0
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -110,7 +110,6 @@ Php Notice issue fixed
 Added Form Submit Logs
 1.6.7
 Added Form Submit Logs
-
 1.6.8
 Custom module related issue fixed
 1.6.9
@@ -193,10 +192,8 @@ Added: Script issue has been fixed.
 Added:Added Authentication check.
 1.7.4.1
 Added: SSL verified issue fixed
-
 1.7.4.4
 Added: GCLID field api issue fixed
-
 1.7.4.5
 Added: Japan data centre authentication option added
 1.7.4.6
@@ -207,27 +204,20 @@ Added: Api data added to logs
 Added: Api data added to logs
 1.7.4.9
 Added: removed empty space for email id
-
 1.7.5.1
 zcga.js file 404 issue fixed
-
 1.7.5.2
 Added : added fetch field option in the contact form
 1.7.5.3
 Added: In Japan dc added check for email encode
-
 1.7.5.4
 Added: Unused css removed
-
 1.7.5.5
 Added : Select2 component z-index issue has been fixed
-
 1.7.5.6
 Added : Unwanted Caching file has been removed
-
 1.7.5.8
 Added : Arbitrary Options Update vulnerability and Security check_admin_referer issue fixed
-
 1.7.6.0
 Added : Description Content Updated
 1.7.6.1
@@ -246,7 +236,6 @@ Custom Phonetext field Supported
 Re authendication dynamic select issue fixed
 1.7.6.7
 Deal module api enabled
-
 1.7.6.8
 Php latest version compatibility check added
 1.7.6.10
@@ -269,7 +258,6 @@ Wordpress latest version compatibility check and update
 Wordpress latest version compatibility check and update
 1.7.8.2
 Added group by field support
-
 1.7.8.3
 Wordpress latest version compatibility check 
 1.7.8.4
@@ -302,26 +290,13 @@ Security review changes has been updated
 Wordpress latest version compatibility check 
 1.7.9.8
 Security review changes has been updated 
-1.7.9.9
-Php latest version compatibility checking
-1.8.0.0
-Php latest version compatibility checking
-1.8.0.1
-Php latest version compatibility checking
-1.8.0.2
-Php latest version compatibility checking
-1.8.0.3
-Php latest version compatibility checking
-1.8.0.4
-Php latest version compatibility checking
-1.8.0.5
-Php latest version compatibility checking
-1.8.0.6
-Php latest version compatibility checking
 1.8.0.7
 Php latest version compatibility checking
 1.8.0.9
-Php latest version compatibility checking
+Wordpress latest version compatibility checking
+1.8.1.0
+Wordpress latest version compatibility checking
+
 
 == Upgrade notice ==
 

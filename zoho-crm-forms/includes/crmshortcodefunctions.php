@@ -215,7 +215,10 @@ class zcffieldoptions {
                     $htmlcontent1 .= '<td class="back_f8f8f8 sortable-icon border-leftTrans border-rightTrans" width="4%"></td>';
                     $htmlcontent1 .= '<td class="back_f8f8f8 arrow-div" ><span class="newmandatory">' . $config_leads_fields['fields'][$i]['label'] . '</span></td>';
                     $config_leads_fieldsval =$config_leads_fields['fields'][$i]['display_label'];
-                    $htmlcontent1 .= "<td class=' aligncenter border-rightTrans pl30'><input type='text' data-id='" . $field_id . "' order-pos='" . $orderpos . "' data-label='Save Display Label' class='textField form-control pl0 field_label_display orderPos ' name='fieldlabel" . $field_id . "'  id='field_label_display_" . $i . "' data-value='" . $config_leads_fields['fields'][$i]['display_label'] . "' value='" . $config_leads_fieldsval . "' onblur =\"return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$EditShortcode', '$onAction')\"></td>";
+                    $encodedModule = urlencode($module);
+                    $encodedEditShortcode = urlencode($EditShortcode);
+                    $encodedOnAction = urlencode($onAction);
+                    $htmlcontent1 .= "<td class=' aligncenter border-rightTrans pl30'><input type='text' data-id='" . $field_id . "' order-pos='" . $orderpos . "' data-label='Save Display Label' class='textField form-control pl0 field_label_display orderPos ' name='fieldlabel" . $field_id . "'  id='field_label_display_" . $i . "' data-value='" . $config_leads_fields['fields'][$i]['display_label'] . "' value='" . $config_leads_fieldsval . "' onblur =\"return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedEditShortcode', '$encodedOnAction')\"></td>";
 
                     $htmlcontent1 .= '<td class=" aligncenter border-rightTrans">';
                     $htmlcontent1 .= "</td>";
@@ -224,8 +227,11 @@ class zcffieldoptions {
                     $shortcode = sanitize_text_field($_REQUEST['EditShortcode']);
                     $onaction = sanitize_text_field($_REQUEST['onAction']);
                     if ($config_leads_fields['fields'][$i]['hiddenfield'] == 1) {
+                        $encodedModule = urlencode($module);
+                        $encodedShortcode = urlencode($shortcode);
+                        $encodedOnAction = urlencode($onaction);
 
-                        $htmlcontent1 .= "<label class='newCustomchkbox-md  {$disableTypeHiddenfield}'><input checked='checked' type='checkbox' data-id='".esc_attr($field_id)."' name='hiddenfieldChk".esc_attr($field_id)."' class='onoffswitch-checkbox hiddenfieldChk enablefield' data-status='hiddenenablefield' data-label='Hidden Disable Field' id='hiddenfieldChk" . esc_attr($i) . "' onclick=\"return updateStatus(this,'".esc_url(site_url())."','$module','zcf_crmfields_shortcodes','$shortcode', '".esc_js($onaction) . "')\" > <span class='vam chkbxIcon'></span></label>";
+                        $htmlcontent1 .= "<label class='newCustomchkbox-md  {$disableTypeHiddenfield}'><input checked='checked' type='checkbox' data-id='".esc_attr($field_id)."' name='hiddenfieldChk".esc_attr($field_id)."' class='onoffswitch-checkbox hiddenfieldChk enablefield' data-status='hiddenenablefield' data-label='Hidden Disable Field' id='hiddenfieldChk" . esc_attr($i) . "' onclick=\"return updateStatus(this,'".esc_url(site_url())."','$encodedModule','zcf_crmfields_shortcodes','$encodedShortcode', '$encodedOnAction')\" > <span class='vam chkbxIcon'></span></label>";
                     } else {
 
                         $htmlcontent1 .= "<label class='newCustomchkbox-md  {$disableTypeHiddenfield}'><input type='checkbox' 
@@ -236,7 +242,11 @@ class zcffieldoptions {
                     if ($config_leads_fields['fields'][$i]['type']['name'] == 'picklist') {
                         $picklist_count = count($config_leads_fields['fields'][$i]['type']['picklistValues']);
                         $htmlcontent2 = '';
-                        $htmlcontent1 .= "<td width='7%' class=' vH " . $disableTypeHiddenfield . " defaultvaluesField border-rightTrans'><select data-id='" . $field_id . "'' data-label='Default value' onchange =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$shortcode', '$onaction')\" class='multipicklist form-control crmforms_post_fields defaultvalue " . $defaultvalueLabel . " '   name='{$config_leads_fields['fields'][$i]['name']}[]'id='{$config_leads_fields['fields'][$i]['name']}' >";
+                        $encodedModule = urlencode($module);
+                        $encodedShortcode = urlencode($shortcode);
+                        $encodedOnAction = urlencode($onaction);
+
+                        $htmlcontent1 .= "<td width='7%' class=' vH " . $disableTypeHiddenfield . " defaultvaluesField border-rightTrans'><select data-id='" . $field_id . "'' data-label='Default value' onchange =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedShortcode', '$encodedOnAction')\" class='multipicklist form-control crmforms_post_fields defaultvalue " . $defaultvalueLabel . " '   name='{$config_leads_fields['fields'][$i]['name']}[]'id='{$config_leads_fields['fields'][$i]['name']}' >";
                         for ($j = 0; $j < $picklist_count; $j++) {
 
                             if ($config_leads_fields['fields'][$i]['type']['picklistValues'][$j]['label']['actual_value'] == $defaultvaluepicklist) {
@@ -249,7 +259,11 @@ class zcffieldoptions {
                     } else if ($config_leads_fields['fields'][$i]['type']['name'] == 'multiselectpicklist') {
                         $picklist_count = count($config_leads_fields['fields'][$i]['type']['picklistValues']);
                         $htmlcontent2 = '';
-                        $htmlcontent1 .= "<td width='7%' class='vH defaultvaluesField border-rightTrans " . $disableTypeHiddenfield . "'><select data-id='" . $field_id . "'' data-label='Default value' onchange =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$shortcode', '$onaction')\" class='multipicklist form-control crmforms_post_fields defaultvalue " . $defaultvalueLabel . "' multiple='multiple' name='{$config_leads_fields['fields'][$i]['name']}[]'id='{$config_leads_fields['fields'][$i]['name']}' >";
+                        $encodedModule = urlencode($module);
+                        $encodedShortcode = urlencode($shortcode);
+                        $encodedOnAction = urlencode($onaction);
+
+                        $htmlcontent1 .= "<td width='7%' class='vH defaultvaluesField border-rightTrans " . $disableTypeHiddenfield . "'><select data-id='" . $field_id . "'' data-label='Default value' onchange =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedShortcode', '$encodedOnAction')\" class='multipicklist form-control crmforms_post_fields defaultvalue " . $defaultvalueLabel . "' multiple='multiple' name='{$config_leads_fields['fields'][$i]['name']}[]'id='{$config_leads_fields['fields'][$i]['name']}' >";
                         for ($j = 0; $j < $picklist_count; $j++) {
                             if(is_array($defaultvaluepicklist)){
                                 $arrayexistchk = in_array($config_leads_fields['fields'][$i]['type']['picklistValues'][$j]['label']['actual_value'], $defaultvaluepicklist);
@@ -263,7 +277,11 @@ class zcffieldoptions {
                         }
                         $htmlcontent1 .= $htmlcontent2;
                     } else {
-                        $htmlcontent1 .= "<td width='17%' class='border-rightTrans  " . $disableTypeHiddenfield . " defaultvaluesField vH' ><input type='text' data-id='" . $field_id . "'' data-label='Default value' onblur =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$shortcode', '$onaction')\" class='textField pl0 form-control defaultvalue {$defaultvalueLabel} ' name='dafalutvalue{$field_id}'  id='dafalutvalue{$i}' value='" . $config_leads_fields['fields'][$i]['defaultvalue'] . "' data-value='" . $config_leads_fields['fields'][$i]['defaultvalue'] . "'>";
+                        $encodedModule = urlencode($module);
+                        $encodedShortcode = urlencode($shortcode);
+                        $encodedOnAction = urlencode($onaction);
+
+                        $htmlcontent1 .= "<td width='17%' class='border-rightTrans  " . $disableTypeHiddenfield . " defaultvaluesField vH' ><input type='text' data-id='" . $field_id . "'' data-label='Default value' onblur =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedShortcode', '$encodedOnAction')\" class='textField pl0 form-control defaultvalue {$defaultvalueLabel} ' name='dafalutvalue{$field_id}'  id='dafalutvalue{$i}' value='" . $config_leads_fields['fields'][$i]['defaultvalue'] . "' data-value='" . $config_leads_fields['fields'][$i]['defaultvalue'] . "'>";
                     }
 
 
@@ -279,15 +297,23 @@ class zcffieldoptions {
                     $htmlcontent1 .= '
                     <td width="22%" class="back_f8f8f8 arrow-div">' . $config_leads_fields['fields'][$i]['label'] . '</td>';
 
-                    $htmlcontent1 .= "<td class='aligncenter border-rightTrans pl30'><input type='text' data-id='" . $field_id . "' order-pos='" . $orderpos . "' data-label='Save Display Label' class='form-control pl0 field_label_display orderPos  textField' name='fieldlabel" . $field_id . "'  id='field_label_display_" . $i . "' data-value='" . $config_leads_fields['fields'][$i]['display_label'] . "' value='" . $config_leads_fields['fields'][$i]['display_label'] . "' onblur =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$EditShortcode', '$onAction')\"></td>";
+                    $encodedModule = urlencode($module);
+                    $encodedEditShortcode = urlencode($EditShortcode);
+                    $encodedOnAction = urlencode($onAction);
+                    $htmlcontent1 .= "<td class='aligncenter border-rightTrans pl30'><input type='text' data-id='" . $field_id . "' order-pos='" . $orderpos . "' data-label='Save Display Label' class='form-control pl0 field_label_display orderPos  textField' name='fieldlabel" . $field_id . "'  id='field_label_display_" . $i . "' data-value='" . $config_leads_fields['fields'][$i]['display_label'] . "' value='" . $config_leads_fields['fields'][$i]['display_label'] . "' onblur =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedEditShortcode', '$encodedOnAction')\"></td>";
 
                     $htmlcontent1 .= ' <td class="aligncenter border-rightTrans  mandatoryField" width="10%">';
                     if ($config_leads_fields['fields'][$i]["zcf_mandatory"] == 1 || $config_leads_fields['fields'][$i]["zcf_mandatory"] == '') {
-
-                        $htmlcontent1 .= "<label class='newCustomchkbox-md'><input checked='checked' type='checkbox' data-id='" . $field_id . "'' name='setmandatory" . $field_id . "' class='setmandatory enablefield' data-status='enablefield' data-label='Disable Mandatory' id='setmandatory" . $i . "' onclick =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$EditShortcode', '$onAction')\" ><span class='vam chkbxIcon'></span></label>";
+                        $encodedModule = urlencode($module);
+                        $encodedEditShortcode = urlencode($EditShortcode);
+                        $encodedOnAction = urlencode($onAction);
+                        $htmlcontent1 .= "<label class='newCustomchkbox-md'><input checked='checked' type='checkbox' data-id='" . $field_id . "' name='setmandatory" . $field_id . "' class='setmandatory enablefield' data-status='enablefield' data-label='Disable Mandatory' id='setmandatory" . $i . "' onclick =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedEditShortcode', '$encodedOnAction')\" ><span class='vam chkbxIcon'></span></label>";
                     } else {
 
-                        $htmlcontent1 .= "<label class='newCustomchkbox-md '><input type='checkbox' data-id='" . $field_id . "' name='setmandatory" . $field_id . "' class='setmandatory disablefield' data-status='disablefield'  data-label='Enable Mandatory' id='setmandatory" . $i . "' onclick =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$EditShortcode', '$onAction')\" ><span class='vam chkbxIcon'></span></label>";
+                        $encodedModule = urlencode($module);
+                        $encodedEditShortcode = urlencode($EditShortcode);
+                        $encodedOnAction = urlencode($onAction);
+                        $htmlcontent1 .= "<label class='newCustomchkbox-md '><input type='checkbox' data-id='" . $field_id . "' name='setmandatory" . $field_id . "' class='setmandatory disablefield' data-status='disablefield'  data-label='Enable Mandatory' id='setmandatory" . $i . "' onclick =  \" return updateStatus(this,'" . site_url() . "','" . $encodedModule . "','zcf_crmfields_shortcodes','" . $encodedEditShortcode . "','" . $encodedOnAction . "')\" ><span class='vam chkbxIcon'></span></label>";
                     }
                     $htmlcontent1 .= '</td>';
 
@@ -299,20 +325,30 @@ class zcffieldoptions {
                     $htmlcontent1 .= '<td width="17%" class="border-rightTrans aligncenter ' . $disableTypeDisabledfield . ' hiddenFields " width="10%">';
 
                     if ($config_leads_fields['fields'][$i]['hiddenfield'] == 1) {
+                        $encodedModule = urlencode($module);
+                        $encodedEditShortcode = urlencode($EditShortcode);
+                        $encodedOnAction = urlencode($onAction);
 
-                        $htmlcontent1 .= "<label class='newCustomchkbox-md'><input checked='checked' type='checkbox' data-id='" . $field_id . "' name='hiddenfieldChk" . $field_id . "' class='hiddenfieldChk enablefield' data-status='hiddenenablefield' data-label='Hidden Disable Field' id='hiddenfieldChk" . $i . "' onclick =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$EditShortcode', '$onAction')\" > <span class='vam chkbxIcon'></span></label>";
+                        $htmlcontent1 .= "<label class='newCustomchkbox-md'><input checked='checked' type='checkbox' data-id='" . $field_id . "' name='hiddenfieldChk" . $field_id . "' class='hiddenfieldChk enablefield' data-status='hiddenenablefield' data-label='Hidden Disable Field' id='hiddenfieldChk" . $i . "' onclick =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedEditShortcode', '$encodedOnAction')\" > <span class='vam chkbxIcon'></span></label>";
                     } else {
 
+                        $encodedModule = urlencode($module);
+                        $encodedEditShortcode = urlencode($EditShortcode);
+                        $encodedOnAction = urlencode($onAction);
+
                         $htmlcontent1 .= "<label class='newCustomchkbox-md'>
-                        <input type='checkbox' data-id='" . $field_id . "' name='hiddenfieldChk" . $field_id . "' class='hiddenfieldChk disablefield' data-status='hiddendisablefield'  data-label='Hidden Enable Field' id='hiddenfieldChk" . $i . "' onclick =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$EditShortcode', '$onAction')\" ><span class='vam chkbxIcon'></span></label>";
-                    }
+                        <input type='checkbox' data-id='" . $field_id . "' name='hiddenfieldChk" . $field_id . "' class='hiddenfieldChk disablefield' data-status='hiddendisablefield'  data-label='Hidden Enable Field' id='hiddenfieldChk" . $i . "' onclick =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedEditShortcode', '$encodedOnAction')\" ><span class='vam chkbxIcon'></span></label>";}
 
                     $htmlcontent1 .= '</td>';
 
                     if ($config_leads_fields['fields'][$i]['type']['name'] == 'picklist') {
                         $picklist_count = count($config_leads_fields['fields'][$i]['type']['picklistValues']);
                         $htmlcontent2 = '';
-                        $htmlcontent1 .= "<td width='17%' class='border-rightTrans  " . $disableTypeHiddenfield . " defaultvaluesField'><select data-id='" . $field_id . "' data-label='Default value' onchange =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$EditShortcode', '$onAction')\" class='multipicklist form-control crmforms_post_fields defaultvalue " . $defaultvalueLabel . " '   name='{$config_leads_fields['fields'][$i]['name']}[]'id='{$config_leads_fields['fields'][$i]['name']}' >";
+                        $encodedModule = urlencode($module);
+                        $encodedShortcode = urlencode($EditShortcode);
+                        $encodedOnAction = urlencode($onAction);
+
+                        $htmlcontent1 .= "<td width='17%' class='border-rightTrans  " . $disableTypeHiddenfield . " defaultvaluesField'><select data-id='" . $field_id . "' data-label='Default value' onchange =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedShortcode', '$encodedOnAction')\" class='multipicklist form-control crmforms_post_fields defaultvalue " . $defaultvalueLabel . " '   name='{$config_leads_fields['fields'][$i]['name']}[]'id='{$config_leads_fields['fields'][$i]['name']}' >";
                         for ($j = 0; $j < $picklist_count; $j++) {
                             if ($config_leads_fields['fields'][$i]['type']['picklistValues'][$j]['label']['actual_value'] == $defaultvaluepicklist) {
                                 $htmlcontent2 .= "<option  selected id='{$config_leads_fields['fields'][$i]['name']}' value='{$config_leads_fields['fields'][$i]['type']['picklistValues'][$j]['label']['actual_value']}'>{$config_leads_fields['fields'][$i]['type']['picklistValues'][$j]['label']['display_value']}</option>";
@@ -324,7 +360,11 @@ class zcffieldoptions {
                     } else if ($config_leads_fields['fields'][$i]['type']['name'] == 'multiselectpicklist') {
                         $picklist_count = count($config_leads_fields['fields'][$i]['type']['picklistValues']);
                         $htmlcontent2 = '';
-                        $htmlcontent1 .= "<td width='17%' class='border-rightTrans  " . $disableTypeHiddenfield . " defaultvaluesField'><select data-id='" . $field_id . "' data-label='Default value' onchange =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$EditShortcode', '$onAction')\" class='multipicklist form-control crmforms_post_fields defaultvalue " . $defaultvalueLabel . " ' multiple='multiple' name='{$config_leads_fields['fields'][$i]['name']}[]'id='{$config_leads_fields['fields'][$i]['name']}' >";
+                        $encodedModule = urlencode($module);
+                        $encodedShortcode = urlencode($EditShortcode);
+                        $encodedOnAction = urlencode($onAction);
+
+                        $htmlcontent1 .= "<td width='17%' class='border-rightTrans  " . $disableTypeHiddenfield . " defaultvaluesField'><select data-id='" . $field_id . "' data-label='Default value' onchange =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedShortcode', '$encodedOnAction')\" class='multipicklist form-control crmforms_post_fields defaultvalue " . $defaultvalueLabel . " ' multiple='multiple' name='{$config_leads_fields['fields'][$i]['name']}[]'id='{$config_leads_fields['fields'][$i]['name']}' >";
                         for ($j = 0; $j < $picklist_count; $j++) {
                             $arrayexistchk = in_array($config_leads_fields['fields'][$i]['type']['picklistValues'][$j]['label']['actual_value'], $defaultvaluepicklist);
 
@@ -336,7 +376,11 @@ class zcffieldoptions {
                         }
                         $htmlcontent1 .= $htmlcontent2;
                     } else {
-                        $htmlcontent1 .= "<td width='17%' class='border-rightTrans  " . $disableTypeHiddenfield . " defaultvaluesField'><input type='text' data-id='" . $field_id . "' data-label='Default value' onblur =  \" return updateStatus(this,'" . site_url() . "','$module','zcf_crmfields_shortcodes','$EditShortcode', '$onAction')\" class='form-control pl0 textField defaultvalue {$defaultvalueLabel} ' name='dafalutvalue{$field_id}'  id='dafalutvalue{$i}' value='" . $config_leads_fields['fields'][$i]['defaultvalue'] . "' data-value='" . $config_leads_fields['fields'][$i]['defaultvalue'] . "'>";
+                        $encodedModule = urlencode($module);
+                        $encodedEditShortcode = urlencode($EditShortcode);
+                        $encodedOnAction = urlencode($onAction);
+
+                        $htmlcontent1 .= "<td width='17%' class='border-rightTrans  " . $disableTypeHiddenfield . " defaultvaluesField'><input type='text' data-id='" . $field_id . "' data-label='Default value' onblur =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedEditShortcode', '$encodedOnAction')\" class='form-control pl0 textField defaultvalue {$defaultvalueLabel} ' name='dafalutvalue{$field_id}'  id='dafalutvalue{$i}' value='" . $config_leads_fields['fields'][$i]['defaultvalue'] . "' data-value='" . $config_leads_fields['fields'][$i]['defaultvalue'] . "'>";
                     }
 
 

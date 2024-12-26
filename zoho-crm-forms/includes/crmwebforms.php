@@ -89,8 +89,8 @@ if ($authtokens == '') {
                             $oldshortcode_html = "<p style='display:none;' id='oldshortcodename{$shortcode_fields->shortcode_id}'> $oldshortcodename </p>";
                         }
                         $htmlcontent1 .= "<td class='crmforms-crm-highlight' >";
-                        $htmlcontent1 .= "<a href='#' class='edit_link dIB' onclick='edit_forms(\"Editshortcode\" , \"$shortcode_fields->module\" , \"$shortcode_fields->shortcode_name\",\"$activatedplugin\",\"$shortcode_fields->Layout_Name\",\"$namestr\")'> <span class='edit-icon dB'></span> </a>";
-                        $htmlcontent1 .= "<a href='#' class='delete_link dIB' style='margin-left:2px;' onclick='deleteforms(\"zcfDeleteShortcode\" , \"$shortcode_fields->module\" , \"$shortcode_fields->shortcode_name\",\"$activatedplugin\",\"\",\"$shortcode_fields->form_name\")'>  <span class='delete-icon dB'></span> </a>";
+                        $htmlcontent1 .= "<a href='#' class='edit_link dIB' onclick='edit_forms(\"Editshortcode\" , \"" . esc_js($shortcode_fields->module) . "\" , \"" . esc_js($shortcode_fields->shortcode_name) . "\",\"" . esc_js($activatedplugin) . "\",\"" . esc_js($shortcode_fields->Layout_Name) . "\",\"" . esc_js($namestr) . "\")'> <span class='edit-icon dB'></span> </a>";
+                        $htmlcontent1 .= "<a href='#' class='delete_link dIB' style='margin-left:2px;' onclick='deleteforms(\"zcfDeleteShortcode\" , \"" . esc_js($shortcode_fields->module) . "\" , \"" . esc_js($shortcode_fields->shortcode_name) . "\",\"" . esc_js($activatedplugin) . "\",\"\",\"" . esc_js($shortcode_fields->form_name) . "\")'>  <span class='delete-icon dB'></span> </a>";
                         $htmlcontent1 .= "</td>";
 
 
@@ -142,8 +142,8 @@ if ($authtokens == '') {
                         $contactformShortcode = "[contact-form-7 " . "id='{$form_ID}' title='{$contact_form_title}']";
                         $existing_content .= "<tr>";
                         $existing_content .= "<td class='crmforms-crm-highlight' >";
-                        $existing_content .= "<a href='#' class='edit_link' onclick='return editThirdpartyFrom(\"$form_ID\" , \"$third_plugin\" , \"$third_module\" , \"$layoutname\" , \"$layoutId\",\"$contact_form_title\")'> <span class='edit-icon dB'></span> </a>";
-                        $existing_content .= "<a href='#' class='delete_link' onclick='return delete_mappping_config(\"$third_plugin\" , \"$contact_val\" ,\"$contact_form_title\");' style='margin-left:2px;'> <span class='delete-icon dB'></span> </a>";
+                        $existing_content .= "<a href='#' class='edit_link' onclick='return editThirdpartyFrom(\"" . esc_js($form_ID) . "\" , \"" . esc_js($third_plugin) . "\" , \"" . esc_js($third_module) . "\" , \"" . esc_js($layoutname) . "\" , \"" . esc_js($layoutId) . "\",\"" . esc_js($contact_form_title) . "\")'> <span class='edit-icon dB'></span> </a>";
+                        $existing_content .= "<a href='#' class='delete_link' onclick='return delete_mappping_config(\"" . esc_js($third_plugin) . "\" , \"" . esc_js($contact_val) . "\" ,\"" . esc_js($contact_form_title) . "\");' style='margin-left:2px;'> <span class='delete-icon dB'></span> </a>";
                         $existing_content .= "</td>";
                         $existing_content .= "<td class='crmforms-crm-highlight form-name-link' > $contact_form_title</td><td class='crmforms-crm-highlight'><span class='copyshortcodeTxt' id='copyshortcodeTxt' title='Click to copy shortcode' data-toggle='tooltip' data-placement='top'>$contactformShortcode</span><span class='copyshortcode' onclick='clicktocopyshortcodeList(this)'></span></td>
 				<td class='crmforms-crm-highlight' > $exist_module</td><td class='crmforms-crm-highlight' > $layoutname</td><td class='crmforms-crm-highlight' > $exist_assignee</td>
