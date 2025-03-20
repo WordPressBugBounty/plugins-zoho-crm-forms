@@ -139,11 +139,13 @@ class zcfcoreGetFields {
 
         if (isset($users_list['users'][0]['email']))
             for ($i = 0; $i < count($users_list['users']); $i++) {
-                $htmlcontent_option .= "<option id='{$users_list['users'][$i]['email']}' value='{$users_list['users'][$i]['id']}'";
+                $useremail = esc_html($users_list['users'][$i]['email']);
+                $userid = esc_html($users_list['users'][$i]['id']);
+                $htmlcontent_option .= "<option id='{$useremail}' value='{$userid}'";
                 if ($users_list['users'][$i]['id'] == $config_fields->assigned_to) {
                     $htmlcontent_option .= " selected";
                 }
-                $htmlcontent_option .= ">{$users_list['users'][$i]['email']}</option>";
+                $htmlcontent_option .= ">{$useremail}</option>";
             }
 
         $html .= $htmlcontent_option;

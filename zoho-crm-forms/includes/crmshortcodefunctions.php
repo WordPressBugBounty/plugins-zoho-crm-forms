@@ -861,7 +861,7 @@ class ZcfCallMShortcodeObj extends zcfManageShortcodesActions {
             $name = $value->field_name;
             $mandatory = $value->zcf_field_mandatory;
             $cont_array = array();
-            $cont_array = unserialize($value->custom_field_values);
+            $cont_array = unserialize($value->custom_field_values, ['allowed_classes' => false]);
             $classhidden = 'class:tt';
             $classtrHidden = 'dB';
             $defaultvalue = '';
