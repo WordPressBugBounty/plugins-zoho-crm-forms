@@ -214,11 +214,11 @@ class zcffieldoptions {
 
                     $htmlcontent1 .= '<td class="back_f8f8f8 sortable-icon border-leftTrans border-rightTrans" width="4%"></td>';
                     $htmlcontent1 .= '<td class="back_f8f8f8 arrow-div" ><span class="newmandatory">' . $config_leads_fields['fields'][$i]['label'] . '</span></td>';
-                    $config_leads_fieldsval =$config_leads_fields['fields'][$i]['display_label'];
+                    $config_leads_fieldsval =esc_attr($config_leads_fields['fields'][$i]['display_label']);
                     $encodedModule = urlencode($module);
                     $encodedEditShortcode = urlencode($EditShortcode);
                     $encodedOnAction = urlencode($onAction);
-                    $htmlcontent1 .= "<td class=' aligncenter border-rightTrans pl30'><input type='text' data-id='" . $field_id . "' order-pos='" . $orderpos . "' data-label='Save Display Label' class='textField form-control pl0 field_label_display orderPos ' name='fieldlabel" . $field_id . "'  id='field_label_display_" . $i . "' data-value='" . $config_leads_fields['fields'][$i]['display_label'] . "' value='" . $config_leads_fieldsval . "' onblur =\"return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedEditShortcode', '$encodedOnAction')\"></td>";
+                    $htmlcontent1 .= "<td class=' aligncenter border-rightTrans pl30'><input type='text' data-id='" . $field_id . "' order-pos='" . $orderpos . "' data-label='Save Display Label' class='textField form-control pl0 field_label_display orderPos ' name='fieldlabel" . $field_id . "'  id='field_label_display_" . $i . "' data-value='" . $config_leads_fieldsval. "' value='" . $config_leads_fieldsval . "' onblur =\"return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedEditShortcode', '$encodedOnAction')\"></td>";
 
                     $htmlcontent1 .= '<td class=" aligncenter border-rightTrans">';
                     $htmlcontent1 .= "</td>";
@@ -294,13 +294,16 @@ class zcffieldoptions {
 
                     $htmlcontent1 .= '<td class="back_f8f8f8 sortable-icon border-leftTrans border-rightTrans" width="4%"><a href="#" class="delete_link"  onclick="zcfdeleteFieldsState(' . $rel_id . ')">  <sapn class="delete-icon dB"> </sapn></a></td>';
 
+                    $config_leads_fieldsval =esc_attr($config_leads_fields['fields'][$i]['label']);
+
                     $htmlcontent1 .= '
-                    <td width="22%" class="back_f8f8f8 arrow-div">' . $config_leads_fields['fields'][$i]['label'] . '</td>';
+                    <td width="22%" class="back_f8f8f8 arrow-div">' . $config_leads_fieldsval . '</td>';
 
                     $encodedModule = urlencode($module);
                     $encodedEditShortcode = urlencode($EditShortcode);
                     $encodedOnAction = urlencode($onAction);
-                    $htmlcontent1 .= "<td class='aligncenter border-rightTrans pl30'><input type='text' data-id='" . $field_id . "' order-pos='" . $orderpos . "' data-label='Save Display Label' class='form-control pl0 field_label_display orderPos  textField' name='fieldlabel" . $field_id . "'  id='field_label_display_" . $i . "' data-value='" . $config_leads_fields['fields'][$i]['display_label'] . "' value='" . $config_leads_fields['fields'][$i]['display_label'] . "' onblur =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedEditShortcode', '$encodedOnAction')\"></td>";
+                    $config_leads_fieldsval = esc_attr($config_leads_fields['fields'][$i]['display_label']);
+                    $htmlcontent1 .= "<td class='aligncenter border-rightTrans pl30'><input type='text' data-id='" . $field_id . "' order-pos='" . $orderpos . "' data-label='Save Display Label' class='form-control pl0 field_label_display orderPos  textField' name='fieldlabel" . $field_id . "'  id='field_label_display_" . $i . "' data-value='" . $config_leads_fieldsval . "' value='" . $config_leads_fieldsval . "' onblur =  \" return updateStatus(this,'" . site_url() . "','$encodedModule','zcf_crmfields_shortcodes','$encodedEditShortcode', '$encodedOnAction')\"></td>";
 
                     $htmlcontent1 .= ' <td class="aligncenter border-rightTrans  mandatoryField" width="10%">';
                     if ($config_leads_fields['fields'][$i]["zcf_mandatory"] == 1 || $config_leads_fields['fields'][$i]["zcf_mandatory"] == '') {
