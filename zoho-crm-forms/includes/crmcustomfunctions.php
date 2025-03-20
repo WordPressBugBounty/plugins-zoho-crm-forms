@@ -99,7 +99,7 @@ class zcfcustomfunctions {
 
         $content = "<option value=''>Select Layout</option>";
         foreach ($layoutarray as $key => $value) {
-            $content .= "<option  value='" . esc_html($value->layoutID) . "'>" . $value->Layoutname . "</option>";
+            $content .= "<option  value='" . esc_html($value->layoutID) . "'>" . esc_html($value->Layoutname) . "</option>";
         }
         $allowedposttags = zcf_allowed_tag();
         echo wp_kses( $content, $allowedposttags );

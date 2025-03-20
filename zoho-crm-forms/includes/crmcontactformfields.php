@@ -80,7 +80,7 @@ if ($cform_form_name != 'None') {
 
                 <div class="form-group row mb20">
                     <div class="col-md-12 ml20">
-                        <input type="text" disabled data-value="Unititled" id="form-name" name="form-name" class="textField" value=<?php echo esc_html($_REQUEST['third_module_pluginname']); ?>>
+                        <input type="text" disabled data-value="Unititled" id="form-name" name="form-name" class="textField" value=<?php echo esc_attr($_REQUEST['third_module_pluginname']); ?>>
                         <input type="hidden" id="lead_crmtype" name="lead_crmtype" value="crmformswpbuilder">
                         <input type="hidden" id="savefields" name="savefields" value="Apply">
                     </div>
@@ -143,14 +143,14 @@ if ($cform_form_name != 'None') {
 
                                 </tbody>
                             </table>
-                            <input type='hidden' value=<?php echo esc_html($j); ?> id='total_field_count'>
-                            <input type='hidden' value=<?php echo esc_html($cform_module); ?> id='module'>
-                            <input type='hidden' value=<?php echo esc_html($zohocrmformname); ?> id='active_crm'>
-                            <input type='hidden' value=<?php echo esc_html($cform_form_name); ?> id='form_name'>
-                            <input type='hidden' value=<?php echo esc_html($cform_pluginname); ?> id='thirdparty_plugin'>
+                            <input type='hidden' value=<?php echo esc_attr($j); ?> id='total_field_count'>
+                            <input type='hidden' value=<?php echo esc_attr($cform_module); ?> id='module'>
+                            <input type='hidden' value=<?php echo esc_attr($zohocrmformname); ?> id='active_crm'>
+                            <input type='hidden' value=<?php echo esc_attr($cform_form_name); ?> id='form_name'>
+                            <input type='hidden' value=<?php echo esc_attr($cform_pluginname); ?> id='thirdparty_plugin'>
                             <input type='hidden' value=<?php echo esc_html($js_mandatory_array); ?> id='crm_mandatory_fields'>
-                            <input type="hidden" name="modulename" id="modulename"  value="<?php echo esc_html($_REQUEST['third_module']); ?>">
-                            <input type="hidden" name="layoutname" id="layoutname"  value="<?php echo esc_html($_REQUEST['layoutname']); ?>">
+                            <input type="hidden" name="modulename" id="modulename"  value="<?php echo esc_attr($_REQUEST['third_module']); ?>">
+                            <input type="hidden" name="layoutname" id="layoutname"  value="<?php echo esc_attr($_REQUEST['layoutname']); ?>">
                             <?php
                                 $cform_module_sanitized = sanitize_text_field($cform_module);
                                 $layoutname_sanitized = sanitize_text_field($_REQUEST['layoutname']);
@@ -159,7 +159,7 @@ if ($cform_form_name != 'None') {
 
                                 $layoutIDarray = $get_layoutjson_array[0]->layoutID;
                             ?>
-                            <input type="hidden" name="layoutId" id="layoutId" value=<?php echo esc_html($layoutIDarray); ?>>
+                            <input type="hidden" name="layoutId" id="layoutId" value=<?php echo esc_attr($layoutIDarray); ?>>
 
                             </div>
                             <div class="mt20">
