@@ -29,7 +29,7 @@ class zcfajaxcore {
     }
 
     public static function zcfchooseplugin() {
-
+         zcf_validate_general_nonce();
         $selectedPlugin = 'crmformswpbuilder';
         update_option('ZCFFormBuilderPluginActivated', $selectedPlugin);
         require_once(ZCF_BASE_DIR_URI . "includes/form-zohocrmconfig.php");
@@ -134,6 +134,7 @@ class zcfajaxcore {
     }
 
     public static function zcfsaveSyncValue() {
+        zcf_validate_general_nonce();
         $Sync_value = sanitize_text_field($_REQUEST['syncedvalue']);
         update_option('Sync_value_on_off', $Sync_value);
         die;
@@ -220,6 +221,7 @@ class zcfajaxcore {
     }
 
     public static function zcf_save_usersync_option() {
+       zcf_validate_general_nonce();
         $usersync_RR_value = sanitize_text_field($_REQUEST['user_rr_val']);
         update_option('usersync_rr_value', $usersync_RR_value);
         die;

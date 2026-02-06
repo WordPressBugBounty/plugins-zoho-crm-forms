@@ -1,17 +1,17 @@
 === Zoho CRM Lead Magnet ===
 Contributors: zohocrm
 Donate link: https://www.zoho.com/crm/
-Tags: Lead Capture, Lead Magnet, Webforms, Zoho CRM Wordpress, Lead Builder, Contact Form 7, Web To Lead, Lead Generation
+Tags: Lead Capture, Lead Magnet, Zoho CRM Wordpress,Contact Form 7, Web To Lead
 Requires at least: 6.0
 Author URI: https://www.zoho.com/crm/
 Author: Zoho CRM
-Tested up to: 6.7.2
-Stable tag: 1.8.1.4
+Tested up to: 6.9.0
+Stable tag: 1.8.1.9
 License: GPLv2 or later
-Version: 1.8.1.4
+Version: 1.8.1.9
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-
+Websites are one of the most important sources of leads for your business.
 
 == Description ==
 
@@ -304,6 +304,18 @@ Security review changes has been updated
 Security review changes has been updated 
 1.8.1.4
 Security review changes has been updated 
+1.8.1.5
+The PHP warning issue has been fixed and updated
+1.8.1.6
+Wordpress latest version compatibility checking
+1.8.1.7
+Wordpress latest version compatibility checking
+1.8.1.8
+Wordpress latest version compatibility checking
+1.8.1.9
+The security issue related to Broken Access Control has been fixed.
+
+
 == Upgrade notice ==
 
 == Overall usage flow==
