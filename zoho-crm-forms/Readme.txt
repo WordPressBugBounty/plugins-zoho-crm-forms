@@ -5,10 +5,10 @@ Tags: Lead Capture, Lead Magnet, Zoho CRM Wordpress,Contact Form 7, Web To Lead
 Requires at least: 6.0
 Author URI: https://www.zoho.com/crm/
 Author: Zoho CRM
-Tested up to: 6.9.0
-Stable tag: 1.8.1.9
+Tested up to: 7.0.0
+Stable tag: 1.8.2.2
 License: GPLv2 or later
-Version: 1.8.1.9
+Version: 1.8.2.2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Websites are one of the most important sources of leads for your business.
@@ -313,6 +313,12 @@ Wordpress latest version compatibility checking
 1.8.1.8
 Wordpress latest version compatibility checking
 1.8.1.9
+The security issue related to Broken Access Control has been fixed.
+1.8.2.0
+The security issue related to Broken Access Control has been fixed and Wordpress latest version compatibility checking.
+1.8.2.1
+The security issue related to Broken Access Control has been fixed and Wordpress latest version compatibility checking.
+1.8.2.2
 The security issue related to Broken Access Control has been fixed.
 
 

@@ -3,12 +3,12 @@
 /* * ******************************************************************************************
  * Plugin Name: Zoho CRM Lead Magnet
  * Description: Websites are one of the most important sources of leads for your business. That means your CRM system should be well integrated with your website to contextually capture each and every visitor to turn them into a lead.Introducing the Zoho CRM Lead Capture plugin for Wordpress. This lets you create webforms, embed them in your website, and automatically capture leads directly into your CRM with zero attenuation.Not only is the integration easy to set-up but it's also easy on your wallet.
- * Version: 1.8.1.9
+ * Version: 1.8.2.2
  * ***************************************************************************************** */
 if (!defined('ABSPATH'))
     exit;
 
-        define( 'ZCF_VERSION', '1.8.1.9' );
+        define( 'ZCF_VERSION', '1.8.2.2' );
         define( 'ZCF_LBPLUGINFILE', __FILE__ );
         define( 'ZCF_LBPLUGIN_URL', untrailingslashit( plugins_url( '', ZCF_LBPLUGINFILE ) ) );
         zcf_define_url_constants();
@@ -177,6 +177,10 @@ if (!defined('ABSPATH'))
 
     function zcf_plugin_assets() {
         $pages_list = array('crmforms-builder', 'formsettings-builder', 'create-thirdpartyform-builder', 'create-leadform-builder', 'create-contactform-builder', 'zoho-crm-form-builder','formsubmit-logs','crmforms-authendication','crm-authentications');
+        if ( ! current_user_can('manage_options') ) {
+            return;
+        }
+
         if (sanitize_text_field(isset($_REQUEST['page'])) && in_array(sanitize_text_field($_REQUEST['page']), $pages_list)) {
            wp_register_style('zcfSelect2-css', zcf_lbplugin_baseurl('assets/css/select2.min.css', ZCF_LBPLUGINFILE));
             wp_enqueue_style('zcfSelect2-css');
@@ -256,6 +260,10 @@ add_filter( 'http_request_args', function ( $r ) {
 	return $r;
 } );
  function zcf_add_nonce(){
+        if ( ! current_user_can('manage_options') ) {
+            return;
+        }
+
 		printf(
     '<meta name="zoho_crm_forms_csrf_token" content="%s" />',
     esc_attr( wp_create_nonce( 'zoho_crm_forms_nonce' ) )

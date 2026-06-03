@@ -56,7 +56,7 @@ if (sanitize_text_field(isset($_REQUEST['code']))) {
 
                                         $zcrm_integ_client_id         = sanitize_text_field($_POST['zcrm_integ_client_id']);
                                         $zcrm_integ_client_secret     = sanitize_text_field($_POST['zcrm_integ_client_secret']);
-                                        $zcrm_integ_domain_name       = sanitize_text_field($_POST['zcrm_integ_domain_name']);
+                                        $zcrm_integ_domain_name       = sanitize_text_field($_POST['']);
                                         $zcrm_integ_authorization_uri = sanitize_text_field($_POST['zcrm_integ_authorization_uri']);
                                         update_option('zcrm_integ_client_id',$zcrm_integ_client_id);
                                         update_option('zcrm_integ_client_secret',$zcrm_integ_client_secret);

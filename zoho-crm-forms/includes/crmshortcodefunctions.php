@@ -967,7 +967,14 @@ class ZcfCallMShortcodeObj extends zcfManageShortcodesActions {
             $meta_key = '_form';
             $meta_value = $meta;
             update_post_meta($post_id, $meta_key, $meta_value);
-            $wpdb->query("update zcf_contactformrelation set thirdpartyformid = {$id} where thirdpartypluginname='contactform' and crmformsshortcodename ='$shortcode'");
+            $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE zcf_contactformrelation SET thirdpartyformid = %d WHERE thirdpartypluginname = %s AND crmformsshortcodename = %s",
+                    $id,
+                    'contactform',
+                    $shortcode
+                )
+            );
         } else {
 
             $wpdb->update($wpdb->posts, array('post_content' => $contact_array, 'post_title' => $title), array('ID' => $checkid));

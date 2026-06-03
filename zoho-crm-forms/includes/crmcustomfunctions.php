@@ -409,9 +409,25 @@ class zcfcustomfunctions {
         $doaction = sanitize_text_field($_REQUEST['doaction']);
         switch ($doaction) {
             case "SaveFormSettings":
+                if ( ! current_user_can('manage_options') ) {
+                    wp_die( esc_html__( 'Unauthorized', 'zoho-crm-forms' ), 403 );
+                }
+
                 $shortcode_name = sanitize_text_field($_REQUEST['shortcode']);
                 $thirdparty_title = sanitize_text_field($_REQUEST['thirdparty_title']);
                 $thirdparty_form_type = sanitize_text_field($_REQUEST['thirdparty_form_type']);
+
+                $allowed_thirdparty_form_types = array('none', 'contactform');
+                if ( ! in_array($thirdparty_form_type, $allowed_thirdparty_form_types, true) ) {
+                    wp_die( esc_html__( 'Invalid form type', 'zoho-crm-forms' ), 400 );
+                }
+
+                $valid_shortcode_query = "SELECT shortcode_id FROM zcf_zohoshortcode_manager WHERE shortcode_name = %s LIMIT 1";
+                $valid_shortcode = $wpdb->get_var($wpdb->prepare($valid_shortcode_query, $shortcode_name));
+                if ( empty($valid_shortcode) ) {
+                    wp_die( esc_html__( 'Invalid option', 'zoho-crm-forms' ), 400 );
+                }
+
                 if ($thirdparty_form_type != 'none') {
                     update_option($shortcode_name, $thirdparty_title);
                     update_option('Thirdparty_' . $shortcode_name, $thirdparty_form_type);
@@ -560,6 +576,9 @@ class zcf_AjaxActionsClass {
         $allowed_roles = array( 'editor', 'administrator', 'author' );
         if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles ) ){
         if (sanitize_text_field(isset($_REQUEST['operation'])) && (sanitize_text_field($_REQUEST['operation']) == "NoFieldOperation")) {
+            if ( ! current_user_can('manage_options') ) {
+                wp_die( esc_html__( 'Security check', 'zoho-crm-forms' ) );
+            }
             $OverallFunctionObj->zcf_NormalFieldAjaxAction();
         } else {
             $OverallFunctionObj->zcf_FieldsAjaxAction();
