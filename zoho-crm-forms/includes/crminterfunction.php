@@ -29,7 +29,10 @@ class zcfajaxcore {
     }
 
     public static function zcfchooseplugin() {
-         zcf_validate_general_nonce();
+       zcf_validate_general_nonce();
+      if ( ! current_user_can('manage_options') ) {
+        wp_die( esc_html__( 'Security check', 'zoho-crm-forms' ), 403 );
+      }
         $selectedPlugin = 'crmformswpbuilder';
         update_option('ZCFFormBuilderPluginActivated', $selectedPlugin);
         require_once(ZCF_BASE_DIR_URI . "includes/form-zohocrmconfig.php");
@@ -39,9 +42,7 @@ class zcfajaxcore {
     public static function zcfnewlead_form() {
       zcf_validate_general_nonce();
       $action = sanitize_text_field($_REQUEST['action']);
-      $user = wp_get_current_user();
-      $allowed_roles = array( 'editor', 'administrator', 'author' );
-      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
       $onAction = sanitize_text_field($_REQUEST['Action']);
       $Module = sanitize_text_field($_REQUEST['Module']);
       $layoutname = sanitize_text_field($_REQUEST['LayoutName']);
@@ -95,9 +96,7 @@ class zcfajaxcore {
     public static function zcfmainFormsActions() {
         zcf_validate_general_nonce();
         $action = sanitize_text_field($_REQUEST['action']);
-        $user = wp_get_current_user();
-        $allowed_roles = array( 'editor', 'administrator', 'author' );
-        if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
         require_once( ZCF_BASE_DIR_URI . "includes/crmcustomfunctions.php" );
         $adminObj = new zcf_AjaxActionsClass();
         $admin = $adminObj->zcfmainFormsActions();
@@ -111,9 +110,7 @@ class zcfajaxcore {
     public static function zcfcaptcha_info() {
         zcf_validate_general_nonce();
         $action = sanitize_text_field($_REQUEST['action']);
-        $user = wp_get_current_user();
-        $allowed_roles = array( 'editor', 'administrator', 'author' );
-        if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
         $final_captcha_array['recaptcha_public_key'] = sanitize_text_field($_REQUEST['recaptcha_public_key']);
         $final_captcha_array['recaptcha_private_key'] = sanitize_text_field($_REQUEST['recaptcha_private_key']);
         $final_captcha_array['crmforms_recaptcha'] = sanitize_text_field($_REQUEST['crmforms_recaptcha']);
@@ -128,6 +125,10 @@ class zcfajaxcore {
     }
 
     public static function zcfmappingmoduleconf() {
+      zcf_validate_general_nonce();
+      if ( ! current_user_can('manage_options') ) {
+        wp_die( esc_html__( 'Security check', 'zoho-crm-forms' ), 403 );
+      }
         $map_module = sanitize_text_field($_REQUEST['postdata']);
         update_option('zohocrmbasemodule', $map_module);
         die;
@@ -135,6 +136,9 @@ class zcfajaxcore {
 
     public static function zcfsaveSyncValue() {
         zcf_validate_general_nonce();
+      if ( ! current_user_can('manage_options') ) {
+        wp_die( esc_html__( 'Security check', 'zoho-crm-forms' ), 403 );
+      }
         $Sync_value = sanitize_text_field($_REQUEST['syncedvalue']);
         update_option('Sync_value_on_off', $Sync_value);
         die;
@@ -143,9 +147,7 @@ class zcfajaxcore {
     public static function zcfsend_mapping_configuration() {
         zcf_validate_general_nonce();
         $action = sanitize_text_field($_REQUEST['action']);
-        $user = wp_get_current_user();
-        $allowed_roles = array( 'editor', 'administrator', 'author' );
-        if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
         require_once( ZCF_BASE_DIR_URI . 'includes/crmcontactformfieldsmapping.php' );
         $module = sanitize_text_field($_REQUEST['thirdparty_module']);
         $thirdparty_form = sanitize_text_field($_REQUEST['thirdparty_plugin']);
@@ -165,9 +167,7 @@ class zcfajaxcore {
     public static function zcf_map_contactform_fields() {
         zcf_validate_general_nonce();
         $action = sanitize_text_field($_REQUEST['action']);
-        $user = wp_get_current_user();
-        $allowed_roles = array( 'editor', 'administrator', 'author' );
-        if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
         require_once( ZCF_BASE_DIR_URI . 'includes/crmcontactformfieldsmapping.php' );
         $mapping_ui_fields = new zcfcontactformfieldmapping();
         $mapping_ui_fields->zcfmaping_contactform_fields();
@@ -179,11 +179,17 @@ class zcfajaxcore {
     public static function zcf_save_contact_form_title() {
       zcf_validate_general_nonce();
       $action = sanitize_text_field($_REQUEST['action']);
-      $user = wp_get_current_user();
-      $allowed_roles = array( 'editor', 'administrator', 'author' );
-      if (sanitize_text_field(isset($_REQUEST['action']) )&& (wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles ))){
+      if (sanitize_text_field(isset($_REQUEST['action']) )&& (wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options'))){
+        global $wpdb;
         $thirdparty_title_key = sanitize_text_field($_REQUEST['tp_title_key']);
         $thirdparty_title_value = sanitize_text_field($_REQUEST['tp_title_val']);
+
+        $valid_shortcode_query = "SELECT shortcode_id FROM zcf_zohoshortcode_manager WHERE shortcode_name = %s LIMIT 1";
+        $valid_shortcode = $wpdb->get_var($wpdb->prepare($valid_shortcode_query, $thirdparty_title_key));
+        if ( empty($valid_shortcode) ) {
+            wp_die( esc_html__( 'Invalid option', 'zoho-crm-forms' ), 400 );
+        }
+
         update_option($thirdparty_title_key, $thirdparty_title_value);
         die;
       }else{
@@ -195,9 +201,7 @@ class zcfajaxcore {
     public static function zcf_send_mapped_config() {
       zcf_validate_general_nonce();
       $action = sanitize_text_field($_REQUEST['action']);
-      $user = wp_get_current_user();
-      $allowed_roles = array( 'editor', 'administrator', 'author' );
-      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
         require_once( ZCF_BASE_DIR_URI . 'includes/crmcontactformfieldsmapping.php' );
         $mapping_ui_fields = new zcfcontactformfieldmapping();
         $mapping_ui_fields->zcf_mapped_fields_config();
@@ -209,9 +213,7 @@ class zcfajaxcore {
     public static function zcf_delete_mapped_config() {
         zcf_validate_general_nonce();
         $action = sanitize_text_field($_REQUEST['action']);
-        $user = wp_get_current_user();
-        $allowed_roles = array( 'editor', 'administrator', 'author' );
-        if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
         require_once( ZCF_BASE_DIR_URI . 'includes/crmcontactformfieldsmapping.php' );
         $mapping_ui_fields = new zcfcontactformfieldmapping();
         $mapping_ui_fields->zcf_delete_mappedfields_config();
@@ -222,6 +224,9 @@ class zcfajaxcore {
 
     public static function zcf_save_usersync_option() {
        zcf_validate_general_nonce();
+      if ( ! current_user_can('manage_options') ) {
+        wp_die( esc_html__( 'Security check', 'zoho-crm-forms' ), 403 );
+      }
         $usersync_RR_value = sanitize_text_field($_REQUEST['user_rr_val']);
         update_option('usersync_rr_value', $usersync_RR_value);
         die;

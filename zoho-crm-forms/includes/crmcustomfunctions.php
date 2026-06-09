@@ -138,9 +138,7 @@ class zcfcustomfunctions {
         zcfcheckAccessToken();
         zcf_validate_general_nonce();
         $action = sanitize_text_field($_REQUEST['action']);
-        $user = wp_get_current_user();
-        $allowed_roles = array( 'editor', 'administrator', 'author' );
-        if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+        if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
         $zohocrmformname = sanitize_text_field(isset($_REQUEST['crmtype'])) ? sanitize_text_field($_REQUEST['crmtype']) : "";
         $module = sanitize_text_field(isset($_REQUEST['module'])) ? sanitize_text_field($_REQUEST['module']) : "";
         $module_options = $module;
@@ -572,9 +570,7 @@ class zcf_AjaxActionsClass {
         zcf_validate_general_nonce();
         $OverallFunctionObj = new zcfcustomfunctions();
         $action = sanitize_text_field($_REQUEST['action']);
-        $user = wp_get_current_user();
-        $allowed_roles = array( 'editor', 'administrator', 'author' );
-        if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles ) ){
+        if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options') ){
         if (sanitize_text_field(isset($_REQUEST['operation'])) && (sanitize_text_field($_REQUEST['operation']) == "NoFieldOperation")) {
             if ( ! current_user_can('manage_options') ) {
                 wp_die( esc_html__( 'Security check', 'zoho-crm-forms' ) );
@@ -597,9 +593,7 @@ class zcf_ajaxActionModuleList {
     public static function zcf_getModuleLayoutlist() {
       zcf_validate_general_nonce();
       $action = sanitize_text_field($_REQUEST['action']);
-      $user = wp_get_current_user();
-      $allowed_roles = array( 'editor', 'administrator', 'author' );
-      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+            if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
         $OverallFunctionObj = new zcfcustomfunctions();
         $OverallFunctionObj->zcf_selectLayoutName();
         die;
@@ -616,9 +610,7 @@ class zcf_ajaxzcf_updateTitles {
     public static function zcf_updateTitles() {
       zcf_validate_general_nonce();
       $action = sanitize_text_field($_REQUEST['action']);
-      $user = wp_get_current_user();
-      $allowed_roles = array( 'editor', 'administrator', 'author' );
-      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+            if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
         $OverallFunctionObj = new zcfcustomfunctions();
         $OverallFunctionObj->zcf_updateFormTitle();
         die;
@@ -634,9 +626,7 @@ class zcf_ajaxzcf_updateTitles1 {
     public static function zcf_updateTitles1() {
       zcf_validate_general_nonce();
       $action = sanitize_text_field($_REQUEST['action']);
-      $user = wp_get_current_user();
-      $allowed_roles = array( 'editor', 'administrator', 'author' );
-      if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && array_intersect( $allowed_roles, $user->roles )){
+            if(wp_verify_nonce( $_POST['nonce'],$action.'_nonce' ) && current_user_can('manage_options')){
         $OverallFunctionObj = new zcfcustomfunctions();
         $OverallFunctionObj->zcf_saveClientAuthKeys();
         die;
