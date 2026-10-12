@@ -159,6 +159,10 @@ class zcfajaxcore {
     }
 
     public static function zcf_get_contactform_fields() {
+        zcf_validate_general_nonce();
+      if ( ! current_user_can('manage_options') ) {
+        wp_die( esc_html__( 'Security check', 'zoho-crm-forms' ), 403 );
+      }
         require_once( ZCF_BASE_DIR_URI . 'includes/crmcontactformfieldsmapping.php' );
         $mapping_ui_fields = new zcfcontactformfieldmapping();
         $mapping_ui_fields->zcfget_contactform_fields();

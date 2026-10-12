@@ -3,19 +3,18 @@
 /* * ******************************************************************************************
  * Plugin Name: Zoho CRM Lead Magnet
  * Description: Websites are one of the most important sources of leads for your business. That means your CRM system should be well integrated with your website to contextually capture each and every visitor to turn them into a lead.Introducing the Zoho CRM Lead Capture plugin for Wordpress. This lets you create webforms, embed them in your website, and automatically capture leads directly into your CRM with zero attenuation.Not only is the integration easy to set-up but it's also easy on your wallet.
- * Version: 1.8.2.3
+ * Version: 1.8.2.4
  * ***************************************************************************************** */
 if (!defined('ABSPATH'))
     exit;
 
-        define( 'ZCF_VERSION', '1.8.2.3' );
+        define( 'ZCF_VERSION', '1.8.2.4' );
         define( 'ZCF_LBPLUGINFILE', __FILE__ );
         define( 'ZCF_LBPLUGIN_URL', untrailingslashit( plugins_url( '', ZCF_LBPLUGINFILE ) ) );
         zcf_define_url_constants();
         zcf_configfilesInclude();
         zcf_plugininit();
         zcf_hooksinit();
-        zcf_allowed_tag();
         $crmnames = get_option("active_plugins");
 
         if (in_array("contact-form-7/wp-contact-form-7.php", $crmnames)) {
@@ -46,7 +45,7 @@ if (!defined('ABSPATH'))
 	return $url;
     }
     function zcf_allowed_tag(){
-      global $allowedposttags;
+      $allowedposttags = wp_kses_allowed_html( 'post' );
       $allowed_atts = array(
       'align'      => array(),
       'class'      => array(),
@@ -254,11 +253,6 @@ function zcf_adminhelpenable() {
 }
 
 add_action('admin_head', 'zcf_adminhelpenable');
-add_filter( 'http_request_args', function ( $r ) {
-	$r['sslverify'] = false;
-
-	return $r;
-} );
  function zcf_add_nonce(){
         if ( ! current_user_can('manage_options') ) {
             return;

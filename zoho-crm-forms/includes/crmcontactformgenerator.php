@@ -286,7 +286,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
             if ($fieldtype == "string" || $fieldtype == "text" || $fieldtype == "formula" || $fieldtype == "bigint") {
                 $htmlcontent1 .= "<td><input type='text' class='string{$M} crmforms_post_fields' name='{$config_fields[$i]['name']}' id='{$module_options}_{$config_fields[$i]['name']}' value='";
                 if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field($_POST['formnumber']) == $_SESSION['generated_forms']) && $count_error != 0)
-                    $htmlcontent1 .= sanitize_text_field($_POST[$config_fields[$i]['name']]);
+                    $htmlcontent1 .= esc_attr(sanitize_text_field(wp_unslash($_POST[$config_fields[$i]['name']])));
                 else
                 $htmlcontent1 .= '';
                 $htmlcontent1 .= "'/><span class='crmforms_field_error' id='" . $config_fields[$i]['name'] . "error{$_SESSION["generated_forms"]}'>";
@@ -307,8 +307,8 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
                     $htmlcontent2 .= "<input type='radio' name='{$config_fields[$i]['name']}' value='{$config_fields[$i]['type']['picklistValues'][$j]['label']}'>{$config_fields[$i]['type']['picklistValues'][$j]['value']}";
                 }
                 $htmlcontent1 .= $htmlcontent2;
-                $configfields = sanitize_text_field($_POST[$config_fields[$i]['name']]);
-                $htmlcontent1 .= "<script>document.getElementById('{$config_fields[$i]['name']}').value='{$configfields}'</script>";
+                $configfields = isset($_POST[$config_fields[$i]['name']]) ? sanitize_text_field(wp_unslash($_POST[$config_fields[$i]['name']])) : '';
+                $htmlcontent1 .= "<script>document.getElementById('{$config_fields[$i]['name']}').value=" . wp_json_encode($configfields, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . "</script>";
                 $htmlcontent1 .= "<span class='crmforms_field_error' id='" . $config_fields[$i]['name'] . "error{$_SESSION["generated_forms"]}'></span>";
                 $htmlcontent1 .= "</td>";
                 $count_selected++;
@@ -326,7 +326,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
 
                 $htmlcontent1 .= "<td><select class='picklist{$M} crmforms_post_fields' name='{$config_fields[$i]['name']}' id='{$module_options}_{$config_fields[$i]['name']}'  value='";
                 if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field(intval($_POST['formnumber'])) == $_SESSION['generated_forms']) && $count_error != 0)
-                    $htmlcontent1 .= sanitize_text_field($_POST[$config_fields[$i]['name']]);
+                    $htmlcontent1 .= esc_attr(sanitize_text_field(wp_unslash($_POST[$config_fields[$i]['name']])));
                 else
                     $htmlcontent1 .= '';
 
@@ -344,7 +344,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
             } elseif ($fieldtype == 'integer') {
                 $htmlcontent1 .= "<td><input type='text' class='integer{$M} crmforms_post_fields' name='{$config_fields[$i]['name']}' id='{$module_options}_{$config_fields[$i]['name']}' value='";
                 if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field(intval($_POST['formnumber'])) == $_SESSION['generated_forms']) && $count_error != 0)
-                    $htmlcontent1 .= sanitize_text_field($_POST[$config_fields[$i]['name']]);
+                    $htmlcontent1 .= esc_attr(sanitize_text_field(wp_unslash($_POST[$config_fields[$i]['name']])));
                 else
                     $htmlcontent1 .= '';
                 $htmlcontent1 .= "'/><span class='crmforms_field_error' id='" . $config_fields[$i]['name'] . "error{$_SESSION["generated_forms"]}'>";
@@ -361,7 +361,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
             } elseif ($fieldtype == 'currency') {
                 $htmlcontent1 .= "<td><input type='text' class='currency{$M} crmforms_post_fields' name='{$config_fields[$i]['name']}' id='{$module_options}_{$config_fields[$i]['name']}' value='";
                 if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field(intval($_POST['formnumber'])) == $_SESSION['generated_forms']) && $count_error != 0)
-                    $htmlcontent1 .= sanitize_text_field($_POST[$config_fields[$i]['name']]);
+                    $htmlcontent1 .= esc_attr(sanitize_text_field(wp_unslash($_POST[$config_fields[$i]['name']])));
                 else
                     $htmlcontent1 .= '';
                 $htmlcontent1 .= "'/><span class='crmforms_field_error' id='" . $config_fields[$i]['name'] . "error{$_SESSION["generated_forms"]}'>";
@@ -375,7 +375,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
             } elseif ($fieldtype == 'email') {
                 $htmlcontent1 .= "<td><input type='text' class='email{$M} crmforms_post_fields' name='{$config_fields[$i]['name']}' id='{$module_options}_{$config_fields[$i]['name']}' value='";
                 if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field(intval($_POST['formnumber'])) == $_SESSION['generated_forms']) && $count_error != 0)
-                    $htmlcontent1 .= sanitize_text_field($_POST[$config_fields[$i]['name']]);
+                    $htmlcontent1 .= esc_attr(sanitize_text_field(wp_unslash($_POST[$config_fields[$i]['name']])));
                 else
                     $htmlcontent1 .= '';
 
@@ -403,7 +403,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
                 }
                 $htmlcontent1 .= '<td class="datetimetD"><input type="text" class="date' . $M . ' crmforms_post_fields" name=' . $config_fields[$i]['name'] . ' id="' . $module_options . '_' . $config_fields[$i]['name'] . '_' . $_SESSION['generated_forms'] . '" value="';
                 if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field(intval($_POST['formnumber'])) == $_SESSION['generated_forms']) && $count_error != 0)
-                    $htmlcontent1 .= sanitize_text_field($_POST[$config_fields[$i]['name']]);
+                    $htmlcontent1 .= esc_attr(sanitize_text_field(wp_unslash($_POST[$config_fields[$i]['name']])));
                 else
                     $htmlcontent1 .= '';
 
@@ -426,7 +426,7 @@ function zcf_ContactFormfieldlistsMapping($module, $config_fields, $module_optio
                 }
                 $htmlcontent1 .= '<td class="datetimetD"><input type="text" class="' . $fieldtype . ' crmforms_post_fields" name=' . $config_fields[$i]['name'] . ' id="' . $module_options . '_' . $config_fields[$i]['name'] . '_' . $_SESSION['generated_forms'] . '" value="';
                 if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field(intval($_POST['formnumber'])) == $_SESSION['generated_forms']) && $count_error != 0)
-                    $htmlcontent1 .= sanitize_text_field($_POST[$config_fields[$i]['name']]);
+                    $htmlcontent1 .= esc_attr(sanitize_text_field(wp_unslash($_POST[$config_fields[$i]['name']])));
                 else
                     $htmlcontent1 .= '';
 
@@ -446,7 +446,7 @@ if(sanitize_text_field(isset($_POST['submitcontactform'])) && (sanitize_text_fie
             } elseif ($fieldtype == 'url' || $fieldtype == 'website') {
                 $htmlcontent1 .= "<td><input type='text' class='url{$M} crmforms_post_fields' name='{$config_fields[$i]['name']}' id='{$module_options}_{$config_fields[$i]['name']}' value='";
                 if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field(intval($_POST['formnumber'])) == $_SESSION['generated_forms']) && $count_error != 0)
-                    $htmlcontent1 .= sanitize_text_field($_POST[$config_fields[$i]['name']]);
+                    $htmlcontent1 .= esc_attr(sanitize_text_field(wp_unslash($_POST[$config_fields[$i]['name']])));
                 else
                     $htmlcontent1 .= '';
                 $htmlcontent1 .= "'/><br/><span class='crmforms_field_error' id='" . $config_fields[$i]['name'] . "error{$_SESSION["generated_forms"]}'>";
@@ -462,7 +462,7 @@ if(sanitize_text_field(isset($_POST['submitcontactform'])) && (sanitize_text_fie
             } elseif ($fieldtype == 'phone') {
                 $htmlcontent1 .= "<td><input type='text' class='phone{$M} crmforms_post_fields' name='{$config_fields[$i]['name']}' id='{$module_options}_{$config_fields[$i]['name']}' value='";
 if (sanitize_text_field(isset($_POST[$config_fields[$i]['name']])) && (sanitize_text_field(intval($_POST['formnumber'])) ==sanitize_text_field($_SESSION['generated_forms'])) && $count_error != 0)
-                    $htmlcontent1 .= sanitize_text_field($_POST[$config_fields[$i]['name']]);
+                    $htmlcontent1 .= esc_attr(sanitize_text_field(wp_unslash($_POST[$config_fields[$i]['name']])));
                 else
                     $htmlcontent1 .= '';
                 $htmlcontent1 .= "'/><br/><span class='crmforms_field_error' id='" . $config_fields[$i]['name'] . "error{$_SESSION["generated_forms"]}'>";
