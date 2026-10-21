@@ -142,11 +142,12 @@ if ($authtokens == '') {
                         $contactformShortcode = "[contact-form-7 " . "id='{$form_ID}' title='{$contact_form_title}']";
                         $existing_content .= "<tr>";
                         $existing_content .= "<td class='crmforms-crm-highlight' >";
-                        $existing_content .= "<a href='#' class='edit_link' onclick='return editThirdpartyFrom(\"" . esc_js($form_ID) . "\" , \"" . esc_js($third_plugin) . "\" , \"" . esc_js($third_module) . "\" , \"" . esc_js($layoutname) . "\" , \"" . esc_js($layoutId) . "\",\"" . esc_js($contact_form_title) . "\")'> <span class='edit-icon dB'></span> </a>";
-                        $existing_content .= "<a href='#' class='delete_link' onclick='return delete_mappping_config(\"" . esc_js($third_plugin) . "\" , \"" . esc_js($contact_val) . "\" ,\"" . esc_js($contact_form_title) . "\");' style='margin-left:2px;'> <span class='delete-icon dB'></span> </a>";
+                        // Values are emitted as escaped data-* attributes; crmmain.js binds the Edit/Delete handlers with addEventListener.
+                        $existing_content .= "<a href='#' class='edit_link zcf-tp-edit' data-form-id='" . esc_attr($form_ID) . "' data-third-module='" . esc_attr($third_module) . "' data-layout-name='" . esc_attr($layoutname) . "' data-layout-id='" . esc_attr($layoutId) . "' data-form-title='" . esc_attr($contact_form_title) . "'> <span class='edit-icon dB'></span> </a>";
+                        $existing_content .= "<a href='#' class='delete_link zcf-tp-delete' data-third-plugin='" . esc_attr($third_plugin) . "' data-form-id='" . esc_attr($contact_val) . "' data-form-title='" . esc_attr($contact_form_title) . "' style='margin-left:2px;'> <span class='delete-icon dB'></span> </a>";
                         $existing_content .= "</td>";
-                        $existing_content .= "<td class='crmforms-crm-highlight form-name-link' > $contact_form_title</td><td class='crmforms-crm-highlight'><span class='copyshortcodeTxt' id='copyshortcodeTxt' title='Click to copy shortcode' data-toggle='tooltip' data-placement='top'>$contactformShortcode</span><span class='copyshortcode' onclick='clicktocopyshortcodeList(this)'></span></td>
-				<td class='crmforms-crm-highlight' > $exist_module</td><td class='crmforms-crm-highlight' > $layoutname</td><td class='crmforms-crm-highlight' > $exist_assignee</td>
+                        $existing_content .= "<td class='crmforms-crm-highlight form-name-link' > " . esc_html($contact_form_title) . "</td><td class='crmforms-crm-highlight'><span class='copyshortcodeTxt' id='copyshortcodeTxt' title='Click to copy shortcode' data-toggle='tooltip' data-placement='top'>" . esc_html($contactformShortcode) . "</span><span class='copyshortcode' onclick='clicktocopyshortcodeList(this)'></span></td>
+				<td class='crmforms-crm-highlight' > " . esc_html($exist_module) . "</td><td class='crmforms-crm-highlight' > " . esc_html($layoutname) . "</td><td class='crmforms-crm-highlight' > " . esc_html($exist_assignee) . "</td>
 				<td class='crmforms-crm-highlight' > Contact Form7</td>";
 
                         $existing_content .= "</tr>";
@@ -335,7 +336,7 @@ $modulearrayquery = $wpdb->prepare("SELECT modifydate FROM zcf_zohocrm_list_modu
                         $form_id = $option_value['id'];
                         $title = $option_value['title'];
                         if (!in_array($form_id, $save_form_id)) {
-                            $option_content .= "<option value='{$form_id}'>$title</option>";
+                            $option_content .= "<option value='" . esc_attr($form_id) . "'>" . esc_html($title) . "</option>";
                         }
                     }
 

@@ -6,9 +6,9 @@ Requires at least: 6.0
 Author URI: https://www.zoho.com/crm/
 Author: Zoho CRM
 Tested up to: 7.0.0
-Stable tag: 1.8.2.4
+Stable tag: 1.8.2.5
 License: GPLv2 or later
-Version: 1.8.2.4
+Version: 1.8.2.5
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Websites are one of the most important sources of leads for your business.
@@ -324,6 +324,8 @@ The security issue related to Broken Access Control has been fixed.
 The security issue related to Broken Access Control has been fixed.
 1.8.2.4
 Security fixes: SSL certificate verification is no longer disabled for WordPress HTTP requests, the global post HTML allowlist is no longer modified, a missing authorization check on an AJAX action has been added, and submitted form values are now escaped when re-rendered.
+1.8.2.5
+Security fixes: a stored cross-site scripting issue in the Contact Form 7 mapping list (Edit/Delete actions) has been fixed; Contact Form 7 form titles are now escaped on the plugin's admin pages.
 
 
 == Upgrade notice ==

@@ -56,7 +56,7 @@ class zcfcontactformfieldmapping {
             $form_id = $option_value['id'];
             $title = $option_value['title'];
             if (!in_array($form_id, $save_form_id)) {
-                $option_content .= "<option value='{$form_id}'>$title</option>";
+                $option_content .= "<option value='" . esc_attr($form_id) . "'>" . esc_html($title) . "</option>";
             }
         }
         $html .= $option_content;

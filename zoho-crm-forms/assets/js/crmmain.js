@@ -155,7 +155,7 @@ function mapping_config(map_module, map_form_title, form_id, mapped_tp_plugin, t
 
 function delete_mappping_config(third_plugin, tp_form_id, formName) {
     jQuery.confirm({
-        title: 'Delete Form -<span class="form-name-confirm">' + formName + "</span>",
+        title: 'Delete Form -<span class="form-name-confirm">' + zcfEscapeHtml(formName) + "</span>",
         content: "<div class='mb20'>Your webform will be deleted permanently and will no longer be available in your website</div> Are you sure you want to delete the form?",
         type: 'red',
         typeAnimated: true,
@@ -255,7 +255,7 @@ function create_crmform(Action, Module, shortcode, plugin, LayName) {
 function deleteforms(Action, Module, shortcode, plugin, LayName, formName) {
 
     jQuery.confirm({
-        title: 'Delete Form -<span class="form-name-confirm">' + formName + "</span>",
+        title: 'Delete Form -<span class="form-name-confirm">' + zcfEscapeHtml(formName) + "</span>",
         content: "<div class='mb20'>Your webform will be deleted permanently and will no longer be available in your website</div> Are you sure you want to delete the form?",
         type: 'red',
         typeAnimated: true,
@@ -410,13 +410,36 @@ function getMappingConfiguration(thirdparty_form) {
 }
 function getThirdpartyTitle() {
     var layoutname = jQuery('#choose-thirdleads-layout option:selected').text();
-    window.location = "admin.php?page=create-thirdpartyform-builder&__module=" + jQuery('#map_thirdparty_module').val() + "&form_title=" + jQuery('#thirdparty_form_title').val() + "&third_module=" + jQuery('#map_thirdparty_module').val() + "&third_plugin=contactform&layoutname=" + layoutname + "&layoutId=" + jQuery('#choose-thirdleads-layout').val() + "&third_module_pluginname=" + jQuery('#thirdparty_form_title option:selected').text();
+    var enc = encodeURIComponent;
+    window.location = "admin.php?page=create-thirdpartyform-builder&__module=" + enc(jQuery('#map_thirdparty_module').val()) + "&form_title=" + enc(jQuery('#thirdparty_form_title').val()) + "&third_module=" + enc(jQuery('#map_thirdparty_module').val()) + "&third_plugin=contactform&layoutname=" + enc(layoutname) + "&layoutId=" + enc(jQuery('#choose-thirdleads-layout').val() || '') + "&third_module_pluginname=" + enc(jQuery('#thirdparty_form_title option:selected').text());
 
 
 }
 function editThirdpartyFrom(form_ID, third_plugin, third_module, layoutname, layoutId, contact_form_title) {
-    window.location = "admin.php?page=create-thirdpartyform-builder&__module=" + third_module + "&form_title=" + form_ID + "&third_module=" + third_module + "&third_plugin=contactform&layoutname=" + layoutname + "&layoutId=" + jQuery('#choose-thirdleads-layout').val() + "&third_module_pluginname=" + contact_form_title;
+    var enc = encodeURIComponent;
+    window.location = "admin.php?page=create-thirdpartyform-builder&__module=" + enc(third_module) + "&form_title=" + enc(form_ID) + "&third_module=" + enc(third_module) + "&third_plugin=contactform&layoutname=" + enc(layoutname) + "&layoutId=" + enc(jQuery('#choose-thirdleads-layout').val() || '') + "&third_module_pluginname=" + enc(contact_form_title);
 }
+
+function zcfEscapeHtml(value) {
+    return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+// Contact Form 7 mapping Edit/Delete links carry their values in data-* attributes (see includes/crmwebforms.php)
+// so form titles are never concatenated into inline handlers.
+document.addEventListener('click', function (event) {
+    var target = event.target;
+    var link = target && target.closest ? target.closest('a.zcf-tp-edit, a.zcf-tp-delete') : null;
+    if (!link) {
+        return;
+    }
+    event.preventDefault();
+    var d = link.dataset;
+    if (link.classList.contains('zcf-tp-edit')) {
+        editThirdpartyFrom(d.formId, 'contactform', d.thirdModule, d.layoutName, d.layoutId, d.formTitle);
+    } else {
+        delete_mappping_config(d.thirdPlugin, d.formId, d.formTitle);
+    }
+});
 
 
 
