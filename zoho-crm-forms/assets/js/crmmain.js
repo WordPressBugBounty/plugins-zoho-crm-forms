@@ -1548,7 +1548,7 @@ function authToken(siteurl){
         data:data,
         success: function (data) {
             var data = data.replace("</div>\n</div>\n</div>\n", '');
-            var url = "https://accounts.zoho."+domain+"/oauth/v2/auth?response_type=code&client_id="+clientID+"&scope=ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,ZohoCRM.users.ALL&redirect_uri="+authorization_uri+"&access_type=offline&prompt=consent&state="+stateurl;
+            var url = "https://accounts.zoho."+domain+"/oauth/v2/auth?response_type=code&client_id="+clientID+"&scope=ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,ZohoCRM.users.ALL&redirect_uri="+authorization_uri+"&access_type=offline&prompt=consent&state="+encodeURIComponent(stateurl);
             jQuery('#zcrm_integ_submit').attr('href',url);
             jQuery('#zcrm_integ_submit').attr('disabled',false);
 

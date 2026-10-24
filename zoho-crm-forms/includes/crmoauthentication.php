@@ -1,5 +1,32 @@
 <?php
 
+// OAuth state bound to the current admin user; embedded in the state (return) URL
+// so the callback can prove it belongs to a flow this user started.
+function zcfGetOAuthState() {
+    $key = 'zcf_oauth_state_' . get_current_user_id();
+    $state = get_transient($key);
+    if (empty($state)) {
+        $state = wp_generate_password(32, false, false);
+        set_transient($key, $state, HOUR_IN_SECONDS);
+    }
+    return $state;
+}
+
+function zcfGetOAuthStateUrl($page) {
+    return add_query_arg(array('page' => $page, 'zcf_state' => zcfGetOAuthState()), admin_url('admin.php'));
+}
+
+// Single use: the stored state is deleted once it is checked.
+function zcfConsumeOAuthState($state) {
+    $key = 'zcf_oauth_state_' . get_current_user_id();
+    $expected = get_transient($key);
+    if (empty($expected) || !is_string($state) || $state === '') {
+        return false;
+    }
+    delete_transient($key);
+    return hash_equals($expected, $state);
+}
+
 function zcfgetAuthTokennew($code) {
     $configSetting                  = get_option("zcf_crmformswpbuilder_settings");
     $zcrm_integ_client_id           = get_option("zcrm_integ_client_id");
@@ -24,10 +51,17 @@ function zcfgetAuthTokennew($code) {
         $config['client_id'] = $clientid;
         $config['client_secret'] = $client_secret;
         $config['redirect_uri'] = $redirect_uri;
-        $url =$domain_setup."/oauth/v2/token?code=$code&grant_type=authorization_code&client_id=" . $config['client_id'] . "&client_secret=" . $config['client_secret'] . "&redirect_uri=" . $config['redirect_uri'] . "";
+        $url =$domain_setup."/oauth/v2/token?code=" . rawurlencode($code) . "&grant_type=authorization_code&client_id=" . $config['client_id'] . "&client_secret=" . $config['client_secret'] . "&redirect_uri=" . $config['redirect_uri'] . "";
 
         $zfformsresponse =  wp_remote_post( $url);
+        if (is_wp_error($zfformsresponse) || wp_remote_retrieve_response_code($zfformsresponse) != 200) {
+            return false;
+        }
         $responsedata = json_decode(wp_remote_retrieve_body($zfformsresponse),true);
+        // Keep the existing connection unless the response carries both tokens.
+        if (!is_array($responsedata) || !empty($responsedata['error']) || empty($responsedata['access_token']) || empty($responsedata['refresh_token'])) {
+            return false;
+        }
         $authtokensEncript = base64_encode(base64_encode(base64_encode($responsedata['access_token'])));
         $refreshtokenEncript = base64_encode(base64_encode(base64_encode($responsedata['refresh_token'])));
         $config['authtoken'] = $authtokensEncript;
@@ -36,9 +70,10 @@ function zcfgetAuthTokennew($code) {
         $config['valid_time'] = $responsedata['expires_in_sec'];
         $config['api_domain'] = $responsedata['api_domain'];
         update_option("zcf_crmformswpbuilder_settings", $config);
-
+        zcfsynModules();
+        return true;
     }
-    zcfsynModules();
+    return false;
 }
 
 function zcfcheckAccessToken() {

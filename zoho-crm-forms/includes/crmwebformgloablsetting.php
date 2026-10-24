@@ -13,9 +13,18 @@ if ($config == "") {
 require_once( ZCF_BASE_DIR_URI . "includes/crmoauthentication.php");
 zcfcheckAccessToken();
 
+$reposnseAuth = false;
 if (sanitize_text_field(isset($_REQUEST['code']))) {
     $code = sanitize_text_field($_REQUEST['code']);
-    $reposnseAuth = zcfgetAuthTokennew($code);
+    $zcf_state = isset($_GET['zcf_state']) ? sanitize_text_field(wp_unslash($_GET['zcf_state'])) : '';
+    if (!zcfConsumeOAuthState($zcf_state)) {
+        echo '<div class="error"><p><strong>'.esc_html('Zoho CRM authentication request could not be verified. Please click Authenticate Zoho CRM again.').'</strong></p></div>'."\n";
+    } else {
+        $reposnseAuth = zcfgetAuthTokennew($code);
+        if (!$reposnseAuth) {
+            echo '<div class="error"><p><strong>'.esc_html('Zoho CRM authentication failed. Your existing connection was not changed. Please try again.').'</strong></p></div>'."\n";
+        }
+    }
 }
  $domainname = sanitize_text_field(get_option('zcrm_integ_domain_name'));
  $zcrm_integ_client_id = sanitize_text_field(get_option('zcrm_integ_client_id'));
@@ -114,7 +123,7 @@ if (sanitize_text_field(isset($_REQUEST['code']))) {
                                 <label class="form--label">Client Secret</label>
                                 <input type="text" value="<?php echo esc_html($clientsecret); ?>" name="zcrm_integ_client_secret" class="form--input" id="zcrm_integ_client_secret"  required onchange='authToken()'> <i class="form__row-info">Created in the developer console</i> </div>
                             <div class="form__row">
-                                <input type="hidden"  readonly="readonly" id='stateurl' name="state" class="form--input" value="<?php echo esc_url(admin_url().'admin.php?page=crmforms-builder'); ?>" class="regular-text" readonly="readonly" required onchange='authToken()'/>
+                                <input type="hidden"  readonly="readonly" id='stateurl' name="state" class="form--input" value="<?php echo esc_url(zcfGetOAuthStateUrl('crmforms-builder')); ?>" class="regular-text" readonly="readonly" required onchange='authToken()'/>
 
                                 <label class="form--label">Authorization Redirect URI</label>
                                 <?php $redUrl = "https://extensions.zoho.".$domainname."/plugin/wordpress/callback";?>
@@ -123,8 +132,9 @@ if (sanitize_text_field(isset($_REQUEST['code']))) {
 
                             <div class="form__row form__row-btn">
                             <?php 
-                               $stateUrl = add_query_arg( $_SERVER['QUERY_STRING'], '', esc_url(admin_url().'admin.php') );
-                              $url = "https://accounts.zoho.".$domainname."/oauth/v2/auth?response_type=code&client_id=".$zcrm_integ_client_id."&scope=ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,ZohoCRM.users.ALL&redirect_uri=".$redUrl."&access_type=offline&prompt=consent&state=".$stateUrl;
+                               $statePage = isset($_GET['page']) ? sanitize_key($_GET['page']) : 'crmforms-builder';
+                               $stateUrl = zcfGetOAuthStateUrl($statePage);
+                              $url = "https://accounts.zoho.".$domainname."/oauth/v2/auth?response_type=code&client_id=".$zcrm_integ_client_id."&scope=ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,ZohoCRM.users.ALL&redirect_uri=".$redUrl."&access_type=offline&prompt=consent&state=".rawurlencode($stateUrl);
                             if($domainname != ''){ ?>
                               <a   href='<?php echo esc_url($url);?>' id='zcrm_integ_submit' class='primarybtn'>Authenticate Zoho CRM</a>
                             <?php } else{ ?>
@@ -155,7 +165,7 @@ require_once( ZCF_BASE_DIR_URI . "includes/crmoauthentication.php");
 zcfcheckAccessToken();
 $SettingsConfig = get_option("zcf_crmformswpbuilder_settings");
 $authtokens = $SettingsConfig['authtoken'];
-if ($authtokens != '' && sanitize_text_field(isset($_REQUEST['code']))) {
+if ($authtokens != '' && $reposnseAuth) {
     ?>
     <script>
         jQuery(window).load(function () {
