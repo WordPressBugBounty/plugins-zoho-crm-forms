@@ -27,6 +27,19 @@ function zcfConsumeOAuthState($state) {
     return hash_equals($expected, $state);
 }
 
+// Token lifetime in seconds. Zoho returns the standard "expires_in"; older
+// responses used "expires_in_sec". Falls back to 3600 (Zoho's access-token lifetime).
+function zcfGetTokenExpiry($response) {
+    if (is_array($response)) {
+        foreach (array('expires_in', 'expires_in_sec') as $key) {
+            if (isset($response[$key]) && is_numeric($response[$key]) && (int) $response[$key] > 0) {
+                return (int) $response[$key];
+            }
+        }
+    }
+    return 3600;
+}
+
 function zcfgetAuthTokennew($code) {
     $configSetting                  = get_option("zcf_crmformswpbuilder_settings");
     $zcrm_integ_client_id           = get_option("zcrm_integ_client_id");
@@ -67,8 +80,8 @@ function zcfgetAuthTokennew($code) {
         $config['authtoken'] = $authtokensEncript;
         $config['refresh_token'] = $refreshtokenEncript;
         $config['created_time'] = date("Y-m-d H:i:s");
-        $config['valid_time'] = $responsedata['expires_in_sec'];
-        $config['api_domain'] = $responsedata['api_domain'];
+        $config['valid_time'] = zcfGetTokenExpiry($responsedata);
+        $config['api_domain'] = isset($responsedata['api_domain']) ? $responsedata['api_domain'] : '';
         update_option("zcf_crmformswpbuilder_settings", $config);
         zcfsynModules();
         return true;
@@ -79,14 +92,7 @@ function zcfgetAuthTokennew($code) {
 function zcfcheckAccessToken() {
 
     $configSetting = get_option("zcf_crmformswpbuilder_settings");
-  $refresh_token = base64_decode(base64_decode(base64_decode($configSetting['refresh_token'])));
-    if ($configSetting['refresh_token'] != '') {
-        $currentDate = strtotime(date("Y-m-d H:i:s"));
-        $access_token = base64_decode(base64_decode(base64_decode($configSetting['authtoken'])));
-        $refresh_token = base64_decode(base64_decode(base64_decode($configSetting['refresh_token'])));
-        $created_time = strtotime($configSetting['created_time']);
-        $created_time = $created_time + 3600;
-        $plusOneHour = strtotime(date('Y-m-d H:i:s', $created_time));
+    if (is_array($configSetting) && !empty($configSetting['refresh_token'])) {
         $generateValue = zcfgenerateAccessToken();
         $config['result_Type'] = true;
         $config['access_token'] = $generateValue['authtoken'];
@@ -117,19 +123,42 @@ function zcfgenerateAccessToken() {
         $domain_setup       = "https://accounts.zoho.com";
     }
     $currentDate = strtotime(date("Y-m-d H:i:s"));
-    $refresh_token = base64_decode(base64_decode(base64_decode($configSetting['refresh_token'])));
-    $client_id = $configSetting['client_id'];
-    $client_secret = $configSetting['client_secret'];
+    if (!is_array($configSetting)) {
+        $configSetting = array();
+    }
+    $refresh_token = base64_decode(base64_decode(base64_decode(isset($configSetting['refresh_token']) ? $configSetting['refresh_token'] : '')));
+    $client_id = isset($configSetting['client_id']) ? $configSetting['client_id'] : '';
+    $client_secret = isset($configSetting['client_secret']) ? $configSetting['client_secret'] : '';
     $redirect_uri = $redirect_uri;
+
+    // Returned when the refresh fails: the stored settings are left untouched.
+    $failed = array(
+        'authtoken'     => isset($configSetting['authtoken']) ? $configSetting['authtoken'] : '',
+        'refresh_token' => isset($configSetting['refresh_token']) ? $configSetting['refresh_token'] : '',
+        'client_id'     => $client_id,
+        'client_secret' => $client_secret,
+        'redirect_uri'  => $redirect_uri,
+        'result_Type'   => 'FALSE',
+    );
+    if ($refresh_token === '') {
+        return $failed;
+    }
+
     $url =$domain_setup."/oauth/v2/token?client_id=$client_id&client_secret=$client_secret&grant_type=refresh_token&refresh_token=$refresh_token&redirect_uri=$redirect_uri";
     $zfformsresponse =  wp_remote_post( $url);
+    if (is_wp_error($zfformsresponse) || (int) wp_remote_retrieve_response_code($zfformsresponse) !== 200) {
+        return $failed;
+    }
     $response = json_decode(wp_remote_retrieve_body($zfformsresponse),true);
+    if (!is_array($response) || !empty($response['error']) || empty($response['access_token']) || !is_string($response['access_token'])) {
+        return $failed;
+    }
     $authtokensEncript = base64_encode(base64_encode(base64_encode($response['access_token'])));
     $refreshtokenEncript = base64_encode(base64_encode(base64_encode($refresh_token)));
     $config['authtoken'] = $authtokensEncript;
     $config['refresh_token'] = $refreshtokenEncript;
     $config['created_time'] = date("Y-m-d H:i:s");
-    $config['valid_time'] = $response['expires_in_sec'];
+    $config['valid_time'] = zcfGetTokenExpiry($response);
     $config['client_id'] = $client_id;
     $config['client_secret'] = $client_secret;
     $config['redirect_uri'] = $redirect_uri;

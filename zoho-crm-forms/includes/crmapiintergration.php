@@ -62,8 +62,6 @@ if (!class_exists("crmformsZohoApi")) {
         public function zcfFormDatainsert($modulename, $methodname, $authkey, $xmlData = "", $extraParams = "") {
                 require_once( ZCF_BASE_DIR_URI . "includes/crmoauthentication.php");
                 zcfcheckAccessToken();
-                $requesthosturl = parse_url($_SERVER['HTTP_REFERER']);
-                $domainUrl = parse_url(get_site_url());
                 $SettingsConfig = get_option("zcf_crmformswpbuilder_settings");
 
 
@@ -83,25 +81,72 @@ if (!class_exists("crmformsZohoApi")) {
                 );
 
                $zfformsresponse =  wp_remote_post( $zfformbaseurl, $args );
-               $responseresultjson = json_decode(wp_remote_retrieve_body($zfformsresponse),true);
-               $this->zcf_SubmitLog($responseresultjson,$xmlData);
-               if ($extraParams && is_array($extraParams)) {
+
+               // Transport failure (WP_Error): log it and stop.
+               if (is_wp_error($zfformsresponse)) {
+                    $this->zcf_SubmitLog(array('code' => 'HTTP_REQUEST_FAILED', 'message' => $zfformsresponse->get_error_message()), $xmlData);
+                    return array();
+               }
+
+               $httpcode = (int) wp_remote_retrieve_response_code($zfformsresponse);
+               $responseresultjson = json_decode(wp_remote_retrieve_body($zfformsresponse), true);
+               if (!is_array($responseresultjson)) {
+                    $responseresultjson = array();
+               }
+               if ($httpcode < 200 || $httpcode >= 300) {
+                    $responseresultjson['http_status'] = $httpcode;
+               }
+               $this->zcf_SubmitLog($responseresultjson, $xmlData);
+
+               // Upload attachments only after the CRM confirms the record was created.
+               $recordid = $this->zcfGetCreatedRecordId($httpcode, $responseresultjson);
+               if ($recordid !== '' && $extraParams && is_array($extraParams)) {
                 foreach ($extraParams as $field => $path) {
-                        $this->zcfInsertattachment($responseresultjson, $authkey, $path, $modulename);
+                        $this->zcfInsertattachment($recordid, $authkey, $path, $modulename);
                 }
                }
                return $responseresultjson;
 
         }
+
+        // Returns the new record ID when the response is a 2xx with data[0].code === "SUCCESS"
+        // and a non-empty details.id; otherwise returns an empty string.
+        private function zcfGetCreatedRecordId($httpcode, $response) {
+            if ($httpcode < 200 || $httpcode >= 300) {
+                return '';
+            }
+            if (!isset($response['data'][0]) || !is_array($response['data'][0])) {
+                return '';
+            }
+            $first = $response['data'][0];
+            if (!isset($first['code']) || $first['code'] !== 'SUCCESS') {
+                return '';
+            }
+            if (!isset($first['details']['id']) || !is_scalar($first['details']['id'])) {
+                return '';
+            }
+            $id = (string) $first['details']['id'];
+            return preg_match('/^[0-9]+$/', $id) ? $id : '';
+        }
+
         public function zcf_SubmitLog($responseresultjson,$fetchData=""){
             global $wpdb;
-            $status = $responseresultjson['data'][0]['code'];
-            $desc = serialize($responseresultjson['data'][0]);
+            if (isset($responseresultjson['data'][0]) && is_array($responseresultjson['data'][0])) {
+                $first = $responseresultjson['data'][0];
+            } elseif (is_array($responseresultjson) && !empty($responseresultjson)) {
+                $first = $responseresultjson;
+            } else {
+                $first = array('code' => 'INVALID_RESPONSE');
+            }
+            $status = (isset($first['code']) && is_scalar($first['code'])) ? (string) $first['code'] : 'INVALID_RESPONSE';
+            $desc = serialize($first);
             $joinstring = $desc."".$fetchData;
             $wpdb->insert( 'zcf_submitlogs' , array( 'crmsubmitlogStatus' => $status,'crmsubmitlogDescribtion'=>$joinstring) );
         }
-        public function zcfInsertattachment($response, $authkey, $path='', $modulename="") {
-            $id = $response['data'][0]['details']['id'];
+        public function zcfInsertattachment($id, $authkey, $path='', $modulename="") {
+            if (!is_scalar($id) || !preg_match('/^[0-9]+$/', (string) $id)) {
+                return false;
+            }
 
           $url = $this->apiurl ."/crm/v2/$modulename/$id/Attachments";
           $path = '@' . $path;
