@@ -3,12 +3,12 @@
 /* * ******************************************************************************************
  * Plugin Name: Zoho CRM Lead Magnet
  * Description: Websites are one of the most important sources of leads for your business. That means your CRM system should be well integrated with your website to contextually capture each and every visitor to turn them into a lead.Introducing the Zoho CRM Lead Capture plugin for Wordpress. This lets you create webforms, embed them in your website, and automatically capture leads directly into your CRM with zero attenuation.Not only is the integration easy to set-up but it's also easy on your wallet.
- * Version: 1.8.2.7
+ * Version: 1.8.2.8
  * ***************************************************************************************** */
 if (!defined('ABSPATH'))
     exit;
 
-        define( 'ZCF_VERSION', '1.8.2.7' );
+        define( 'ZCF_VERSION', '1.8.2.8' );
         define( 'ZCF_LBPLUGINFILE', __FILE__ );
         define( 'ZCF_LBPLUGIN_URL', untrailingslashit( plugins_url( '', ZCF_LBPLUGINFILE ) ) );
         zcf_define_url_constants();
@@ -31,6 +31,7 @@ if (!defined('ABSPATH'))
             require_once("includes/crmwebformfieldsfuntions.php");
         }
         require_once('includes/crmwebformshelper.php');
+        add_action('plugins_loaded', array('zcfmaincorehelpers', 'zcf_maybe_migrate_site_scope'));
         require_once("includes/crmcontactformgenerator.php");
         require_once('includes/crmcustomfunctions.php');
 
@@ -302,6 +303,66 @@ add_action('admin_head', 'zcf_adminhelpenable');
 		$nonce = isset($_SERVER['HTTP_X_CSRF_TOKEN']) ? $_SERVER['HTTP_X_CSRF_TOKEN'] : '';
 		if( ! wp_verify_nonce( $nonce, 'zoho_crm_forms_nonce' ) )
 			json_response( 400, 'Nonce validation failed.' );
+	}
+
+	/**
+	 * Site (blog) that owns forms created in the current request.
+	 *
+	 * The plugin's tables are shared by every site of a multisite network, so
+	 * each form definition and field mapping carries the id of its owning site.
+	 */
+	function zcf_current_site_id() {
+		return (int) get_current_blog_id();
+	}
+
+	/**
+	 * Return the form definition row for $shortcode_name only if it belongs to
+	 * the current site, otherwise null.
+	 */
+	function zcf_get_owned_shortcode( $shortcode_name ) {
+		global $wpdb;
+		$shortcode_name = (string) $shortcode_name;
+		if ( $shortcode_name === '' ) {
+			return null;
+		}
+		return $wpdb->get_row( $wpdb->prepare(
+			"SELECT * FROM zcf_zohoshortcode_manager WHERE shortcode_name = %s AND blog_id = %d LIMIT 1",
+			$shortcode_name,
+			zcf_current_site_id()
+		) );
+	}
+
+	/**
+	 * True when every given field-mapping rel_id belongs to a form owned by
+	 * the current site.
+	 */
+	function zcf_owns_formfield_ids( $rel_ids ) {
+		global $wpdb;
+		$rel_ids = array_values( array_unique( array_map( 'intval', (array) $rel_ids ) ) );
+		if ( empty( $rel_ids ) || in_array( 0, $rel_ids, true ) ) {
+			return false;
+		}
+		$placeholders = implode( ',', array_fill( 0, count( $rel_ids ), '%d' ) );
+		$params = array_merge( $rel_ids, array( zcf_current_site_id(), zcf_current_site_id() ) );
+		$owned = (int) $wpdb->get_var( $wpdb->prepare(
+			"SELECT COUNT(*) FROM zcf_zohocrm_formfield_manager ffm
+			 JOIN zcf_zohoshortcode_manager sm ON sm.shortcode_id = ffm.shortcode_id
+			 WHERE ffm.rel_id IN ($placeholders) AND ffm.blog_id = %d AND sm.blog_id = %d",
+			$params
+		) );
+		return $owned === count( $rel_ids );
+	}
+
+	/**
+	 * Stop the request if the form named by $shortcode_name is not owned by
+	 * the current site.
+	 */
+	function zcf_require_owned_shortcode( $shortcode_name ) {
+		$row = zcf_get_owned_shortcode( $shortcode_name );
+		if ( ! $row ) {
+			wp_die( esc_html__( 'Security check', 'zoho-crm-forms' ), 403 );
+		}
+		return $row;
 	}
 
 function zcf_tab3customdisplay() {

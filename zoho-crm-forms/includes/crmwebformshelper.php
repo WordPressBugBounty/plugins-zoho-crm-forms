@@ -92,6 +92,7 @@ class zcfmaincorehelpers {
             self::zcf_altershortcodetable();
         }
         self::zcf_altershortcodetable();
+        self::zcf_maybe_migrate_site_scope();
     }
     public static function zcf_createTableMigration(){
         global $wpdb;
@@ -134,7 +135,9 @@ class zcfmaincorehelpers {
  				  `assignmentrule_ID` varchar(255) NOT NULL,
  				 `assignmentrule_enable` varchar(55) NOT NULL DEFAULT '0',
  				 `thirtparty_enable` varchar(55) DEFAULT '0',
-				   PRIMARY KEY ( shortcode_id )
+				  `blog_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+				   PRIMARY KEY ( shortcode_id ),
+				   KEY `zcf_blog_shortcode` ( blog_id, shortcode_name )
 				) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 		");
 
@@ -153,7 +156,9 @@ class zcfmaincorehelpers {
 				  `editupdate` int(55) NOT NULL,
 				  `hiddenfield` varchar(55) DEFAULT '0',
   				  `defaultvalues` varchar(255) NOT NULL,
-				   PRIMARY KEY ( rel_id )
+				  `blog_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+				   PRIMARY KEY ( rel_id ),
+				   KEY `zcf_blog_shortcode_id` ( blog_id, shortcode_id )
 				) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 		");
         $wpdb->query("
@@ -223,6 +228,95 @@ class zcfmaincorehelpers {
         $wpdb->query("ALTER table zcf_contactformrelation (ADD crmformsshortcodename varchar(50),crmformsfieldid int(20) DEFAULT NULL,crmformsfieldslable varchar(30) NOT NULL,thirdpartypluginname varchar(30) NOT NULL,thirdpartyformid int(50) DEFAULT NULL,thirdpartyfieldids varchar(50) DEFAULT NULL");
 
     }
+    /**
+     * Scope form definitions and field mappings to their owning site.
+     *
+     * The plugin tables are unprefixed and therefore shared by every site of a
+     * multisite network. Adds a blog_id column to both tables and attributes
+     * existing (blog_id = 0) rows to a site. Runs once per network.
+     */
+    const ZCF_SITE_SCOPE_SCHEMA = 1;
+
+    public static function zcf_maybe_migrate_site_scope() {
+        if ((int) get_site_option('zcf_site_scope_schema', 0) >= self::ZCF_SITE_SCOPE_SCHEMA) {
+            return;
+        }
+        self::zcf_migrate_site_scope();
+    }
+
+    public static function zcf_migrate_site_scope() {
+        global $wpdb;
+
+        $tables = array(
+            'zcf_zohoshortcode_manager' => array('zcf_blog_shortcode', 'blog_id, shortcode_name'),
+            'zcf_zohocrm_formfield_manager' => array('zcf_blog_shortcode_id', 'blog_id, shortcode_id'),
+        );
+        foreach ($tables as $table => $index) {
+            if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table)) !== $table) {
+                // Tables not created yet; zcf_createPluginTables() includes blog_id.
+                continue;
+            }
+            if (!$wpdb->get_var("SHOW COLUMNS FROM `$table` LIKE 'blog_id'")) {
+                $wpdb->query("ALTER TABLE `$table` ADD `blog_id` bigint(20) unsigned NOT NULL DEFAULT '0'");
+            }
+            if (!$wpdb->get_var($wpdb->prepare("SHOW INDEX FROM `$table` WHERE Key_name = %s", $index[0]))) {
+                $wpdb->query("ALTER TABLE `$table` ADD KEY `{$index[0]}` ({$index[1]})");
+            }
+        }
+        if (!$wpdb->get_var("SHOW COLUMNS FROM `zcf_zohoshortcode_manager` LIKE 'blog_id'")) {
+            // Schema change failed; leave the flag unset so it is retried.
+            return;
+        }
+
+        // Attribute legacy form definitions to a site.
+        $legacy = $wpdb->get_col("SELECT shortcode_name FROM zcf_zohoshortcode_manager WHERE blog_id = 0");
+        if (!empty($legacy)) {
+            if (!is_multisite()) {
+                $wpdb->query($wpdb->prepare("UPDATE zcf_zohoshortcode_manager SET blog_id = %d WHERE blog_id = 0", get_current_blog_id()));
+            } else {
+                // A form belongs to the one site whose content embeds its
+                // shortcode. Forms that are embedded nowhere, or on more than
+                // one site, go to the main site (fail closed: only the main
+                // site's administrators can manage them).
+                $owners = array();
+                $site_ids = get_sites(array('fields' => 'ids', 'number' => 0));
+                foreach ($site_ids as $site_id) {
+                    $posts_table = $wpdb->get_blog_prefix($site_id) . 'posts';
+                    $contents = $wpdb->get_col(
+                        "SELECT post_content FROM `$posts_table` WHERE post_content LIKE '%zohocrm-web-form%' AND post_status NOT IN ('trash', 'auto-draft', 'inherit')"
+                    );
+                    foreach ((array) $contents as $content) {
+                        if (preg_match_all('/zohocrm-web-form[^\]]*\bid\s*=\s*[\'"]?([A-Za-z0-9]+)/', $content, $m)) {
+                            foreach ($m[1] as $name) {
+                                $owners[$name][(int) $site_id] = true;
+                            }
+                        }
+                    }
+                }
+                $main_site = (int) get_main_site_id();
+                foreach (array_unique($legacy) as $name) {
+                    $owner = (isset($owners[$name]) && count($owners[$name]) === 1) ? (int) key($owners[$name]) : $main_site;
+                    $wpdb->query($wpdb->prepare(
+                        "UPDATE zcf_zohoshortcode_manager SET blog_id = %d WHERE shortcode_name = %s AND blog_id = 0",
+                        $owner, $name
+                    ));
+                }
+            }
+        }
+
+        // Field mappings inherit the site of their form definition.
+        if ($wpdb->get_var("SHOW COLUMNS FROM `zcf_zohocrm_formfield_manager` LIKE 'blog_id'")) {
+            $wpdb->query(
+                "UPDATE zcf_zohocrm_formfield_manager ffm
+                 JOIN zcf_zohoshortcode_manager sm ON sm.shortcode_id = ffm.shortcode_id
+                 SET ffm.blog_id = sm.blog_id
+                 WHERE ffm.blog_id = 0"
+            );
+        }
+
+        update_site_option('zcf_site_scope_schema', self::ZCF_SITE_SCOPE_SCHEMA);
+    }
+
     public static function zcf_altershortcodetable() {
          global $wpdb;
         $wpdb->query("ALTER table zcf_zohoshortcode_manager ADD Round_Robin varchar(50)");

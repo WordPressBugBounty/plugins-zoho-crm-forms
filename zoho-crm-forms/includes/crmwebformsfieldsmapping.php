@@ -151,7 +151,7 @@ class zcffieldlistDatamanage {
 
             if ($crm_type == $shortcodedata->crm_type && $module_type == $module) {
                 if (count($fields) == 0) {
-                    $query = $wpdb->query($wpdb->prepare("INSERT INTO zcf_zohocrm_formfield_manager (field_id, shortcode_id, display_label, custom_field_type, custom_field_values, zcf_field_mandatory, form_field_sequence, state)VALUES (%d, %d, %s, %s, %s, %d, %d, %d)",$field_id,$shortcode_id,$field_label,$field_type,$field_values,$field_mandatory,$field_sequence,$publish));
+                    $query = $wpdb->query($wpdb->prepare("INSERT INTO zcf_zohocrm_formfield_manager (field_id, shortcode_id, display_label, custom_field_type, custom_field_values, zcf_field_mandatory, form_field_sequence, state, blog_id)VALUES (%d, %d, %s, %s, %s, %d, %d, %d, %d)",$field_id,$shortcode_id,$field_label,$field_type,$field_values,$field_mandatory,$field_sequence,$publish,(int) $shortcodedata->blog_id));
                 } else {
                     $state = "";
                     if ($field_mandatory == 1) {
@@ -237,7 +237,9 @@ $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, 
                             'zcf_field_mandatory' => $field_mandatory,
                             'form_field_sequence' => $field_sequence,
                             'state' => $publish,
-                            'editupdate' => 1
+                            'editupdate' => 1,
+                            // A mapping belongs to the same site as its form.
+                            'blog_id' => (int) $shortcodedata->blog_id
                         );
                     $query = $wpdb->insert('zcf_zohocrm_formfield_manager', $querydata);
 
@@ -297,9 +299,9 @@ $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, 
             $crm_type = $temp;
         }
         if ($mode == "create") {
-            $shortcodemanager = $wpdb->insert('zcf_zohoshortcode_manager', array('shortcode_name' => "$shortcode_name", 'form_type' => "$form_type", 'assigned_to' => "$assigned_to", 'error_message' => "$error_message", 'success_message' => "$success_message", 'is_redirection' => "$is_redirection", 'url_redirection' => "$url_redirection", 'google_captcha' => "$google_captcha", 'module' => "$module", 'crm_type' => "$crm_type", 'Round_Robin' => "$first_userid", 'Layout_Name' => $layoutname, 'form_name' => $formname, 'layoutId' => $layoutId, 'assignmentrule_ID' => $assignmentrule_ID, 'assignmentrule_enable' => $assignmentrule_enable, 'thirtparty_enable' => $customthirdpartyplugin));
+            $shortcodemanager = $wpdb->insert('zcf_zohoshortcode_manager', array('shortcode_name' => "$shortcode_name", 'form_type' => "$form_type", 'assigned_to' => "$assigned_to", 'error_message' => "$error_message", 'success_message' => "$success_message", 'is_redirection' => "$is_redirection", 'url_redirection' => "$url_redirection", 'google_captcha' => "$google_captcha", 'module' => "$module", 'crm_type' => "$crm_type", 'Round_Robin' => "$first_userid", 'Layout_Name' => $layoutname, 'form_name' => $formname, 'layoutId' => $layoutId, 'assignmentrule_ID' => $assignmentrule_ID, 'assignmentrule_enable' => $assignmentrule_enable, 'thirtparty_enable' => $customthirdpartyplugin, 'blog_id' => zcf_current_site_id()));
         } else {
-            $shortcodemanager = $wpdb->update('zcf_zohoshortcode_manager', array('form_type' => "$form_type", 'assigned_to' => "$assigned_to", 'error_message' => "$error_message", 'success_message' => "$success_message", 'is_redirection' => $is_redirection, 'url_redirection' => "$url_redirection", 'google_captcha' => $google_captcha, 'duplicate_handling' => "$duplicate_handling", 'assignmentrule_ID' => $assignmentrule_ID, 'assignmentrule_enable' => $assignmentrule_enable, 'thirtparty_enable' => $customthirdpartyplugin), array('shortcode_name' => "$shortcode_name"));
+            $shortcodemanager = $wpdb->update('zcf_zohoshortcode_manager', array('form_type' => "$form_type", 'assigned_to' => "$assigned_to", 'error_message' => "$error_message", 'success_message' => "$success_message", 'is_redirection' => $is_redirection, 'url_redirection' => "$url_redirection", 'google_captcha' => $google_captcha, 'duplicate_handling' => "$duplicate_handling", 'assignmentrule_ID' => $assignmentrule_ID, 'assignmentrule_enable' => $assignmentrule_enable, 'thirtparty_enable' => $customthirdpartyplugin), array('shortcode_name' => "$shortcode_name", 'blog_id' => zcf_current_site_id()));
         }
         $lastid = $wpdb->insert_id;
         return $lastid;
@@ -308,7 +310,7 @@ $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $field_name, $module, 
     function zcfinsertFormFields($shortcode_id, $field_id, $zcf_field_mandatory, $state, $custom_field_type, $custom_field_values, $form_field_sequence, $display_label) {
         global $wpdb;
 
-            $forms = $wpdb->insert('zcf_zohocrm_formfield_manager', array('shortcode_id' => "$shortcode_id", 'field_id' => "$field_id", 'zcf_field_mandatory' => "$zcf_field_mandatory", 'state' => "$state", 'custom_field_type' => "$custom_field_type", 'custom_field_values' => "$custom_field_values", 'form_field_sequence' => "$form_field_sequence", 'display_label' => "$display_label"));
+            $forms = $wpdb->insert('zcf_zohocrm_formfield_manager', array('shortcode_id' => "$shortcode_id", 'field_id' => "$field_id", 'zcf_field_mandatory' => "$zcf_field_mandatory", 'state' => "$state", 'custom_field_type' => "$custom_field_type", 'custom_field_values' => "$custom_field_values", 'form_field_sequence' => "$form_field_sequence", 'display_label' => "$display_label", 'blog_id' => zcf_current_site_id()));
 
     }
 

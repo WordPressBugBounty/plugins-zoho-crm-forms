@@ -123,9 +123,9 @@ class zcfcustomfunctions {
         global $wpdb;
         $shortcode = sanitize_text_field($_REQUEST['shortcode']);
         $formTitle = sanitize_text_field($_REQUEST['formvalue']);
-        $updatequery = "UPDATE zcf_zohoshortcode_manager SET form_name = %s WHERE shortcode_name = %s
+        $updatequery = "UPDATE zcf_zohoshortcode_manager SET form_name = %s WHERE shortcode_name = %s AND blog_id = %d
             ";
-        $result = $wpdb->query($wpdb->prepare($updatequery, $formTitle, $shortcode));
+        $result = $wpdb->query($wpdb->prepare($updatequery, $formTitle, $shortcode, zcf_current_site_id()));
         $shortcodemanagerquery = $wpdb->prepare("SELECT * FROM zcf_zohoshortcode_manager");
         $shortcodemanager = $wpdb->get_results($shortcodemanagerquery );
         $namestr = sanitize_title_with_dashes($shortcode_fields->form_name);

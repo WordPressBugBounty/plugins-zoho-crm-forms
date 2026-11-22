@@ -719,10 +719,10 @@ class zcfManageShortcodesActions {
         $users_list = get_option('crm_users');
         $assignee = $users_list['users'][0]['email'];
         $fieldsquery = "SELECT * 
-                    FROM zcf_zohoshortcode_manager 
-                    WHERE shortcode_name = %s
+                    FROM zcf_zohoshortcode_manager
+                    WHERE shortcode_name = %s AND blog_id = %d
                 ";
-        $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $shortcode) );
+        $fields = $wpdb->get_results($wpdb->prepare($fieldsquery, $shortcode, zcf_current_site_id()) );
         $config_fields = $shortcodeObj->zcffieldsPropsettings($crmtype, $module, $layoutname);
         foreach ($config_fields as $field) {
             $shortcodeObj->zcfinsertFormFields($shortcode_id, $field->field_id, $field->field_mandatory, '1', $field->field_type, $field->field_values, $field->field_sequence, $field->field_label);
@@ -753,7 +753,7 @@ class zcfManageShortcodesActions {
             $i = $shortcode_count;
             foreach ($value['formfieldIds'] as $key1 => $value1) {
 
-                $wpdb->update('zcf_zohocrm_formfield_manager', array('state' => "1", 'form_field_sequence' => $shortcode_count), array('rel_id' => $value1));
+                $wpdb->update('zcf_zohocrm_formfield_manager', array('state' => "1", 'form_field_sequence' => $shortcode_count), array('rel_id' => (int) $value1, 'blog_id' => zcf_current_site_id()));
                 $shortcode_count++;
             }
         }
@@ -762,7 +762,7 @@ class zcfManageShortcodesActions {
     public static function zcfdeleteFieldsState($value) {
 
         global $wpdb;
-        $wpdb->update('zcf_zohocrm_formfield_manager', array('state' => "0"), array('rel_id' => $value));
+        $wpdb->update('zcf_zohocrm_formfield_manager', array('state' => "0"), array('rel_id' => (int) $value, 'blog_id' => zcf_current_site_id()));
     }
 
     public static function zcfCreateShortcode($module, $layoutname, $formname, $layoutId) {
@@ -817,14 +817,19 @@ class zcfManageShortcodesActions {
         global $wpdb;
         $data = array();
         $delete_short = $shortcode;
-        $deletedataquery = "SELECT shortcode_id FROM zcf_zohoshortcode_manager WHERE shortcode_name = %s";
-        $deletedata = $wpdb->get_results($wpdb->prepare($deletedataquery, $delete_short) );
+        $site_id = zcf_current_site_id();
+        // Only forms owned by the current site may be deleted.
+        $deletedataquery = "SELECT shortcode_id FROM zcf_zohoshortcode_manager WHERE shortcode_name = %s AND blog_id = %d";
+        $deletedata = $wpdb->get_results($wpdb->prepare($deletedataquery, $delete_short, $site_id) );
+        if (empty($deletedata)) {
+            return array();
+        }
 
-        $deleteid = $deletedata[0]->shortcode_id;
-        $delete_shortcode = $wpdb->query($wpdb->prepare("DELETE FROM zcf_zohoshortcode_manager WHERE shortcode_id = %d",
-        $deleteid));        
-        $delete_shortcode_fields = $wpdb->query($wpdb->prepare("DELETE FROM zcf_zohocrm_formfield_manager WHERE shortcode_id = %d",
-        $deleteid));
+        $deleteid = (int) $deletedata[0]->shortcode_id;
+        $delete_shortcode = $wpdb->query($wpdb->prepare("DELETE FROM zcf_zohoshortcode_manager WHERE shortcode_id = %d AND blog_id = %d",
+        $deleteid, $site_id));
+        $delete_shortcode_fields = $wpdb->query($wpdb->prepare("DELETE FROM zcf_zohocrm_formfield_manager WHERE shortcode_id = %d AND blog_id = %d",
+        $deleteid, $site_id));
         return $deletedata;
         exit;
     }

@@ -6,9 +6,9 @@ Requires at least: 6.0
 Author URI: https://www.zoho.com/crm/
 Author: Zoho CRM
 Tested up to: 7.0.0
-Stable tag: 1.8.2.7
+Stable tag: 1.8.2.8
 License: GPLv2 or later
-Version: 1.8.2.7
+Version: 1.8.2.8
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Websites are one of the most important sources of leads for your business.
@@ -330,6 +330,8 @@ Security fixes: a stored cross-site scripting issue in the Contact Form 7 mappin
 Security fix: the Zoho CRM authentication callback now verifies a per-user, single-use state value before exchanging the authorization code, and stored access and refresh tokens are no longer overwritten when the token request fails or returns an error.
 1.8.2.7
 Bug fixes: form submissions now check the HTTP result and validate the Zoho CRM response before using it, so server errors, invalid JSON, empty responses and connection failures are logged without PHP warnings. Attachments are uploaded only after the CRM confirms the record was created. The OAuth token expiry is now read from the standard expires_in field. A failed token refresh no longer overwrites the stored access token.
+1.8.2.8
+Security fix: on WordPress Multisite, a site administrator could delete or modify another site's forms through the form management AJAX action. Forms and their field mappings are now tied to the site that created them, and every form change is authorized against that site. Existing forms are assigned to the site whose content embeds their shortcode; forms that are not embedded, or are embedded on more than one site, are assigned to the main site.
 
 
 == Upgrade notice ==

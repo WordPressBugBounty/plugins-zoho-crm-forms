@@ -54,6 +54,7 @@ class zcfajaxcore {
             $value = $zcfCreateShortcode->zcfCreateShortcode($Module, $layoutname, $formtitle, $layoutId);
             $value['onAction'] = 'onCreate';
         } elseif ($onAction == 'Editshortcode') {
+            zcf_require_owned_shortcode(sanitize_text_field($_REQUEST['shortcode']));
             $value = array();
             $value['shortcode'] = sanitize_text_field($_REQUEST['shortcode']);
             $value['module'] = sanitize_text_field($_REQUEST['Module']);
@@ -66,15 +67,26 @@ class zcfajaxcore {
         } elseif ($onAction  == 'zcfupdateState') {
             $value = array();
             $value['formfieldIds'] = json_decode(stripslashes($_REQUEST['formfieldIds']));
+            if (!is_array($value['formfieldIds'])) {
+                $value['formfieldIds'] = array();
+            }
+            if (!empty($value['formfieldIds']) && !zcf_owns_formfield_ids($value['formfieldIds'])) {
+                wp_die( esc_html__( 'Security check', 'zoho-crm-forms' ), 403 );
+            }
             require_once(ZCF_BASE_DIR_URI . "includes/crmshortcodefunctions.php");
             $zcfCreateShortcode = new zcfManageShortcodesActions();
             $zcfCreateShortcode->zcfupdateState($value, sanitize_text_field($_REQUEST['formfieldsLength']), sanitize_text_field($_REQUEST['shortcodename']));
         } elseif ($onAction  == 'zcfdeleteFieldsState') {
             $formfieldId = sanitize_text_field($_REQUEST['formfieldIds']);
+            if (!zcf_owns_formfield_ids(array($formfieldId))) {
+                wp_die( esc_html__( 'Security check', 'zoho-crm-forms' ), 403 );
+            }
             require_once(ZCF_BASE_DIR_URI . "includes/crmshortcodefunctions.php");
             $zcfCreateShortcode = new zcfManageShortcodesActions();
             $zcfCreateShortcode->zcfdeleteFieldsState($formfieldId);
         } else {
+            // Authorize the form against its owning site before deleting it.
+            zcf_require_owned_shortcode(sanitize_text_field($_REQUEST['shortcode']));
             require_once(ZCF_BASE_DIR_URI . "includes/crmshortcodefunctions.php");
             $zcfDeleteShortcode = new zcfManageShortcodesActions();
             $zcfDeleteShortcode->zcfDeleteShortcode(sanitize_text_field($_REQUEST['shortcode']));

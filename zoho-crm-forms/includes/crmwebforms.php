@@ -66,7 +66,7 @@ if ($authtokens == '') {
 					<th class='crmforms-crm-free-list-view-th aligncenter'>" . __('Form Type', 'zoho-crm-forms') . "</th>
 
 				</tr></thead><tbody>";
-                $shortcodemanagerquery = $wpdb->prepare("SELECT * FROM zcf_zohoshortcode_manager");
+                $shortcodemanagerquery = $wpdb->prepare("SELECT * FROM zcf_zohoshortcode_manager WHERE blog_id = %d", zcf_current_site_id());
                 $shortcodemanager = $wpdb->get_results($shortcodemanagerquery );
                       echo esc_html($shortcode_fields->form_name);
 
